@@ -1,0 +1,79 @@
+{% extends 'app/index.html' %}
+
+{% block title %}
+    Добавить баланс Клиента | {{block.super}}
+{% endblock title %}
+
+{% block header %}
+    Добавить баланс Клиента
+{% endblock header %}
+
+{% block content %}
+
+    <div class="details-table">
+        <form method="POST" action="{% url 'partner_add_coins_url' partner.id %}">
+            {% csrf_token %}
+            {% for field in form %}
+                {% if field.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{field.errors}}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            {% if success_msg %}
+                 <div class="alert alert-success" role="alert">
+                        {{success_msg}}
+                    </div>
+            {% endif %}
+            <table class="table table-sm">
+                <tr>
+                    <td>Имя Клиента</td>
+                    <td>
+                        <div class="input-group-sm">
+                            {{partner.name}}
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Тип идентификации</td>
+                    <td>
+                        <div class="input-group-sm">
+                            {{partner.get_identification_type_display}}
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Информация</td>
+                    <td>
+                        <div class="input-group-sm">
+                            {{partner.data}}
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{form.balance.label}}: *</td>
+                    <td>
+                        <span>Баланс у контрагента: {{partner.contractor.balance}}</span>
+                        <div class="input-group-sm">
+                            {{form.balance}}
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Контрагент</td>
+                    <td>
+                        <div class="input-group-sm">
+                            {{partner.contractor}}
+                        </div>
+                    </td>
+                </tr>
+                
+            </table>
+            <button type='submit' class='btn btn-success'>Добавить</button>
+            <a href="{% url 'partner_list_url' %}" class="btn btn-light">Отмена</a>
+
+        </form>
+    </div>
+
+{% endblock content %}
+

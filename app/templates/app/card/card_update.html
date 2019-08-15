@@ -1,0 +1,50 @@
+{% extends 'app/index.html' %}
+
+{% block title %}
+    Изменить карту | {{block.super}}
+{% endblock title %}
+
+{% block header %}
+    Изменить карту "{{card.data}}"
+{% endblock header %}
+
+{% block content %}
+
+    <div class="details-table">
+        <form method="POST" action="{% url 'card_update_url' card.id %}">
+            {% csrf_token %}
+            {% for field in form %}
+                {% if field.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{field.errors}}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            <table class="table table-sm">
+                <tr>
+                    <td>{{cardform.data.label}}: *</td>
+                    <td>
+                        <div class="input-group-sm">
+                            {{cardform.data}}
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{cardform.partner.label}}: *</td>
+                    <td>
+                        <div class="input-group-sm">
+                            {{cardform.partner}}
+                        </div>
+                    </td>
+                </tr>
+                
+                                
+            </table>
+            <button type='submit' class='btn btn-secondary'>Изменить</button>
+            <a href="{% url 'card_list_url' %}" class="btn btn-light">Отмена</a>
+
+        </form>
+    </div>
+
+{% endblock content %}
+

@@ -1,0 +1,125 @@
+{% url 'partner_list_url' as partner_list_url %}
+{% url 'app_url' as app_url %}
+{% url 'contractor_list_url' as contractor_list_url %}
+{% url 'card_list_url' as card_list_url %}
+{% url 'station_list_url' as station_list_url %}
+{% url 'post_list_url' as post_list_url %}
+{% url 'payment_list_url' as payment_list_url %}
+
+
+{% url 'partner_create_url' as partner_create_url %}
+{% url 'contractor_create_url' as contractor_create_url %}
+{% url 'station_create_url' as station_create_url %}
+{% url 'user_transaction_list_url' as user_transaction_list_url %}
+{% url 'transaction_list_url' as transaction_list_url %}
+
+
+
+
+<div class="sidebar-sticky">
+    <ul class="nav flex-column">
+                {% comment %} <li class="nav-item">   
+                    <a class="nav-link  {% if request.path == order_create_url %}active{% endif %}" href="{% url 'order_create_url' %}">
+                        <i class="fas fa-plus"></i>
+                        Создать заказ
+                    </a>
+                </li> {% endcomment %}
+            <li class="nav-item">
+                <a class="nav-link {% if request.path == app_url %}active{% endif %}" href="{{ app_url }}">
+                    <i class="fas fa-list-ul"></i>               
+                    Главная
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <a class="nav-link {% if request.path == contractor_list_url %}active{% endif %}" href="{{ contractor_list_url }}">
+                    <i class="fas fa-money-check"></i>               
+                    Контрагенты
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if request.path == partner_list_url %}active{% endif %}" href="{{ partner_list_url }}">
+                    <i class="fas fa-user"></i>               
+                    Клиенты
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if request.path == card_list_url %}active{% endif %}" href="{{ card_list_url }}">
+                    <i class="fas fa-id-card"></i>               
+                    Карты
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if request.path == station_list_url %}active{% endif %}" href="{{ station_list_url }}">
+                    <i class="fas fa-handshake"></i>               
+                    Станции
+                </a>
+            </li>
+            <li class="nav-item">
+                    <a class="nav-link {% if request.path == post_list_url %}active{% endif %}" href="{{ post_list_url }}">
+                        <i class="fab fa-raspberry-pi"></i>               
+                        Посты
+                    </a>
+                </li>
+            <li class="nav-item">
+                <a class="nav-link {% if request.path == payment_list_url %}active{% endif %}" href="{{ payment_list_url }}">
+                    <i class="fas fa-shopping-basket"></i>               
+                    Платежи
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if request.path == user_transaction_list_url %}active{% endif %}" href="{{ user_transaction_list_url }}">
+                    <i class="fas fa-cash-register"></i>               
+                    Журнал
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if request.path == transaction_list_url %}active{% endif %}" href="{{ transaction_list_url }}">
+                    <i class="fas fa-exchange-alt"></i>               
+                    Транзакции
+                </a>
+            </li>
+        </ul>
+        {% comment %} <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+            Создать
+        </h6>
+        <ul class="nav flex-column mb-2">
+
+            <li class="nav-item">
+                <a class="nav-link" href="{{ partner_create_url }}">
+                    <i class="fas fa-file-export"></i>               
+                    Добавить Клиента
+                </a>
+            </li> 
+            <li class="nav-item">
+                <a class="nav-link" href="{{ contractor_create_url }}">
+                    <i class="fas fa-file-export"></i>               
+                    Добавить контрагента
+                </a>
+            </li> 
+            <li class="nav-item">
+                <a class="nav-link" href="{{ station_create_url }}">
+                    <i class="fas fa-file-export"></i>               
+                    Добавить станцию
+                </a>
+            </li> 
+            <li class="nav-item">
+                <a class="nav-link" href="{{ card_create_url }}">
+                    <i class="fas fa-file-export"></i>               
+                    Добавить карту
+                </a>
+            </li> 
+        </ul>   {% endcomment %}
+        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+            Отчеты
+        </h6>
+        <ul class="nav flex-column mb-2">
+
+            <li class="nav-item">
+                <a class="nav-link" href="/">
+                    <i class="fas fa-file-export"></i>               
+                    Экспорт Excel (не работает)
+                </a>
+            </li> 
+        </ul>
+</div>

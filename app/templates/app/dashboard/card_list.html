@@ -1,0 +1,32 @@
+<div class="content-item pb-5">
+    <table class="table table-sm mx-auto">
+        <thead>
+            <tr>
+                <td colspan=7>
+                    <h5>Карты</h5>
+                </td>
+            </tr>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Данные карты</th>
+                <th scope="col">Данные Клиента</th>
+                <th scope="col">Баланс Клиента</th>
+                <th scope="col">Контрагент</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for card in cards %}
+
+                <tr>
+                    <td>{{card.id}}</td>
+                    <td>{{card.data}}</td>
+                    <td>
+                        <b>{{card.partner.data}}</b>
+                    </td>
+                    <td>{{card.partner.balance}}</td>
+                    <td>{{card.partner.contractor}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

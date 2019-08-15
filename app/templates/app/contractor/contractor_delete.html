@@ -1,0 +1,16 @@
+{% extends 'app/index.html' %}
+
+{% block header %}
+    Удаление контрагента "{{ contractor.name }}"
+{% endblock header %}
+
+
+{% block content %}
+    <h5>Вы действительно хотите удалить контрагента "{{ contractor.name }}"</h5>
+<form action="{% url 'contractor_delete_url' contractor.id %}" method='POST'>
+    {% csrf_token %}
+    <button type="submit" class="btn btn-secondary">Удалить</button>
+    <a href="{% url 'contractor_list_url' %}" class="btn btn-light">Отмена</a>
+</form>
+
+{% endblock content %}

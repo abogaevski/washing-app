@@ -1,0 +1,24 @@
+<table class="table-list table table-sm table-hover mx-auto has-detail ">
+    <thead>
+        <tr>
+            <td colspan="6">
+                <h5>Контрагенты</h5>
+            </td>
+        </tr>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Имя</th>
+            <th scope="col">Баланс</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        {% for contractor in contractors %} 
+            <tr>
+                <td>{{contractor.id}}</td>
+                <td>{{contractor.name}}</td>
+                <td>{{contractor.balance}}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table> 

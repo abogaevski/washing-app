@@ -1,0 +1,16 @@
+{% extends 'app/index.html' %}
+
+{% block header %}
+    Удаление Клиента "{{ partner.name }}"
+{% endblock header %}
+
+
+{% block content %}
+    <h5>Вы действительно хотите удалить контрагента "{{ partner.name }}"</h5>
+<form action="{% url 'partner_delete_url' partner.id %}" method='POST'>
+    {% csrf_token %}
+    <button type="submit" class="btn btn-secondary">Удалить</button>
+    <a href="{% url 'partner_list_url' %}" class="btn btn-light">Отмена</a>
+</form>
+
+{% endblock content %}

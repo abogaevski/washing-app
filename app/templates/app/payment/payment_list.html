@@ -1,0 +1,63 @@
+{% extends 'app/index.html' %}
+
+{% block title %}
+Список платежей | {{block.super}}
+{% endblock title %}
+
+{% block header %}
+    Список платежей
+{% endblock header %} 
+
+{% block header_buttons %}
+    <a href="{% url 'payment_create_url' %}" class="btn btn-success">Добавить платеж</a>
+{% endblock header_buttons %}
+
+{% block content %}
+<div class="datepicker input-group-sm d-inline-block mb-3">
+    <input type="text" id='min' class="form-control" placeholder='От'>
+</div>
+<div class="datepicker input-group-sm  d-inline-block mb-3">
+    <input type="text" id='max' class="form-control d-inline-block" placeholder='До'>
+</div>
+<div class="content-item pb-5 align-self-start mb-3">
+
+<table class="table-list table table-sm table-hover mx-auto has-detail ">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Кому</th>
+            <th scope="col">Баланс контрагента</th>
+            <th scope="col">Сумма</th>
+            <th scope="col">Примечание</th>
+            <th scope="col">Дата</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        {% for payment in payments %}
+        
+        <tr>
+
+            <td data-item-id='{{payment.id}}'>{{payment.id}}</td>
+            <td>{{payment.contractor.name}}</td>
+            <td>{{payment.contractor.balance}}</td>
+            <td>{{payment.amount}}</td>
+            <td>{{payment.annotation}}</td>
+            <td>{{payment.date|date:"d.m.Y H:i"}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table> 
+
+</div>
+<div class="detail-container">
+
+    </div>
+
+    {% comment %} <script>
+            $('.btn-detail').click(function () {
+            getDetailForEntity(this, "{% url 'payment_detail_url' %}")
+        })
+    </script> {% endcomment %}
+
+{% endblock content %}

@@ -1,0 +1,28 @@
+    <table class="table-list table table-sm table-hover mx-auto has-detail">
+        <thead>
+        <tr>
+                <td colspan="6">
+                    <h5>Клиенты</h5>
+                </td>
+            </tr>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Контрагент</th>
+                <th scope="col">Клиент</th>
+                <th scope="col">Баланс</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for partner in partners %}
+                <tr>
+
+
+                    <td data-item-id='{{partner.id}}'>{{partner.id}}</td>
+                    <td>{{partner.contractor.name}}</td>
+                    <td>{{partner.name}}</td>
+                    <td>{{partner.balance}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>

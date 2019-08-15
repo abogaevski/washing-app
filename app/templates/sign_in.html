@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    Войти | {{block.super}}
+{% endblock title %}
+
+    
+
+{% block body %}
+
+    <div class="login-page">
+        <div class="login-form">
+            <div class="form">
+                <div class="brand">
+                     <h1 class="h2">
+                       Управление мойками
+                    </h1>
+                </div>
+                <hr>
+
+                <form method="POST">
+                    {% csrf_token %}
+                        <div class="form-group">
+                            {% if form.non_field_errors.as_text %}
+                                <div class="alert alert-danger non-field-errors" role="alert">
+                                    {% for err in form.non_field_errors %}
+                                    <p class="form-error">{{ err }}</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            {% for field in form %}
+                                {{field.label}}
+                                {{field}}
+                            {% endfor %}
+                        </div>
+                    <button type="submit">Войти</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock body %}
+
+

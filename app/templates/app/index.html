@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+
+{% block body %}
+    {% block navbar %}
+        {% include 'app/includes/navbar.html' %}
+    {% endblock navbar %}
+
+    <div class="container-fluid">
+        <div class="row full-height">
+            <div class="col-2 sidebar bg-light">
+                {% block sidebar %}
+                    {% include 'app/includes/sidebar.html' %}
+                {% endblock sidebar %}
+            </div>
+            <div class="col-md-9 ml-sm-auto col-lg-10 px-4" role='main'>
+                {% for message in messages %}
+                    <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+                
+                <div class="content px-4 py-4 mx-2 my-2">
+
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">
+                            {% block header %}
+                                Приложение ДЕМО
+                            {% endblock header %}
+                        </h1>
+                        
+                            <div class="btn-toolbar mb-2 mb-md-0">
+                                <div class="btn-group mr-2">
+                                    {% block header_buttons %}
+                                    {% endblock header_buttons %}
+                                </div>
+                                
+                            </div>
+                        
+                    </div>
+                        {% block content %}
+
+                        {% endblock content %}
+                </div>
+               
+            </div>
+            <div class="col-md-9 ml-sm-auto col-lg-10 px-0" role='footer'>
+                {% block footer %}
+                    {# {% include 'app/includes/footer.html' %} #}
+                {% endblock footer %}
+            </div>
+        </div>
+    </div>
+
+     
+
+{% endblock body %}

@@ -1,0 +1,57 @@
+{% extends 'app/index.html' %}
+
+{% block title %}
+    Добавить платеж | {{block.super}}
+{% endblock title %}
+
+{% block header %}
+    Добавить платеж
+{% endblock header %}
+
+{% block content %}
+
+    <div class="details-table">
+         <form method="POST" action="{% url 'payment_create_url' %}">
+            {% csrf_token %}
+            {% for field in form %}
+                {% if field.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{field.errors}}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            <table class="table table-sm">
+                <tr data-form-id="{{form.contractor.auto_id}}">
+                    <td>{{form.contractor.label}}: </td>
+                    <td>
+                        <div class="input-group-sm">
+                            {{form.contractor}}
+                        </div>
+                    </td>
+                </tr>
+              
+                <tr>
+                    <td>{{form.amount.label}}: *</td>
+                    <td>
+                        <div class="input-group-sm">
+                            {{form.amount}}
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{form.annotation.label}}: *</td>
+                    <td>
+                        <div class="input-group-sm">
+                            {{form.annotation}}
+                        </div>
+                    </td>
+                </tr>          
+            </table>
+            <button type='submit' class='btn btn-success'>Добавить</button>
+            <a href="{% url 'payment_list_url' %}" class="btn btn-light">Отмена</a>
+            
+        </form>
+    </div>
+
+
+{% endblock content %}

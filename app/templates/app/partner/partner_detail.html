@@ -1,0 +1,172 @@
+<div class="row">
+    <div class="col-6">
+        <div class="pt-3 pb-2 mb-3">
+            <h5 class="d-inline-block">Информация по "{{partner.name}}"</h5>
+            <div class="btn-group">
+                    <a href="{% url 'partner_delete_url' partner.id %}" class="btn btn-secondary ">Удалить</a>
+                    <a href="{% url 'partner_update_url' partner.id %}" class="btn btn-secondary ">Изменить</a>
+                </div>
+            </div>
+
+        <div class="detail-summary align-self-center  ">
+            <table class="table table-bordered table-sm mx-auto">
+                <tbody>
+                    <tr>
+                        <td>Имя Клиента</td>
+                        <td>
+                            {{partner.name}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Идентификация</td>
+                        <td>
+                            {{partner.identification_type}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Данные Клиента</td>
+                        <td>
+                            {{partner.data}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Баланс</td>
+                        <td>
+                            {{partner.balance}}
+                        </td>
+                    </tr>
+                   
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="col-6">
+        <h5 class='pt-3 pb-2 mb-3'>Контрагент клиента
+            "{{partner.name}}"</h5>
+        <div class="detail-summary align-self-center">
+            <table class="table table-bordered table-sm mx-auto">
+                <tbody>
+                    <tr>
+                        <td>Имя контрагента</td>
+                        <td>
+                            {{partner.contractor.name}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>УНП</td>
+                        <td>
+                            {{partner.contractor.UNP}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Адрес</td>
+                        <td>
+                            {{partner.contractor.address}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Баланс</td>
+                        <td>
+                            {{partner.contractor.balance}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Клиенты</td>
+                        <td>
+                            {{partner.contractor.partners.count}}
+                        </td>
+
+                    </tr>
+
+                </tbody>
+            </table> 
+        </div>
+
+        <div class="pt-3 pb-2 mb-3">       
+            <h5 class='d-inline-block'>Карты у
+                "{{partner.name}}"</h5>
+                <a href="{% url 'card_create_url' %}" class="btn btn-success">Добавить</a>
+        </div>
+        {% if partner.cards.all %}
+
+            <div class="">
+                <table class="table table-bordered table-sm mx-auto">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Данные карты</th>
+                            <th scope="col">Данные Клиента</th>
+                            <th scope="col">Баланс Клиента</th>
+                            <th scope="col">Контрагент</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for card in partner.cards.all %}
+
+                            <tr>
+                                <td>{{card.id}}</td>
+                                <td>{{card.data}}</td>
+                                <td>
+                                    {{card.partner.data}}
+                                </td>
+                                <td>{{card.partner.balance}}</td>
+                                <td>{{card.partner.contractor}}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p>Карт у "{{partner.name}}
+                " не существует</p>
+
+        {% endif %}
+    </div>
+</div>
+<h5 class='pt-3 pb-2 mb-3'>Транзакции по "{{partner.name}}"</h5>
+
+{% if partner.transactions.all %}
+    <div class="detail-transactions">
+        <div class="datepicker input-group-sm d-inline-block mb-3">
+            <input type="text" id='min' class="form-control" placeholder='От'>
+        </div>
+        <div class="datepicker input-group-sm  d-inline-block mb-3">
+            <input type="text" id='max' class="form-control d-inline-block" placeholder='До'>
+        </div>
+        <table class="table-transactions table table-sm mx-auto table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Карта</th>
+                    <th scope="col">Станция</th>
+                    <th scope="col">Пост</th>
+                    <th scope="col">Сумма</th>
+                    <th scope="col">Время</th>
+                    <th scope="col">Инициатор</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transaction in partner.transactions.all %}
+                
+                    <tr>
+                        <td>{{transaction.id}}</td>
+                        <td>{{transaction.card}}</td>
+                        <td>{{transaction.station.owner}}</td>
+                        <td>{{transaction.post.id}}</td>
+                        <td>{{transaction.price}}</td>
+                        <td>{{transaction.start_time|date:"d.m.Y H:i"}}</td>
+                        <td>{{transaction.get_initiator_type_display}}</td>
+
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+
+    </div>
+{% else %}
+    <p>Транзакций по "{{partner.name}}
+        " не существует</p>
+
+{% endif %}

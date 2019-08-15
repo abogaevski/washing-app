@@ -1,0 +1,137 @@
+<div class="row">
+    <div class="col-6">
+        <h5 class="pt-3 pb-2 mb-3">Клиент по карте "{{card.data}}"</h5>
+
+        <div class="detail-summary align-self-center  ">
+            <table class="table table-bordered table-sm mx-auto ">
+                <tbody>
+                    <tr>
+                        <td>Имя Клиента</td>
+                        <td>
+                            {{card.partner.name}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Идентификация</td>
+                        <td>
+                            {{card.partner.identification_type}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Данные Клиента</td>
+                        <td>
+                            {{card.partner.data}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Баланс</td>
+                        <td>
+                            {{card.partner.balance}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Контрагент</td>
+                        <td>
+                            {{card.partner.contractor}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-6">
+    <h5 class="pt-3 pb-2 mb-3">Контрагент по карте "{{card.data}}"</h5>
+
+        <div class="detail-summary align-self-center  ">
+
+      <table class="table table-bordered table-sm mx-auto">
+                <tbody>
+                    <tr>
+                        <td>Имя контрагента</td>
+                        <td>
+                            {{card.partner.contractor.name}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>УНП</td>
+                        <td>
+                            {{card.partner.contractor.UNP}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Адрес</td>
+                        <td>
+                            {{card.partner.contractor.address}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Баланс</td>
+                        <td>
+                            {{card.partner.contractor.balance}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Клиенты</td>
+                        <td>
+                            {{card.partner.contractor.partners.count}}
+                        </td>
+                        
+                    </tr>
+                    
+                </tbody>
+            </table>
+            </div>
+
+    </div>
+</div>
+<h5 class='pt-3 pb-2 mb-3'>Транзакции по "{{card.data}}"</h5>
+
+{% if card.transactions.all %}
+
+    <div class="detail-transactions ">
+
+        <div class="datepicker input-group-sm d-inline-block mb-3">
+            <input type="text" id='min' class="form-control" placeholder='От'>
+        </div>
+        <div class="datepicker input-group-sm  d-inline-block mb-3">
+            <input type="text" id='max' class="form-control d-inline-block" placeholder='До'>
+        </div>
+
+        <table class="table-transactions table table-bordered table-sm mx-auto" id"table-transactions-list">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Карта</th>
+                    <th scope="col">Станция</th>
+                    <th scope="col">Пост</th>
+                    <th scope="col">Сумма</th>
+                    <th scope="col">Время</th>
+                    <th scope="col">Инициатор</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transaction in card.transactions.all %}
+
+                    <tr>
+                        <td>{{transaction.id}}</td>
+                         {% if transaction.card == None %}
+                            <td>Нет карты</td>
+                        {% else %}
+                            <td>{{transaction.card}}</td>
+                        {% endif %}
+                        <td>{{transaction.station.owner}}</td>
+                        <td>{{transaction.post.id}}</td>
+                        <td>{{transaction.price}}</td>
+                        <td>{{transaction.start_time|date:"d.m.Y H:i"}}</td>
+                        <td>{{transaction.get_initiator_type_display}}</td>
+
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+{% else %}
+    <p>Транзакций по "{{card.data}}" не существует</p>
+
+{% endif %}

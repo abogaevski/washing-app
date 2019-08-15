@@ -1,0 +1,59 @@
+<h5>Запустить мойку</h5>
+<form method="POST" action="{% url 'start_wash_url' %}" novalidate>
+    {% csrf_token %}
+    {% for field in wash_form %}
+        {% if field.errors %}
+            <div class="alert alert-danger" role="alert">
+                {{field.errors}}
+            </div>
+        {% endif %}
+    {% endfor %}
+    <div class="form-group">
+
+        {% for field in wash_form %}
+            <div class="input-group-sm start-wash-input">
+                {{field.label}}:
+                {{field}}
+            </div>
+
+
+        {% endfor %}
+        <button class='btn btn-secondary' type='submit'>Отправить</button>
+
+    </div>
+
+
+</form>
+<script>
+    $("#id_station").change(function () {
+        var url = '{% url "load_posts_url" %}' // get the url of the `load_cities` view
+        var stationId = $(this).val(); // get the selected country ID from the HTML input
+
+        $.ajax({ // initialize an AJAX request
+            url: url, // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+            data: {
+                'station': stationId // add the country id to the GET parameters
+            },
+            success: function (data) { // `data` is the return of the `load_cities` view function
+                $("#id_post").html(data); // replace the contents of the city input with the data that came from the server
+            }
+        });
+
+
+    });
+    $("#id_partner").change(function () {
+        var url = '{% url "load_cards_url" %}' // get the url of the `load_cities` view
+        var partnerId = $(this).val(); // get the selected country ID from the HTML input
+
+        $.ajax({ // initialize an AJAX request
+            url: url, // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+            data: {
+                'partner': partnerId // add the country id to the GET parameters
+            },
+            success: function (data) { // `data` is the return of the `load_cities` view function
+                $("#id_card").html(data); // replace the contents of the city input with the data that came from the server
+            }
+        });
+
+    });
+</script>

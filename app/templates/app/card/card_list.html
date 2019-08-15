@@ -1,0 +1,67 @@
+{% extends 'app/index.html' %}
+
+{% block title %}
+    Список карт |
+    {{block.super}}
+{% endblock title %}
+
+{% block header %}
+    Список карт
+{% endblock header %}
+
+{% block header_buttons %}
+    <a href="{% url 'card_create_url' %}" class="btn btn-success">Добавить карту</a>
+{% endblock header_buttons %}
+
+{% block content %}
+    <div class="content-item pb-5 align-self-start mb-3">
+            <table class="table-list table-hover table table-sm mx-auto has-detail">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Данные карты</th>
+                        <th scope="col">Клиент</th>
+                        <th scope="col">Баланс Клиента</th>
+                        <th scope="col">Контрагент</th>
+                        <th scope="col">Транзакций по карте</th>
+                        <th scope="col">Действия</th>
+
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for card in cards %}
+                        {% if card.is_active %}
+                            <tr data-item-id='{{card.id}}'>
+                                <td>{{card.id}}</td>
+                                <td>{{card.data}}</td>
+                                <td>{{card.partner.name}}</td>
+                                <td>{{card.partner.balance}}</td>
+                                <td>{{card.partner.contractor}}</td>
+                                <td>{{card.transactions.count}}</td>
+                                <td>
+                                    <div class="btn-group" role="group" aria-label="Basic example">
+                                        <a href="{% url 'card_delete_url' card.id %}" class="btn btn-secondary ">Удалить</a>
+                                        <a href="{% url 'card_update_url' card.id %}" class="btn btn-secondary ">Изменить</a>
+                                        <a href="#" class="btn btn-secondary  btn-detail" data-item-id='{{card.id}}'>
+                                        {% csrf_token %}                   
+                                        Подробности
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+    </div>
+    <div class="detail-container">
+
+    </div>
+    <script>
+        $('tr[data-item-id], .btn-detail').click(function () {
+            getDetailForEntity(this, "{% url 'card_detail_url' %}")
+        })
+    </script>
+
+{% endblock content %}

@@ -1,0 +1,47 @@
+
+    <table class="table-list table table-sm mx-auto ">
+        <thead>
+            <tr>
+                <td colspan="8">
+                    <h5>Транзакции</h5>                   
+                </td>
+            </tr>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Карта</th>
+                <th scope="col">Клиент</th>
+                <th scope="col">Станция</th>
+                <th scope="col">Пост</th>
+                <th scope="col">Сумма</th>
+                <th scope="col">Время</th>
+                <th scope="col">Инициатор</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transactions %}
+
+                <tr>
+                    <td>{{transaction.id}}</td>
+                     {% if transaction.card == None %}
+                        <td>Нет карты</td>
+                    {% else %}
+                        <td>{{transaction.card}}</td>
+                    {% endif %}
+
+                    {% if transaction.partner == None %}
+                        <td>Нет клиента</td>
+                    {% else %}
+                    <td>
+                        <b>{{transaction.partner}}</b>
+                    </td>
+                    {% endif %}
+
+                    <td>{{transaction.station.owner}}</td>
+                    <td>{{transaction.post.id}}</td>
+                    <td>{{transaction.price}}</td>
+                    <td>{{transaction.start_time}}</td>
+                    <td>{{transaction.get_initiator_type_display}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>

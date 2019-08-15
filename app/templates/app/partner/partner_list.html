@@ -1,0 +1,87 @@
+{% extends 'app/index.html' %}
+
+{% block title %}
+    Список Клиентов | {{block.super}}
+{% endblock title %}
+
+{% block header %}
+    Список Клиентов
+{% endblock header %}
+
+{% block header_buttons %}
+    <a href="{% url 'partner_create_url' %}" class="btn btn-success">Добавить Клиента</a>
+{% endblock header_buttons %}
+
+
+
+{% block content %}
+
+    <div class="content-item pb-5 align-self-start mb-3">
+        <table class="table-list table table-sm table-hover mx-auto has-detail">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Имя</th>
+                    <th scope="col">Контрагент</th>
+                    <th scope="col">Тип идентификации</th>
+                    <th scope="col">Данные Клиента</th>
+                    <th scope="col">Баланс контрагента</th>
+                    <th scope="col">Баланс</th>
+                    <th scope="col">Действия</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for partner in partners %}
+                    <tr data-item-id='{{partner.id}}'>
+                    
+
+                        <td>{{partner.id}}</td>
+                        <td>{{partner.name}}</td>
+                        <td>{{partner.contractor}}</td>
+                        <td>{{partner.get_identification_type_display}}</td>
+                        <td>{{partner.data}}</td>
+                        <td>{{partner.contractor.balance}}
+                        </td>
+                        <td data-col-id='partner_balance_{{ partner.id }}'><b>{{partner.balance}}</b>
+                            Добавить:
+                            <form action="{% url 'partner_add_coins_url' partner.id %}" method="POST">
+                                {% csrf_token %}
+                                <div class="input-group input-group-sm mb-3">
+                                    <input type="number" name="balance" step="0.25" value="" class="form-control" required="" id="id_balance_{{ partner.id }}">
+                                    <div  class="input-group-append">
+                                        <button type='submit' class="btn btn-outline-success" style="height:100%;">
+                                            OK
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <a href="{% url 'partner_delete_url' partner.id %}" class="btn btn-secondary">Удалить</a>
+                                <a href="{% url 'partner_update_url' partner.id %}" class="btn btn-secondary ">Изменить</a>
+                                <a href="#" class="btn btn-secondary btn-detail" data-item-id='{{partner.id}}'>
+                                    {% csrf_token %}                   
+                                    Подробности
+                                </a>
+                                {% comment %} <a href="{% url 'partner_add_coins_url' partner.id %}" class="btn btn-success ">Добавить баланс</a> {% endcomment %}
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+</div>
+
+<div class="detail-container">
+
+</div>
+ 
+    <script>
+        $('tr[data-item-id], .btn-detail').click(function () {
+            getDetailForEntity(this, "{% url 'partner_detail_url' %}")
+        })
+    </script>
+
+{% endblock content %}

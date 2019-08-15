@@ -1,0 +1,24 @@
+{% extends 'app/index.html' %}
+
+{% block title %}
+    Список Клиентов | {{block.super}}
+{% endblock title %}
+
+{% block header %}
+    Список Клиентов
+{% endblock header %}
+
+{% block header_buttons %}
+    <a href="{% url 'partner_create_url' %}" class="btn btn-success">Добавить Клиента</a>
+{% endblock header_buttons %}
+
+{% block content %}
+    {% include 'app/partner/partner_list.html' %}
+    <div class="detail-container">
+    </div>
+     <script>
+        $('tr[data-item-id], .btn-detail').click(function () {
+            getDetailForEntity(this, "{% url 'partner_detail_url' %}")
+        })
+    </script>
+{% endblock content %}

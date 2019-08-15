@@ -1,0 +1,63 @@
+{% extends 'app/index.html' %}
+
+{% block title %}
+    Изменить станцию | {{block.super}}
+{% endblock title %}
+
+{% block header %}
+    Изменить станцию
+{% endblock header %}
+
+{% block content %}
+
+    <div class="details-table">
+        <div class="details-table">
+        <form method="POST" action="{% url 'station_update_url' station.id %}">
+            {% csrf_token %}
+            {% for field in form %}
+                {% if field.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{field.errors}}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            <table class="table table-sm">
+                </tr>
+                <tr>
+                    <td>{{stationform.station_id.label}}: *</td>
+                    <td>
+                        <div class="input-group-sm">
+                            {{stationform.station_id}}
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{stationform.owner.label}}: *</td>
+                    <td>
+                        <div class="input-group-sm">
+                            {{stationform.owner}}
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{stationform.info.label}}: *</td>
+                    <td>
+                        <div class="input-group-sm">
+                            {{stationform.info}}
+                        </div>
+                    </td>
+                </tr>
+                
+            </table>
+            <button type='submit' class='btn btn-secondary'>Изменить</button>
+            <a href="{% url 'station_list_url' %}" class="btn btn-light">Отмена</a>
+
+
+        </form>
+    </div>
+
+        </form>
+    </div>
+
+{% endblock content %}
+

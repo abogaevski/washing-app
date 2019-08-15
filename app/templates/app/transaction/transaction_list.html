@@ -1,0 +1,120 @@
+{% extends 'app/index.html' %}
+
+
+{% block title %}
+Список транзакций | {{block.super}}
+{% endblock title %}
+
+{% block sidebar %}
+{% include 'app/includes/sidebar.html' %}
+{% endblock sidebar %}
+
+{% block header %}
+    Список транзакций
+{% endblock header %}
+
+
+{% block content %}
+
+<div class="datepicker input-group-sm d-inline-block mb-3">
+    <input type="text" id='min' class="form-control" placeholder='От'>
+</div>
+<div class="datepicker input-group-sm  d-inline-block mb-3">
+    <input type="text" id='max' class="form-control d-inline-block" placeholder='До'>
+</div>
+
+<table class="table table-sm mx-auto table-bordered" id="table-transactions-list">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Карта</th>
+            <th scope="col">Клиент</th>
+            <th scope="col">Станция</th>
+            <th scope="col">Пост</th>
+            <th scope="col">Время</th>
+            <th scope="col">Сумма</th>
+            <th scope="col">Инициатор</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% comment %} {% for transaction in transactions %}
+        
+        <tr>
+            <td>{{transaction.id}}</td>
+            {% if transaction.card == None %}
+                <td>Нет карты</td>
+            {% else %}
+                <td>{{transaction.card}}</td>
+            {% endif %}
+            {% if transaction.partner == None %}
+                <td>Нет партнера</td>
+            {% else %}
+            <td>
+                <b>{{transaction.partner}}</b>
+            </td>
+            {% endif %}
+            <td>{{transaction.station.owner}}</td>
+            <td>{{transaction.post.id}}</td>
+            <td data-time="{{transaction.start_time|date:'d.m.Y'}}">{{transaction.start_time|date:"d.m.Y H:i"}}</td>
+            <td>{{transaction.price}}</td>
+            {# <td>{{transaction.initiator_type.name}}</td> #}
+        </tr>
+        {% endfor %} {% endcomment %}
+    </tbody>
+</table>
+
+<script>
+$(document).ready(function(){
+    
+
+    var table = $("#table-transactions-list").DataTable({
+        select: true,
+        "order": [[ 0, "desc" ]],
+        "language": {
+            "lengthMenu": "_MENU_",
+            "zeroRecords": "Ничего не найдено",
+            "info": "Страниц: _PAGE_ из _PAGES_",
+            "zeroRecords":    "Записей нет",
+            "infoEmpty": "Не найдено",
+            "infoFiltered": "(Поиск по _MAX_ записям)",
+            "search" : "Фильтр",
+            "paginate": {
+                "first":      "Первая",
+                "last":       "Последняя",
+                "next":       "Следующая",
+                "previous":   "Предыдущая"
+            },
+        },
+        destroy: true,
+        "serverSide": true,
+        "ajax": {
+            url: "{% url 'transactions_ajax_request' %}",
+            data: function(data) {
+
+                date_from = $('#min').datepicker({ dateFormat: 'dd.mm.yy' }).val();
+                date_to = $('#max').datepicker({ dateFormat: 'dd.mm.yy' }).val();
+
+                data.date_from = date_from;
+                data.date_to = date_to;
+
+            }
+        }
+    });
+
+    $("#min").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true });
+    $("#max").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true });
+
+
+    $('#min, #max').change(function () {
+        table.draw();
+    });
+
+
+})
+
+
+</script>
+
+
+
+{% endblock content %}

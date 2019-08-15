@@ -1,0 +1,141 @@
+<div class="row">
+{% comment %} First col with summary {% endcomment %}
+    <div class="col">
+
+        <div class="pt-3 pb-2 mb-3">
+            <h5 class='d-inline-block'>
+               Сводная информация по {{station.owner}}
+            </h5>
+            <div class="btn-group">
+                <a href="{% url 'station_delete_url' station.id %}" class="btn btn-secondary ">Удалить</a>
+                <a href="{% url 'station_update_url' station.id %}" class="btn btn-secondary ">Изменить</a>
+            </div>
+        </div>
+
+
+        <div class="detail-summary align-self-center">
+
+            <table class="table table-sm table-bordered">
+                <tr>
+                    <td>Владелец</td>
+                    <td>
+                        {{station.owner}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Идентификатор</td>
+                    <td>
+                        {{station.station_id}}
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>Информация</td>
+                    <td>
+                        {{station.info}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Посты</td>
+                    <td>
+                        {{station.posts.count}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Транзакций всего</td>
+                    <td>
+                        {{station.transactions.count}}
+                    </td>
+                </tr>
+                    
+                </table>
+            </div>
+    </div>
+    {% comment %} Second col for posts {% endcomment %}
+    <div class="col">
+        <div class="pt-3 pb-2 mb-3">
+            <h5 class='d-inline-block'>
+                Посты
+                {{station.owner}}
+            </h5>
+        </div>
+
+        <table class="table table-sm mx-auto table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Номер поста</th>
+                    <th scope="col">UID</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for post in station.posts.all %}
+                    <tr>
+                        <td>{{post.id}}</td>
+                        <td>{{post.post_id}}</td>
+                        <td>
+                            {{post.mac_uid}}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <h5 class='pt-3 pb-2 mb-3'>Транзакции по "{{station.owner}}"</h5>
+
+        {% if station.transactions.all %}
+
+        <div class="detail-transactions ">
+
+            <div class="datepicker input-group-sm d-inline-block mb-3">
+                <input type="text" id='min' class="form-control" placeholder='От'>
+            </div>
+            <div class="datepicker input-group-sm  d-inline-block mb-3">
+                <input type="text" id='max' class="form-control d-inline-block" placeholder='До'>
+            </div>
+
+        <table class="table-transactions table table-bordered table-sm mx-auto">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Карта</th>
+                    <th scope="col">Станция</th>
+                    <th scope="col">Пост</th>
+                    <th scope="col">Сумма</th>
+                    <th scope="col">Время</th>
+                    <th scope="col">Инициатор</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                    {% for transaction in station.transactions.all %}
+
+                        <tr>
+                            <td>{{transaction.id}}</td>
+                            {% if transaction.card == None %}
+                                <td>Нет карты</td>
+                            {% else %}
+                                <td>{{transaction.card}}</td>
+                            {% endif %}
+                            <td>{{transaction.station.owner}}</td>
+                            <td>{{transaction.post.id}}</td>
+                            <td>{{transaction.price}}</td>
+                            <td>{{transaction.start_time|date:"d.m.Y H:i"}}</td>
+                            <td>{{transaction.get_initiator_type_display}}</td>
+                        </tr>
+                    {% endfor %}
+
+            </tbody>
+        </table>
+
+    </div>
+{% else %}
+    <p>Транзакций по "{{station.owner}}
+        " не существует</p>
+
+{% endif %}
+    </div>
+</div>

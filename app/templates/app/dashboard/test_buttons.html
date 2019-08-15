@@ -1,0 +1,62 @@
+<form method="POST" action="{% url 'test_url' %}">
+    {% csrf_token %}
+    <button class='btn btn-success' type='submit'>get_account_balance</button>
+
+
+</form>
+
+
+<form method="POST" action="{% url 'test_url' %}">
+    {% csrf_token %}
+    <button class='btn btn-warning' type='submit'>transaction</button>
+
+</form>
+
+
+<form method="POST" action="{% url 'test_url' %}">
+    {% csrf_token %}
+    <button class='btn btn-danger' type='submit'>init</button>
+
+</form>
+
+<div id="id_post">
+
+</div>
+
+
+
+<script>
+    $(".btn-sucsess").click(function () {
+      var url = '{% url "test_url" %}'  // get the url of the `load_cities` view
+      var data = '{"client" : 5645}'
+      var topic = '1234567890/get_account_balance'  // get the selected country ID from the HTML input
+
+      $.ajax({                       // initialize an AJAX request
+        url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+        data: {
+            msg:data,
+            topic:topic
+            },
+        success: function (data) {   // `data` is the return of the `load_cities` view function
+          $("#id_post").html(data);  // replace the contents of the city input with the data that came from the server
+        }
+      });
+
+
+    });
+     $("#id_partner").change(function () {
+      var url = '{% url "load_cards_url" %}'  // get the url of the `load_cities` view
+      var partnerId = $(this).val();  // get the selected country ID from the HTML input
+
+      $.ajax({                       // initialize an AJAX request
+        url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+        data: {
+          'partner': partnerId       // add the country id to the GET parameters
+        },
+        success: function (data) {   // `data` is the return of the `load_cities` view function
+          $("#id_card").html(data);  // replace the contents of the city input with the data that came from the server
+        }
+      });
+
+    });
+</script>
