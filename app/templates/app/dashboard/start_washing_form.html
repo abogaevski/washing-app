@@ -49,6 +49,8 @@
     $("#id_partner").change(function () {
         var url = '{% url "load_cards_url" %}' 
         var partnerId = $(this).val(); 
+        csrf = $('form').find('input[name=csrfmiddlewaretoken]').val()
+
 
         $.ajax({ 
             type: 'POST',
