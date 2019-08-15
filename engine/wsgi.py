@@ -19,7 +19,7 @@ from django.core.wsgi import get_wsgi_application
 # adjust the Python version in the line below as needed 
 #sys.path.append('/var/www/wash_app/env/lib/python3.6/site-packages')
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'engine.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'engine.settings_dev')
 
 try:
     application = get_wsgi_application()

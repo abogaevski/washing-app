@@ -91,15 +91,17 @@ class StartWash(View):
         return redirect("/")
 
 def load_posts(request):
-    station_id = request.POST['data'].get('station')
-    posts = Post.objects.filter(station_id=station_id).order_by('id')
-    return render(request, 'app/dashboard/post_options.html', {'posts': posts})
+    if request.is_ajax():
+        station_id = request.POST.get('station')
+        posts = Post.objects.filter(station_id=station_id).order_by('id')
+        return render(request, 'app/dashboard/post_options.html', {'posts': posts})
 
 
 def load_cards(request):
-    partner_id = request.POST['data'].get('partner')
-    cards = Card.objects.filter(partner_id=partner_id).order_by('id')
-    return render(request, 'app/dashboard/cards_options.html', {'cards': cards})
+    if request.is_ajax():
+        partner_id = request.POST.get('partner')
+        cards = Card.objects.filter(partner_id=partner_id).order_by('id')
+        return render(request, 'app/dashboard/cards_options.html', {'cards': cards})
 
 # ----------------------------------------------
 # Entity lists
