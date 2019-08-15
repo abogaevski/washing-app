@@ -20,32 +20,33 @@ var config = {
 }
 
 $(document).ready(function () {
-    // table = dataTable('.table-list', config);
+    
+    table = dataTable('.table-list', config);
 
-    // $.fn.dataTable.ext.search.push(
-    //     function (settings, data, dataIndex) {
-    //         var min = $('#min').datepicker("getDate");
-    //         var max = $('#max').datepicker("getDate");
-    //         splitDate = data[5].split(' ')
-    //         splitDate = splitDate[0].split('.')
-    //         // var start = Date(splitDate[0]);
-    //         startDate = new Date(parseInt(splitDate[2]), parseInt(splitDate[1]) - 1, parseInt(splitDate[0]));
+    $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex) {
+            var min = $('#min').datepicker("getDate");
+            var max = $('#max').datepicker("getDate");
+            splitDate = data[5].split(' ')
+            splitDate = splitDate[0].split('.')
+            // var start = Date(splitDate[0]);
+            startDate = new Date(parseInt(splitDate[2]), parseInt(splitDate[1]) - 1, parseInt(splitDate[0]));
                        
-    //         if (min == null && max == null) { return true; }
-    //         if (min == null && startDate <= max) { return true;}
-    //         if(max == null && startDate >= min) {return true;}
-    //         if (startDate <= max && startDate >= min) { return true; }
-    //         return false;
-    //     }
-    // );
+            if (min == null && max == null) { return true; }
+            if (min == null && startDate <= max) { return true;}
+            if(max == null && startDate >= min) {return true;}
+            if (startDate <= max && startDate >= min) { return true; }
+            return false;
+        }
+    );
 
-    // $("#min").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true });
-    // $("#max").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true });
+    $("#min").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true });
+    $("#max").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true });
 
-    // //   // Event listener to the two range filtering inputs to redraw on input
-    // $('#min, #max').change(function () {
-    //     table.draw();
-    // });
+    //   // Event listener to the two range filtering inputs to redraw on input
+    $('#min, #max').change(function () {
+        table.draw();
+    });
 
 
 });
