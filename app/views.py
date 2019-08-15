@@ -54,7 +54,7 @@ class Dashboard(LoginRequiredMixin, View):
 
 class StartWash(View):
     def post(self, request):
-        bound_form = StartWashingForm(request.POST['data'])
+        bound_form = StartWashingForm(request.POST)
 
         if bound_form.is_valid():
             uid = bound_form.cleaned_data['post'].mac_uid
