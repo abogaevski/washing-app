@@ -136,3 +136,35 @@ MESSAGE_TAGS = {
     messages.WARNING: 'alert-warning',
     messages.ERROR: 'alert-danger',
 }
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'mqtt_file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/mqtt_debug.log'),
+            'maxBytes': 1024 * 1024 * 5,
+            'backupCount': 7,
+            'formatter': 'verbose'
+        },
+    },
+    'loggers': {
+        'mqtt': {
+            'level': 'DEBUG',
+            'handlers': ['mqtt_file'],
+            'propagate': True,
+        }
+    },
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
+}

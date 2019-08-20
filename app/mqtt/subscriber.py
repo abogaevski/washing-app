@@ -10,30 +10,30 @@ from django.core.exceptions import ValidationError, FieldError
 from decimal import *
 
 def on_connect(client, userdata, flags, rc):
-    print("Connected with result code "+str(rc))
+    logger.debug("Connected with result code "+str(rc))
     client.subscribe("#")
 
 
 def on_message(client, userdata, msg):
     from app.models import Post, Card, Partner, Transaction, Station
-    print('Has a message')
-    print(str(msg.payload))
+    logger.debug('Has a message:' + str(msg.payload))
     payload=json.loads(msg.payload)
     topic=msg.topic.split('/')
     payload['rpi'] = topic[0]
     payload['command'] = topic[1]
 
-    # print('Payload is: ' + str(payload))
-    print('Topic is: ' + msg.topic)
+    # logger.debug('Payload is: ' + str(payload))
+    logger.debug('Topic is: ' + msg.topic)
 
 
     if payload["command"] == 'account_balance' or payload["command"] == 'start_washing' or payload["command"] == 'srv_ping':
-        print("no action")
+        logger.debug('No action required')
+
 
     elif payload["command"] == 'get_account_balance':
 
-        print('------------------------------')
-        print('Get account balance start')
+        logger.debug('Get account balance start')
+
         
         #- payload["rpi"]
         #- payload["client"]
@@ -42,88 +42,87 @@ def on_message(client, userdata, msg):
         card = get_object_or_none(Card, data=client)
         
         if card:
-            print('Card is ' + str(card.data))
+            logger.debug('Card is ' + str(card.data))
+            
             client_balance = card.partner.balance
-            print('Balance is ' + str(client_balance))
+            logger.debug('Balance is ' + str(client_balance))
 
             #**************************
             #*******xdsi***************
             rpi=str(payload['rpi'])
-            print('RPI is ' + rpi)
+            logger.debug('RPI is ' + rpi)
             post = get_object_or_none(Post, mac_uid=rpi)
-            print(post.mac_uid)
+            logger.debug(post.mac_uid)
             station=post.station
-            print('Course is ' + str(station.course))
+            logger.debug('Course is ' + str(station.course))
             #- fuction check balance and send it
             topic = payload['rpi'] + '/account_balance'
-            print('Topic is ' + topic)
+            logger.debug('Topic is ' + topic)
 
             #**************************
             #*******xdsi***************
             data = json.dumps({'client': payload["client"], 'balance': float(client_balance), 'course': station.course})
-            print( str(data) )
+            logger.debug( str(data) )
             try:
                 publish_data(topic, data)
-                print( data )
-                print('------------------------------')
+                logger.debug( data )
             except:
-                print("Can't send data for account balance")        
+                logger.debug("Can't send data for account balance")        
         else:
-            print('card is not defined')
+            logger.debug('card is not defined')
     
 
     # TRANSACTIONS
     elif payload["command"] == 'transaction':
-        print('------------------------------')
-        print('Transaction start')
+        logger.debug('Transaction start')
 
         init_type = int(payload['type'])
-        print('Init type is ' + str(init_type))
+        logger.debug('Init type is ' + str(init_type))
 
         rpi = str(payload['rpi'])
         # post = Post.objects.get(mac_uid=rpi)
         post = get_object_or_none(Post, mac_uid=rpi)
         if post:
-            print('Post is ' + str(post.mac_uid))
+            logger.debug('Post is ' + str(post.mac_uid))
             station = post.station
-            print('Station is ' + station.owner)       
+            logger.debug('Station is ' + station.owner)       
 
         timestamp = int(payload['date'])
         start_time_from_timestamp = datetime.fromtimestamp(timestamp)
         tz = pytz.timezone(settings.TIME_ZONE)
         start_time = tz.localize(start_time_from_timestamp)
 
-        print('Start date is ' + str(start_time))
+        logger.debug('Start date is ' + str(start_time))
 
 
 #**************************
 #*******xdsi***************
         points = int(payload['points'])
-        print('Points is ' + str(points))
+        logger.debug('Points is ' + str(points))
         station = post.station
         price = points/station.course
-        print('Price is ' + str(price))
-        print(type(price))
+        logger.debug('Price is ' + str(price))
+        logger.debug(type(price))
 
 
-        if init_type!=2:
+        if init_type != 2:
             
             client = str(payload['client'])
 
             card = get_object_or_none(Card, data=client)
             if card:
-                print('Card is ' + str(card))
+                logger.debug('Card is ' + str(card))
                 partner = card.partner
-                print('Partner is ' + partner.name)     
+                logger.debug('Partner is ' + partner.name)     
 
-            print(type(partner.balance))
+            logger.debug(type(partner.balance))
             partner.balance -= Decimal(price)
-            print('Partner balance after payment is ' + str(partner.balance))
+            logger.debug('Partner balance after payment is ' + str(partner.balance))
 
             try:
                 partner.save()
             except (ValidationError, FieldError) as err:
-                print('Partner is not save ' + str(err))
+                logger.debug('Partner is not save ' + str(err))
 
             try:
                 t = Transaction.objects.create(
@@ -135,11 +134,9 @@ def on_message(client, userdata, msg):
                     price = price,
                     initiator_type = init_type
                 )
-                print(t)
+                logger.debug(t)
             except:
-                print('Transaction not created HERE!')
-                print('------------------------------')
-
+                logger.debug('Transaction with partner and card not created')
 
         try:
             t = Transaction.objects.create(
@@ -149,39 +146,27 @@ def on_message(client, userdata, msg):
                 price = price,
                 initiator_type = init_type
             )
-            print(t)
+            logger.debug(t)
         except:
-            print('Transaction not created')
-            print('------------------------------')
+            logger.debug('Transaction not created')
                 
-                
-
-        
-        # if t:
-        #     print('Transaction is ' + str(t.start_time))
-        #     print('------------------------------')
-        # else:
-        #     print('Transaction not created')
-        #     print('------------------------------')
         
     elif payload["command"] == 'init':
 
-        print('------------------------------')
-        print('Init start')
+        logger.debug('Init start')
 
         station_id = int(payload['station'])
-        print('Station id is ' + str(station_id))
+        logger.debug('Station id is ' + str(station_id))
 
         post_id = int(payload['post'])
-        print('Post id is ' + str(post_id))
+        logger.debug('Post id is ' + str(post_id))
 
         rpi = int(payload['rpi'])
-        print('MAC is ' + str(rpi))
+        logger.debug('MAC is ' + str(rpi))
         
         station = get_object_or_none(Station, station_id=station_id)
-        # station = Station.objects.get(station_id=station_id)
         if station:
-            print('Station is ' + station.owner)
+            logger.debug('Station is ' + station.owner)
 
             try:
                 p = Post.objects.create(
@@ -189,10 +174,9 @@ def on_message(client, userdata, msg):
                     station = station,
                     mac_uid = rpi
                 )
-                print('New post is ' + str(p.mac_uid))
-                print('------------------------------')
+                logger.debug('New post is ' + str(p.mac_uid))
             except:
-                print('New post is not created')
+                logger.debug('New post is not created')
 
 client = mqtt.Client()
 client.username_pw_set(username="mqttuseruser",password="Uwxd_D41")
