@@ -9,6 +9,8 @@ from django.core.exceptions import ValidationError, FieldError
 #**xdsi*update
 from decimal import *
 
+logger = logging.getLogger('mqtt')
+
 def on_connect(client, userdata, flags, rc):
     logger.debug("Connected with result code "+str(rc))
     client.subscribe("#")
