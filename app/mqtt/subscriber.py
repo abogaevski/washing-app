@@ -185,7 +185,8 @@ def on_message(client, userdata, msg):
         rpi = payload['rpi']
         logger.debug('Rpi ' + rpi + 'is available')
 
-client = mqtt.Client()
+# client = mqtt.Client()
+client = mqtt.Client(client_id="subs")
 client.username_pw_set(username="mqttuseruser",password="Uwxd_D41")
 client.on_connect = on_connect
 client.on_message = on_message
