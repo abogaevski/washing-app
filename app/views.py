@@ -22,6 +22,8 @@ import re
 from django_datatables_view.base_datatable_view import BaseDatatableView
 from django.utils.html import escape
 
+import os
+
 
 # Create your views here.
 class Dashboard(LoginRequiredMixin, View):
@@ -576,3 +578,9 @@ class TransactionListJson(LoginRequiredMixin, BaseDatatableView):
             qs = qs.filter(qs_params)
 
         return qs
+
+
+def openLogs(request):
+    with open(os.path.join(settings.BASE_DIR, 'logs/mqtt_debug.log')) as log:
+        content = log.readlines()
+        return HttpResponse(content, content_type="text/plain")
