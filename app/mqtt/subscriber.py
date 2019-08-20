@@ -8,6 +8,7 @@ from app.utils import get_object_or_none
 from django.core.exceptions import ValidationError, FieldError
 #**xdsi*update
 from decimal import *
+import logging
 
 logger = logging.getLogger('mqtt')
 
