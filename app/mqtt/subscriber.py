@@ -178,6 +178,10 @@ def on_message(client, userdata, msg):
             except:
                 logger.debug('New post is not created')
 
+    elif payload["command"] == 'rpi_ping':
+        rpi = payload['rpi']
+        logger.debug('Rpi ' + rpi + 'is available')
+
 client = mqtt.Client()
 client.username_pw_set(username="mqttuseruser",password="Uwxd_D41")
 client.on_connect = on_connect
