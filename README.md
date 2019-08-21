@@ -65,21 +65,21 @@
 18. systemctl status gunicorn
 19. nano /etc/nginx/sites-available/washing-app
 
-    server {
-        listen 80;
-        server_name washing-app.by;
+        server {
+            listen 80;
+            server_name washing-app.by;
 
-        location = /favicon.ico { access_log off; log_not_found off; }
-        location /static/ {
-            root /var/www/washing-app/;
+            location = /favicon.ico { access_log off; log_not_found off; }
+            location /static/ {
+                root /var/www/washing-app/;
+            }
+
+            location / {
+                include proxy_params;
+                proxy_pass http://unix:/run/gunicorn.sock;
+            }
         }
 
-        location / {
-            include proxy_params;
-            proxy_pass http://unix:/run/gunicorn.sock;
-        }
-    }
-
-ln -s /etc/nginx/sites-available/washing-app /etc/nginx/sites-enabled
-nginx -t
-systemctl restart nginx
+20. ln -s /etc/nginx/sites-available/washing-app /etc/nginx/sites-enabled
+21. nginx -t
+22. systemctl restart nginx
