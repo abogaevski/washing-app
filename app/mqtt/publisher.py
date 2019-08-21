@@ -3,7 +3,6 @@ import logging
 
 logger = logging.getLogger('mqtt')
 
-logger.debug('Try to publish data')
 def publish_data(topic, data):
     def on_connect(client, userdata, flags, rc):
         logger.debug("[PUBLISHER]: Connected with result code "+str(rc))
