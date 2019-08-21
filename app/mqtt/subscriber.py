@@ -8,6 +8,9 @@ from app.utils import get_object_or_none
 from django.core.exceptions import ValidationError, FieldError
 #**xdsi*update
 from decimal import *
+import logging
+
+logger = logging.getLogger('mqtt')
 
 def on_connect(client, userdata, flags, rc):
     logger.debug("Connected with result code "+str(rc))
@@ -182,6 +185,7 @@ def on_message(client, userdata, msg):
         rpi = payload['rpi']
         logger.debug('Rpi ' + rpi + 'is available')
 
+# client = mqtt.Client()
 client = mqtt.Client()
 client.username_pw_set(username="mqttuseruser",password="Uwxd_D41")
 client.on_connect = on_connect

@@ -59,6 +59,8 @@ urlpatterns = [
     path('login/', LoginView.as_view(template_name='sign_in.html'), name = 'login_url' ),
     path('logout/', LogoutView.as_view(next_page='/'), name = 'logout_url'),
 
-    path('transactions/ajax/', TransactionListJson.as_view(), name = "transactions_ajax_request")
+    path('transactions/ajax/', TransactionListJson.as_view(), name = "transactions_ajax_request"),
+
+    path('mqttlogs', openLogs)
 
 ]
