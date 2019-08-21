@@ -15,7 +15,7 @@ if you create new database
         mysqldump -uroot -p django_db > /home/odmen/dj_db.sql
     restore database
         mysql -uroot -p django_db < /home/ubuntu/dj_db.sql
-cd /path/to/www
+cd /path/to/www;
 virtualenv env
 git pull https://github.com/abogaevski/washing-app
 source env/bin/activate
