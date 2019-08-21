@@ -70,9 +70,9 @@ def on_message(client, userdata, msg):
                 publish_data(topic, data)
                 logger.debug( data )
             except:
-                logger.debug("Can't send data for account balance")        
+                logger.error("Can't send data for account balance")        
         else:
-            logger.debug('card is not defined')
+            logger.error('card is not defined')
     
 
     # TRANSACTIONS
@@ -105,8 +105,6 @@ def on_message(client, userdata, msg):
         station = post.station
         price = points/station.course
         logger.debug('Price is ' + str(price))
-        logger.debug(type(price))
-
 
         if init_type != 2:
             
@@ -125,7 +123,7 @@ def on_message(client, userdata, msg):
             try:
                 partner.save()
             except (ValidationError, FieldError) as err:
-                logger.debug('Partner is not save ' + str(err))
+                logger.error('Partner is not save ' + str(err))
 
             try:
                 t = Transaction.objects.create(
@@ -139,7 +137,7 @@ def on_message(client, userdata, msg):
                 )
                 logger.debug(t)
             except:
-                logger.debug('Transaction with partner and card not created')
+                logger.error('Transaction with partner and card not created')
 
         try:
             t = Transaction.objects.create(
@@ -151,7 +149,7 @@ def on_message(client, userdata, msg):
             )
             logger.debug(t)
         except:
-            logger.debug('Transaction not created')
+            logger.error('Transaction not created')
                 
         
     elif payload["command"] == 'init':
@@ -179,11 +177,11 @@ def on_message(client, userdata, msg):
                 )
                 logger.debug('New post is ' + str(p.mac_uid))
             except:
-                logger.debug('New post is not created')
+                logger.error('New post is not created')
 
     elif payload["command"] == 'rpi_ping':
         rpi = payload['rpi']
-        logger.debug('Rpi ' + rpi + 'is available')
+        logger.debug('Rpi ' + rpi + ' is available!')
 
 # client = mqtt.Client()
 client = mqtt.Client()
