@@ -154,18 +154,18 @@ def on_message(client, userdata, msg):
                 logger.debug(t)
             except:
                 logger.error('Transaction with partner and card not created')
-
-        try:
-            t = Transaction.objects.create(
-                station = station,
-                post = post,
-                start_time = start_time,
-                price = price,
-                initiator_type = init_type
-            )
-            logger.debug(t)
-        except:
-            logger.error('Transaction not created')
+        else:
+            try:
+                t = Transaction.objects.create(
+                    station = station,
+                    post = post,
+                    start_time = start_time,
+                    price = price,
+                    initiator_type = init_type
+                )
+                logger.debug(t)
+            except:
+                logger.error('Transaction not created')
                 
         
     elif payload["command"] == 'init':
