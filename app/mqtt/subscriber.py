@@ -37,42 +37,58 @@ def on_message(client, userdata, msg):
 
         logger.debug('Get account balance start')
 
-        
+
         #- payload["rpi"]
         #- payload["client"]
+
+        rpi=str(payload['rpi'])
+        logger.debug('RPI is ' + rpi)
+        topic = payload['rpi'] + '/account_balance'
+        logger.debug('Topic is ' + topic)
+
+
         client = str(payload['client'])
         # card = Card.objects.get(data=client)
         card = get_object_or_none(Card, data=client)
-        
+
         if card:
             logger.debug('Card is ' + str(card.data))
-            
+
             client_balance = card.partner.balance
             logger.debug('Balance is ' + str(client_balance))
 
             #**************************
             #*******xdsi***************
-            rpi=str(payload['rpi'])
-            logger.debug('RPI is ' + rpi)
+            ## rpi=str(payload['rpi'])
+            ## logger.debug('RPI is ' + rpi)
             post = get_object_or_none(Post, mac_uid=rpi)
             logger.debug(post.mac_uid)
             station=post.station
             logger.debug('Course is ' + str(station.course))
             #- fuction check balance and send it
-            topic = payload['rpi'] + '/account_balance'
-            logger.debug('Topic is ' + topic)
+            ## topic = payload['rpi'] + '/account_balance'
+            ## logger.debug('Topic is ' + topic)
 
             #**************************
             #*******xdsi***************
             data = json.dumps({'client': payload["client"], 'balance': float(client_balance), 'course': station.course})
             logger.debug( str(data) )
-            try:
-                publish_data(topic, data)
-                logger.debug( data )
-            except:
-                logger.error("Can't send data for account balance")        
+            ## try:
+            ##     publish_data(topic, data)
+            ##     logger.debug( data )
+            ## except:
+            ##     logger.error("Can't send data for account balance")
         else:
             logger.error('card is not defined')
+            data = json.dumps({'client': "NONE"})
+            logger.debug( str(data) )
+
+        try:
+            publish_data(topic, data)
+            logger.debug( data )
+        except:
+            logger.error("Can't send data for account balance")
+
     
 
     # TRANSACTIONS
