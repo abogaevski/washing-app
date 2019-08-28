@@ -517,8 +517,9 @@ class CardDelete(LoginRequiredMixin, OjectDisableMixin, View):
 class TransactionListJson(LoginRequiredMixin, BaseDatatableView):
     model = Transaction
     columns = ['id', 'card', 'partner',
-               'station', 'post', 'start_time', 'price']
-    order_columns = ['id', 'card', 'partner', 'station', '', 'start_time', '']
+               'station', 'post', 'start_time', 'price', 'initiator_type']
+    order_columns = ['id', 'card', 'partner',
+               'station', 'post', 'start_time', 'price', 'initiator_type']
 
     def prepare_results(self, qs):
         # prepare list with output column data
