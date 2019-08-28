@@ -46,12 +46,15 @@ class StationForm(forms.ModelForm):
         fields = [
             'station_id',
             'owner',
-            'info'
+            'info',
+            'course'
         ]
         widgets = {
             'station_id': forms.NumberInput(attrs={'class': 'form-control'}),
             'owner': forms.TextInput(attrs={'class': 'form-control'}),
-            'info': forms.Textarea(attrs={'class': 'form-control'})
+            'info': forms.Textarea(attrs={'class': 'form-control'}),
+            'course': forms.NumberInput(attrs={'class': 'form-control'})
+
         }
 
 

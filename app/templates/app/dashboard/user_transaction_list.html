@@ -23,9 +23,9 @@
                 <td>{{user_transaction.amount}}</td>
                 <td>{{user_transaction.date_pub}}</td>
                 <td>
-                    {% if user_transaction.exec_type == 0 %}
+                    {% if user_transaction.exec_type == 1 %}
                         <i class="fas fa-check bg-success rounded-circle status-icon"></i>
-                    {% elif user_transaction.exec_type == 1 %}
+                    {% elif user_transaction.exec_type == 0 %}
                         <i class="fas fa-ban bg-danger rounded-circle status-icon"></i>
                     {% endif %}
                 </td> 

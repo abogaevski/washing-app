@@ -72,6 +72,7 @@ class StartWash(View):
                 }
             else:
                 data = {
+                    'client': 'NONE',
                     'points': points
                 }
 
@@ -229,7 +230,7 @@ class CardActive(LoginRequiredMixin, View):
         return render(request, 'app/card/card_create.html', context={'form': form})
 
     def post(self, request):
-        bound_form = CardForm(request.POST['data'])
+        bound_form = CardForm(request.POST)
         if bound_form.is_valid():
             bound_obj = ''
             try:
@@ -350,7 +351,7 @@ class PartnerAddCoins(LoginRequiredMixin, View):
 
     def post(self, request, id):
         partner = Partner.objects.get(id=id)
-        bound_form = PartnerCoinForm(request.POST['data'], instance=partner)
+        bound_form = PartnerCoinForm(request.POST, instance=partner)
         partner_balance = partner.balance
 
         if bound_form.is_valid():
@@ -418,12 +419,15 @@ class PartnerAddCoins(LoginRequiredMixin, View):
 
 def partnerAddCoinsRequest(request):
     if request.is_ajax():
-        post = request.POST['data']
+        post = request.POST
+        bound_balance = {
+            'balance': post['balance']
+        }
 
         partner = Partner.objects.get(id=post['item'])
         partner_balance = partner.balance
 
-        bound_form = PartnerCoinForm(request.POST['data'], instance=partner)
+        bound_form = PartnerCoinForm(bound_balance, instance=partner)
         message = "Изменение баланса клиента. "
 
         if bound_form.is_valid():
@@ -513,8 +517,9 @@ class CardDelete(LoginRequiredMixin, OjectDisableMixin, View):
 class TransactionListJson(LoginRequiredMixin, BaseDatatableView):
     model = Transaction
     columns = ['id', 'card', 'partner',
-               'station', 'post', 'start_time', 'price']
-    order_columns = ['id', 'card', 'partner', 'station', '', 'start_time', '']
+               'station', 'post', 'start_time', 'price', 'initiator_type']
+    order_columns = ['id', 'card', 'partner',
+               'station', 'post', 'start_time', 'price', 'initiator_type']
 
     def prepare_results(self, qs):
         # prepare list with output column data

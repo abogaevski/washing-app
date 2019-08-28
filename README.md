@@ -79,24 +79,24 @@ Run:
 
 Paste:
 
-        [Unit]
-        Description=gunicorn daemon
-        Requires=gunicorn.socket
-        After=network.target
+    [Unit]
+    Description=gunicorn daemon
+    Requires=gunicorn.socket
+    After=network.target
 
-        [Service]
-        User=sammy
-        Group=www-data
-        WorkingDirectory=/var/www/washing-app
-        ExecStart=/var/www/washing-app/env/bin/gunicorn \
-                --error-logfile /var/log/gunicorn/error.log \
-                --access-logfile /var/log/gunicorn/access.log \
-                --workers 3 \
-                --bind unix:/run/gunicorn.sock \
-                engine.wsgi:application
+    [Service]
+    User=www-data
+    Group=www-data
+    WorkingDirectory=/var/www/washing-app
+    ExecStart=/var/www/washing-app/env/bin/gunicorn \
+            --error-logfile /var/log/gunicorn/error.log \
+            --access-logfile /var/log/gunicorn/access.log \
+            --workers 3 \
+            --bind unix:/run/gunicorn.sock \
+            engine.wsgi:application
 
-        [Install]
-        WantedBy=multi-user.target
+    [Install]
+    WantedBy=multi-user.target
 
 ##### Enabling new systemd service
 
@@ -127,20 +127,20 @@ Run:
 
 And paste:
 
-        server {
-            listen 80;
-            server_name washing-app.by;
+    server {
+        listen 80;
+        server_name washing-app.by;
 
-            location = /favicon.ico { access_log off; log_not_found off; }
-            location /static/ {
-                root /var/www/washing-app/;
-            }
-
-            location / {
-                include proxy_params;
-                proxy_pass http://unix:/run/gunicorn.sock;
-            }
+        location = /favicon.ico { access_log off; log_not_found off; }
+        location /static/ {
+            root /var/www/washing-app/;
         }
+
+        location / {
+            include proxy_params;
+            proxy_pass http://unix:/run/gunicorn.sock;
+        }
+    }
 
 Enabling new site:
 
