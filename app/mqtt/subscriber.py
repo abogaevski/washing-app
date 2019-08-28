@@ -204,7 +204,7 @@ def on_message(client, userdata, msg):
 
             else:
                 logger.error('Undefined transaction type. Not created')
-        else
+        else:
         logger.error('Undefined post')
 
     elif payload["command"] == 'init':
