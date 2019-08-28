@@ -10,5 +10,3 @@ admin.site.register(Card)
 admin.site.register(Transaction)
 admin.site.register(Payment)
 admin.site.register(UserTransaction)
-
-

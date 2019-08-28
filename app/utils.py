@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from django.template import loader
 from django.http import HttpResponse
 from django.contrib import messages
@@ -9,11 +9,12 @@ class ObjectListMixin:
     model = None
     template = None
     context = None
+
     def get(self, request):
         objects = self.model.objects.all()
-        return render(  request,
-                        self.template,
-                        context={self.context: objects})
+        return render(request,
+                      self.template,
+                      context={self.context: objects})
 
 
 def objectDetailRequest(request, model, template):
@@ -35,7 +36,8 @@ def get_object_or_none(model, **kwargs):
 class ObjectCreateMixin:
     form = None
     template = None
-    
+    redirect_url = None
+
     def get(self, request):
         form = self.form
         return render(request, self.template, context={'form': form})
@@ -45,9 +47,8 @@ class ObjectCreateMixin:
         if bound_form.is_valid():
             new_obj = bound_form.save()
             messages.success(request, 'Вы cоздали ' + str(new_obj))
-            return redirect('/')
+            return redirect(self.redirect_url)
         return render(request, self.template, context={'form': bound_form})
-
 
 
 class ObjectUpdateMixin:
@@ -60,8 +61,8 @@ class ObjectUpdateMixin:
         bound_form = self.model_form(instance=obj)
 
         return render(request,  self.template,
-                                    context={   self.model_form.__name__.lower(): bound_form,
-                                                self.model.__name__.lower(): obj})
+                      context={self.model_form.__name__.lower(): bound_form,
+                               self.model.__name__.lower(): obj})
 
     def post(self, request, id):
         obj = self.model.objects.get(id=id)
@@ -71,10 +72,10 @@ class ObjectUpdateMixin:
             new_obj = bound_form.save()
             messages.info(request, 'Вы изменили ' + str(new_obj))
 
-            return redirect('/')
+            return redirect("{}_list_url".format(self.model.__name__.lower()))
         return render(request, self.template,
-                                    context={   self.model_form.__name__.lower(): bound_form,
-                                                self.model.__name__.lower(): obj})    
+                      context={self.model_form.__name__.lower(): bound_form,
+                               self.model.__name__.lower(): obj})
 
 
 class ObjectDeleteMixin:
@@ -84,7 +85,7 @@ class ObjectDeleteMixin:
     def get(self, request, id):
         obj = self.model.objects.get(id=id)
         return render(request,  self.template,
-                                context={self.model.__name__.lower(): obj})
+                      context={self.model.__name__.lower(): obj})
 
     def post(self, request, id):
         obj = self.model.objects.get(id=id)
@@ -92,12 +93,13 @@ class ObjectDeleteMixin:
         try:
             obj.delete()
             messages.info(request, 'Вы удалили ' + str(obj))
-            return redirect('/')
+            return redirect("{}_list_url".format(self.model.__name__.lower()))
         except ProtectedError:
-            messages.error(request, 'Вы не можете удалить {0}.<br>Ошибка: Наличие транзакций'.format(obj) )
-            return redirect('/')
+            messages.error(
+                request, 'Вы не можете удалить {0}. Ошибка: Наличие транзакций или клиентов у контрагента'.format(obj))
+            return redirect("{}_list_url".format(self.model.__name__.lower()))
 
-        return redirect('/')
+        return redirect("{}_list_url".format(self.model.__name__.lower()))
 
 
 class OjectDisableMixin:
@@ -107,7 +109,7 @@ class OjectDisableMixin:
     def get(self, request, id):
         obj = self.model.objects.get(id=id)
         return render(request,  self.template,
-                                context={self.model.__name__.lower(): obj})
+                      context={self.model.__name__.lower(): obj})
 
     def post(self, request, id):
         obj = self.model.objects.get(id=id)
@@ -116,8 +118,9 @@ class OjectDisableMixin:
             obj.is_active = False
             obj.save()
             messages.info(request, 'Вы отключили {0}'.format(obj))
-            return redirect('/')
+            return redirect("{}_list_url".format(self.model.__name__.lower()))
+
         else:
-            messages.warning(request, 'Вы не можете отключить {0}.<br>Ошибка: Уже отлючена'.format(obj) )
-            return redirect('/')
-            
+            messages.warning(
+                request, 'Вы не можете отключить {0}.<br>Ошибка: Уже отлючена'.format(obj))
+            return redirect("{}_list_url".format(self.model.__name__.lower()))

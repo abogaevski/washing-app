@@ -14,7 +14,8 @@ urlpatterns = [
     path('partners/detail/', partnerDetailRequest, name='partner_detail_url'),
 
     path('contractors/', ContractorList.as_view(), name='contractor_list_url'),
-    path('contractors/detail/', contractorDetailRequest, name='contractor_detail_url'),
+    path('contractors/detail/', contractorDetailRequest,
+         name='contractor_detail_url'),
 
     path('cards/', CardList.as_view(), name='card_list_url'),
     path('cards/detail', cardDetailRequest, name='card_detail_url'),
@@ -29,37 +30,47 @@ urlpatterns = [
 
 
     path('partner/create/', PartnerCreate.as_view(), name='partner_create_url'),
-    path('contractor/create/', ContractorCreate.as_view(), name='contractor_create_url'),
+    path('contractor/create/', ContractorCreate.as_view(),
+         name='contractor_create_url'),
     path('station/create/', StationCreate.as_view(), name='station_create_url'),
     path('card/create/', CardActive.as_view(), name='card_create_url'),
     path('payment/create/', PaymentCreate.as_view(), name='payment_create_url'),
 
 
 
-    path('partner/<int:id>/update/', PartnerUpdate.as_view(), name='partner_update_url'),
-    path('contractor/<int:id>/update/', ContractorUpdate.as_view(), name='contractor_update_url'),
-    path('station/<int:id>/update/', StationUpdate.as_view(), name='station_update_url'),
+    path('partner/<int:id>/update/',
+         PartnerUpdate.as_view(), name='partner_update_url'),
+    path('contractor/<int:id>/update/',
+         ContractorUpdate.as_view(), name='contractor_update_url'),
+    path('station/<int:id>/update/',
+         StationUpdate.as_view(), name='station_update_url'),
     path('card/<int:id>/update/', CardUpdate.as_view(), name='card_update_url'),
 
-    path('contractor/<int:id>/delete/', ContractorDelete.as_view(), name='contractor_delete_url'),
-    path('partner/<int:id>/delete/', PartnerDelete.as_view(), name='partner_delete_url'),
+    path('contractor/<int:id>/delete/',
+         ContractorDelete.as_view(), name='contractor_delete_url'),
+    path('partner/<int:id>/delete/',
+         PartnerDelete.as_view(), name='partner_delete_url'),
     # path('station/<int:id>/delete/', StationDelete.as_view(), name='station_delete_url'),
     path('card/<int:id>/delete/', CardDelete.as_view(), name='card_delete_url'),
 
 
 
 
-    path('partner/<int:id>/add-coins/', PartnerAddCoins.as_view(), name='partner_add_coins_url'),
-    path('partner/ajax/add-coins/', partnerAddCoinsRequest, name='partner_ajax_add_coins_url'),
+    path('partner/<int:id>/add-coins/',
+         PartnerAddCoins.as_view(), name='partner_add_coins_url'),
+    path('partner/ajax/add-coins/', partnerAddCoinsRequest,
+         name='partner_ajax_add_coins_url'),
 
-    path('user-transactions/', UserTransactionList.as_view(), name='user_transaction_list_url'),
+    path('user-transactions/', UserTransactionList.as_view(),
+         name='user_transaction_list_url'),
 
 
 
-    path('login/', LoginView.as_view(template_name='sign_in.html'), name = 'login_url' ),
-    path('logout/', LogoutView.as_view(next_page='/'), name = 'logout_url'),
+    path('login/', LoginView.as_view(template_name='sign_in.html'), name='login_url'),
+    path('logout/', LogoutView.as_view(next_page='/'), name='logout_url'),
 
-    path('transactions/ajax/', TransactionListJson.as_view(), name = "transactions_ajax_request"),
+    path('transactions/ajax/', TransactionListJson.as_view(),
+         name="transactions_ajax_request"),
 
     path('mqttlogs', openLogs)
 

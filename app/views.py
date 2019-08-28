@@ -7,7 +7,7 @@ from .forms import *
 from .mqtt.publisher import publish_data
 from .utils import *
 import json
-import time 
+import time
 from django.db.models import Sum
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -16,7 +16,7 @@ from datetime import datetime, timedelta
 import pytz
 from django.conf import settings
 from django.forms.models import model_to_dict
-from django.db.models import  Q
+from django.db.models import Q
 import re
 
 from django_datatables_view.base_datatable_view import BaseDatatableView
@@ -28,8 +28,7 @@ import os
 # Create your views here.
 class Dashboard(LoginRequiredMixin, View):
     def get(self, request):
-        last_day = datetime.now() - timedelta(hours = 24)
-
+        last_day = datetime.now() - timedelta(hours=24)
         tz = pytz.timezone(settings.TIME_ZONE)
         last_day = tz.localize(last_day)
 
@@ -37,21 +36,18 @@ class Dashboard(LoginRequiredMixin, View):
         partners = Partner.objects.filter(balance__lte=5)
         contractors = Contractor.objects.filter(balance__lte=5)
         wash_form = StartWashingForm()
+        user_transactions = UserTransaction.objects.filter(
+            date_pub__gte=last_day)
 
-        # post_transactions_sum = Transaction.objects.all().aggregate(Sum('price'))
-
-
-        user_transactions = UserTransaction.objects.filter(date_pub__gte=last_day)
-
-        return render(  request,
-                        'app/dashboard/dashboard.html',
-                        context= {  'transactions': transactions,
-                                    'partners': partners,
-                                    'contractors': contractors,
-                                    'wash_form': wash_form,
-                                    'user_transactions': user_transactions
-                                    }
-                    )
+        return render(request,
+                      'app/dashboard/dashboard.html',
+                      context={'transactions': transactions,
+                               'partners': partners,
+                               'contractors': contractors,
+                               'wash_form': wash_form,
+                               'user_transactions': user_transactions
+                               }
+                      )
 
 
 class StartWash(View):
@@ -63,17 +59,13 @@ class StartWash(View):
             client_uid = ''
             try:
                 client_uid = str(bound_form.cleaned_data['card'].data)
-                print(client_uid)
             except:
                 print('Client not found!')
 
             course = bound_form.cleaned_data['station'].course
-            # points = bound_form.cleaned_data['payment'] * course
-            # points = ( bound_form.cleaned_data['payment'] * course )  // 1
-            points = int( bound_form.cleaned_data['payment'] * course )
+            points = int(bound_form.cleaned_data['payment'] * course)
             if client_uid:
                 data = {
-                    # Change!
                     'client': client_uid,
                     'points': points
 
@@ -89,8 +81,9 @@ class StartWash(View):
 
             return redirect('/')
 
-        messages.error(request, 'Произошла ошибка!')
+        messages.error(request, 'Произошла ошибка! Данные неправильные.')
         return redirect("/")
+
 
 def load_posts(request):
     if request.is_ajax():
@@ -110,10 +103,11 @@ def load_cards(request):
 # ObjectListMixin in utils.py
 # ----------------------------------------------
 
+
 class TransactionList(LoginRequiredMixin, ObjectListMixin, View):
     model = Transaction
     template = 'app/transaction/transaction_list.html'
-    context = 'transactions'  
+    context = 'transactions'
 
 
 class PartnerList(LoginRequiredMixin, ObjectListMixin, View):
@@ -132,7 +126,7 @@ class CardList(LoginRequiredMixin, ObjectListMixin, View):
     model = Card
     template = 'app/card/card_list.html'
     context = 'cards'
-        
+
 
 class StationList(LoginRequiredMixin, ObjectListMixin, View):
     model = Station
@@ -172,15 +166,18 @@ def partnerDetailRequest(request):
     template = 'app/partner/partner_detail.html'
     return HttpResponse(objectDetailRequest(request, model, template))
 
+
 def contractorDetailRequest(request):
     model = Contractor
     template = 'app/contractor/contractor_detail.html'
     return HttpResponse(objectDetailRequest(request, model, template))
 
+
 def cardDetailRequest(request):
     model = Card
     template = 'app/card/card_detail.html'
     return HttpResponse(objectDetailRequest(request, model, template))
+
 
 def stationDetailRequest(request):
     model = Station
@@ -201,21 +198,29 @@ def stationDetailRequest(request):
 class PartnerCreate(LoginRequiredMixin, ObjectCreateMixin, View):
     form = PartnerForm
     template = 'app/partner/partner_create.html'
+    # Urls names is in urls.py
+    redirect_url = 'partner_list_url'
 
 
 class ContractorCreate(LoginRequiredMixin, ObjectCreateMixin, View):
     form = ContractorForm
     template = 'app/contractor/contractor_create.html'
+    # Urls names is in urls.py
+    redirect_url = 'contractor_list_url'
 
 
 class StationCreate(LoginRequiredMixin, ObjectCreateMixin, View):
     form = StationForm
     template = 'app/station/station_create.html'
+    # Urls names is in urls.py
+    redirect_url = 'station_list_url'
 
 
 class CardCreate(LoginRequiredMixin, ObjectCreateMixin, View):
     form = CardForm
     template = 'app/card/card_create.html'
+    # Urls names is in urls.py
+    redirect_url = 'card_list_url'
 
 
 class CardActive(LoginRequiredMixin, View):
@@ -228,8 +233,9 @@ class CardActive(LoginRequiredMixin, View):
         if bound_form.is_valid():
             bound_obj = ''
             try:
-                bound_obj = Card.objects.get(data=bound_form.cleaned_data['data'])
-            except: 
+                bound_obj = Card.objects.get(
+                    data=bound_form.cleaned_data['data'])
+            except:
                 new_obj = bound_form.save()
                 messages.success(request, 'Вы cоздали ' + str(new_obj))
 
@@ -238,18 +244,20 @@ class CardActive(LoginRequiredMixin, View):
                     bound_obj.partner = bound_form.cleaned_data['partner']
                     bound_obj.is_active = True
                     bound_obj.save()
-                    messages.success(request, 'Вы включили {0} '.format(bound_obj))
+                    messages.success(
+                        request, 'Вы включили {0} '.format(bound_obj))
                 else:
                     messages.warning(request,   'Вы не можете включить {0}. Уже включена '
-                                                .format(bound_obj))      
+                                                .format(bound_obj))
 
-        return redirect('/')
+        return redirect('card_list_url')
 
 
 class PaymentCreate(LoginRequiredMixin, View):
     def get(self, request):
         form = PaymentForm
         return render(request, 'app/payment/payment_create.html', context={'form': form})
+
     def post(self, request):
         message = 'Добавление платежа. '
         bound_form = PaymentForm(request.POST)
@@ -265,20 +273,24 @@ class PaymentCreate(LoginRequiredMixin, View):
 
             new_obj = bound_form.save()
 
-            message += 'Успешно. Платеж для "'+ contractor.name +'" добавлен с примечанием: "' + bound_form.cleaned_data['annotation'] + '"'
+            message += 'Успешно. Платеж для "' + contractor.name + \
+                '" добавлен с примечанием: "' + \
+                bound_form.cleaned_data['annotation'] + '"'
             messages.success(request, message)
-            
+
             UserTransaction.objects.create(
-                    entity='Контрагент: ' + contractor.name,
-                    user=request.user,
-                    annotation=message,
-                    exec_type=1,
-                    amount= amount
-                )
+                entity='Контрагент: ' + contractor.name,
+                user=request.user,
+                annotation=message,
+                exec_type=1,
+                amount=amount
+            )
 
             return redirect('payment_list_url')
 
-        message += 'Ошибка. Платеж для "'+ contractor.name +'" не добавлен с примечанием: "' + bound_form.cleaned_data['annotation'] + '"'
+        message += 'Ошибка. Платеж для "' + contractor.name + \
+            '" не добавлен с примечанием: "' + \
+            bound_form.cleaned_data['annotation'] + '"'
         messages.error(request, message)
 
         UserTransaction.objects.create(
@@ -286,11 +298,11 @@ class PaymentCreate(LoginRequiredMixin, View):
             user=request.user,
             annotation=message,
             exec_type=0,
-            amount= amount
+            amount=amount
         )
 
         return redirect('payment_list_url')
-    
+
         # return HttpResponseRedirect(reverse('jobs'))
 
 # ----------------------------------------------
@@ -320,6 +332,7 @@ class StationUpdate(LoginRequiredMixin, ObjectUpdateMixin, View):
     model_form = StationForm
     template = 'app/station/station_update.html'
 
+
 class CardUpdate(LoginRequiredMixin, ObjectUpdateMixin, View):
     model = Card
     model_form = CardForm
@@ -331,9 +344,9 @@ class PartnerAddCoins(LoginRequiredMixin, View):
         partner = Partner.objects.get(id=id)
         bound_form = PartnerCoinForm(instance=partner)
 
-        return render ( request, 'app/partner/partner_add_coins.html',
-                        context={   'form': bound_form,
-                                    'partner': partner})
+        return render(request, 'app/partner/partner_add_coins.html',
+                      context={'form': bound_form,
+                               'partner': partner})
 
     def post(self, request, id):
         partner = Partner.objects.get(id=id)
@@ -346,7 +359,7 @@ class PartnerAddCoins(LoginRequiredMixin, View):
             message = 'Изменение баланса клиента. '
 
             if partner_balance_in_form > contractor_balance:
-                message +=   'Ошибка. Вы указали баланс больше, чем имеется у контрагента.\
+                message += 'Ошибка. Вы указали баланс больше, чем имеется у контрагента.\
                             Пожалуйста, добавьте баланс контрагенту перед тем как добавить Клиенту!'
                 messages.error(request, message)
 
@@ -373,19 +386,19 @@ class PartnerAddCoins(LoginRequiredMixin, View):
                 )
                 return redirect('partner_list_url')
 
-
-            else: 
+            else:
                 contractor = partner.contractor
                 new_contractor_balance = contractor_balance - partner_balance_in_form
                 contractor.balance = new_contractor_balance
                 contractor.save()
-                
+
                 new_partner_balance = partner_balance + partner_balance_in_form
                 new_partner_obj = bound_form.save(commit=False)
                 new_partner_obj.balance = new_partner_balance
                 new_partner_obj.save()
 
-                message += 'Успешно. Добавлено ' + str(partner_balance_in_form) + ' к ' + new_partner_obj.name
+                message += 'Успешно. Добавлено ' + \
+                    str(partner_balance_in_form) + ' к ' + new_partner_obj.name
 
                 UserTransaction.objects.create(
                     entity='Клиент: ' + partner.name,
@@ -397,8 +410,7 @@ class PartnerAddCoins(LoginRequiredMixin, View):
 
                 messages.success(request, message)
                 return redirect('partner_list_url')
-            
-        
+
         message += 'Ошибка. Произошла ошибка добавления!'
         messages.error(request, message)
         return redirect('partner_list_url')
@@ -407,7 +419,7 @@ class PartnerAddCoins(LoginRequiredMixin, View):
 def partnerAddCoinsRequest(request):
     if request.is_ajax():
         post = request.POST['data']
-        
+
         partner = Partner.objects.get(id=post['item'])
         partner_balance = partner.balance
 
@@ -417,8 +429,6 @@ def partnerAddCoinsRequest(request):
         if bound_form.is_valid():
             contractor_balance = partner.contractor.balance
             partner_balance_in_form = bound_form.cleaned_data['balance']
-
-            # return JsonResponse({"partner": contractor_balance})
 
             if partner_balance_in_form > contractor_balance:
                 message += "Ошибка! Вы добавили больше, чем имеется у контрагента"
@@ -431,7 +441,7 @@ def partnerAddCoinsRequest(request):
                     amount=partner_balance_in_form
                 )
 
-                return JsonResponse({"message": message, "class": "alert-warning", 'partner': partner.id })         
+                return JsonResponse({"message": message, "class": "alert-warning", 'partner': partner.id})
 
             elif (partner_balance + partner_balance_in_form) < 0:
 
@@ -443,20 +453,21 @@ def partnerAddCoinsRequest(request):
                     exec_type=0,
                     amount=partner_balance_in_form
                 )
-                return JsonResponse({"message": message, "class": "alert-warning", 'partner': partner.id })
+                return JsonResponse({"message": message, "class": "alert-warning", 'partner': partner.id})
 
-            else: 
+            else:
                 contractor = partner.contractor
                 new_contractor_balance = contractor_balance - partner_balance_in_form
                 contractor.balance = new_contractor_balance
                 contractor.save()
-                
+
                 new_partner_balance = partner_balance + partner_balance_in_form
                 new_partner_obj = bound_form.save(commit=False)
                 new_partner_obj.balance = new_partner_balance
                 new_partner_obj.save()
 
-                message += 'Успешно. Добавлено ' + str(partner_balance_in_form) + ' к ' + new_partner_obj.name
+                message += 'Успешно. Добавлено ' + \
+                    str(partner_balance_in_form) + ' к ' + new_partner_obj.name
 
                 UserTransaction.objects.create(
                     entity='Клиент: ' + partner.name,
@@ -466,9 +477,9 @@ def partnerAddCoinsRequest(request):
                     amount=partner_balance_in_form
                 )
 
-                return JsonResponse({"message": message, "class": "alert-success", 'new_balance': new_partner_balance, 'new_contractor_balance': new_contractor_balance,'partner': partner.id })
+                return JsonResponse({"message": message, "class": "alert-success", 'new_balance': new_partner_balance, 'new_contractor_balance': new_contractor_balance, 'partner': partner.id})
         message += "Произошла ошибка!"
-        
+
         UserTransaction.objects.create(
             entity='Клиент: ' + partner.name,
             user=request.user,
@@ -476,12 +487,7 @@ def partnerAddCoinsRequest(request):
             exec_type=1,
             amount=partner_balance_in_form
         )
-        return JsonResponse({"message": message + str(bound_form.errors), "class": "alert-danger", 'partner': partner.id })
-
-            
-            
-
-        # return redirect('/')
+        return JsonResponse({"message": message + str(bound_form.errors), "class": "alert-danger", 'partner': partner.id})
 
 
 class ContractorDelete(LoginRequiredMixin, ObjectDeleteMixin, View):
@@ -506,7 +512,8 @@ class CardDelete(LoginRequiredMixin, OjectDisableMixin, View):
 
 class TransactionListJson(LoginRequiredMixin, BaseDatatableView):
     model = Transaction
-    columns = ['id', 'card', 'partner', 'station', 'post', 'start_time', 'price']
+    columns = ['id', 'card', 'partner',
+               'station', 'post', 'start_time', 'price']
     order_columns = ['id', 'card', 'partner', 'station', '', 'start_time', '']
 
     def prepare_results(self, qs):
@@ -518,11 +525,11 @@ class TransactionListJson(LoginRequiredMixin, BaseDatatableView):
         for item in qs:
             if item.card:
                 new_card = item.card.data
-            else: 
+            else:
                 new_card = "Нет карты"
 
             if item.partner:
-               new_partner = item.partner.name
+                new_partner = item.partner.name
             else:
                 new_partner = "Нет партнера"
 
@@ -531,10 +538,12 @@ class TransactionListJson(LoginRequiredMixin, BaseDatatableView):
 
             json_data.append([
                 escape(item.id),  # escape HTML for security reasons
-                escape("{0}".format(new_card)),  
-                escape("{0}".format(new_partner)), 
-                escape("{0}".format(item.station.owner)),  # escape HTML for security reasons
-                escape("{0}".format(item.post.id)),  # escape HTML for security reasons
+                escape("{0}".format(new_card)),
+                escape("{0}".format(new_partner)),
+                # escape HTML for security reasons
+                escape("{0}".format(item.station.owner)),
+                # escape HTML for security reasons
+                escape("{0}".format(item.post.id)),
                 item.start_time.strftime("%d.%m.%Y %H:%M:%S"),
                 escape("{0}".format(item.price)),
                 escape("{0}".format(item.get_initiator_type_display()))
@@ -552,11 +561,11 @@ class TransactionListJson(LoginRequiredMixin, BaseDatatableView):
             search_parts = search.split('?')
 
             for part in search_parts:
-                q = Q(id__istartswith=part)|\
-                    Q(card__data__istartswith=part)|\
-                    Q(partner__name__istartswith=part)|\
-                    Q(station__owner__istartswith=part)|\
-                    Q(post__id__istartswith=part)|\
+                q = Q(id__istartswith=part) |\
+                    Q(card__data__istartswith=part) |\
+                    Q(partner__name__istartswith=part) |\
+                    Q(station__owner__istartswith=part) |\
+                    Q(post__id__istartswith=part) |\
                     Q(price__istartswith=part)
 
                 qs_params = qs_params & q if qs_params else q
@@ -569,7 +578,6 @@ class TransactionListJson(LoginRequiredMixin, BaseDatatableView):
 
             qs = qs.filter(qs_params)
 
-            
         if date_to:
             print(datetime.strptime(date_to, "%d.%m.%Y"))
             q = Q(start_time__lte=datetime.strptime(date_to, "%d.%m.%Y"))

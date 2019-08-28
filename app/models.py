@@ -11,7 +11,8 @@ class Contractor(models.Model):
     name = models.CharField("Название организации контрагента", max_length=100)
     UNP = models.CharField("УНП", max_length=50)
     address = models.CharField("Адрес", max_length=50)
-    balance = models.DecimalField(verbose_name="Баланс", max_digits=7, decimal_places=2)
+    balance = models.DecimalField(
+        verbose_name="Баланс", max_digits=7, decimal_places=2)
 
     def __str__(self):
         return self.name
@@ -25,10 +26,13 @@ class Partner(models.Model):
         (4, 'ТС'),
     )
     name = models.CharField("Название организации Клиента", max_length=100)
-    identification_type = models.PositiveSmallIntegerField("Тип идентификации", choices=TYPES, default=1)
+    identification_type = models.PositiveSmallIntegerField(
+        "Тип идентификации", choices=TYPES, default=1)
     data = models.CharField("Данные Клиента", max_length=200)
-    balance = models.DecimalField(verbose_name="Баланс", max_digits=7, decimal_places=2)
-    contractor = models.ForeignKey(Contractor, verbose_name="Контрагент", on_delete=models.CASCADE, related_name="partners" )
+    balance = models.DecimalField(
+        verbose_name="Баланс", max_digits=7, decimal_places=2)
+    contractor = models.ForeignKey(
+        Contractor, verbose_name="Контрагент", on_delete=models.CASCADE, related_name="partners")
 
     def __str__(self):
         return self.name
@@ -40,23 +44,25 @@ class Station(models.Model):
     course = models.PositiveSmallIntegerField("Курс (балл/руб)", default=1)
     info = models.TextField('Информация', blank=True, max_length=200)
     is_active = models.BooleanField("Активна", default=True)
-    
+
     def __str__(self):
         return self.owner
 
 
 class Post(models.Model):
     post_id = models.PositiveSmallIntegerField("Номер поста", default=1)
-    station = models.ForeignKey(Station, verbose_name='Станция', on_delete=models.CASCADE, related_name="posts")
-    mac_uid = models.CharField("MAC UID", max_length=12, unique=True )
+    station = models.ForeignKey(
+        Station, verbose_name='Станция', on_delete=models.CASCADE, related_name="posts")
+    mac_uid = models.CharField("MAC UID", max_length=12, unique=True)
 
     def __str__(self):
         return str(self.post_id)
 
-   
+
 class Card(models.Model):
     data = models.CharField('Данные карты', max_length=200)
-    partner = models.ForeignKey(Partner, verbose_name="Клиент", on_delete=models.CASCADE, related_name="cards")
+    partner = models.ForeignKey(
+        Partner, verbose_name="Клиент", on_delete=models.CASCADE, related_name="cards")
     is_active = models.BooleanField("Активна", default=True)
 
     def __str__(self):
@@ -74,21 +80,29 @@ class Transaction(models.Model):
         (1, 'Веб-приложение'),
         (2, 'Купюроприемник')
     )
-    card = models.ForeignKey(Card, verbose_name="Карта", on_delete=models.PROTECT, related_name="transactions", blank=True, null=True)
-    partner = models.ForeignKey(Partner, verbose_name="Клиент", on_delete=models.PROTECT, related_name="transactions", blank=True, null=True)
-    station = models.ForeignKey(Station, verbose_name="Станция", on_delete=models.PROTECT, related_name="transactions")
-    post = models.ForeignKey(Post, verbose_name="Пост", on_delete=models.PROTECT, related_name="transactions")
+    card = models.ForeignKey(Card, verbose_name="Карта", on_delete=models.PROTECT,
+                             related_name="transactions", blank=True, null=True)
+    partner = models.ForeignKey(Partner, verbose_name="Клиент", on_delete=models.PROTECT,
+                                related_name="transactions", blank=True, null=True)
+    station = models.ForeignKey(Station, verbose_name="Станция",
+                                on_delete=models.PROTECT, related_name="transactions")
+    post = models.ForeignKey(Post, verbose_name="Пост",
+                             on_delete=models.PROTECT, related_name="transactions")
     start_time = models.DateTimeField("Дата начала")
-    price = models.DecimalField(verbose_name="Цена", max_digits=7, decimal_places=2)
-    initiator_type = models.PositiveSmallIntegerField("Инициатор транзакции", choices=INIT_TYPES, default=1)
+    price = models.DecimalField(
+        verbose_name="Цена", max_digits=7, decimal_places=2)
+    initiator_type = models.PositiveSmallIntegerField(
+        "Инициатор транзакции", choices=INIT_TYPES, default=1)
 
     def __str__(self):
         return "Транзакция {0}".format(self.pk)
 
 
 class Payment(models.Model):
-    contractor = models.ForeignKey(Contractor, verbose_name="Контрагент", on_delete=models.PROTECT, related_name="payments", blank=True, null=True)
-    amount = models.DecimalField(verbose_name="Сумма начисления", max_digits=7, decimal_places=2)
+    contractor = models.ForeignKey(Contractor, verbose_name="Контрагент",
+                                   on_delete=models.PROTECT, related_name="payments", blank=True, null=True)
+    amount = models.DecimalField(
+        verbose_name="Сумма начисления", max_digits=7, decimal_places=2)
     annotation = models.CharField("Примечание", max_length=150, blank=True)
     date = models.DateTimeField("Дата", auto_now_add=True)
 
@@ -103,9 +117,11 @@ class UserTransaction(models.Model):
         (1, 'Проведен'),
     )
 
-    user = models.ForeignKey(User, verbose_name="Пользователь", on_delete=models.PROTECT, related_name="user_transactions")
+    user = models.ForeignKey(User, verbose_name="Пользователь",
+                             on_delete=models.PROTECT, related_name="user_transactions")
     entity = models.CharField("Кому", max_length=100)
     annotation = models.CharField("Примечание", max_length=150, blank=True)
-    exec_type = models.SmallIntegerField('Статус', choices=EXEC_TYPE, default = 0)
+    exec_type = models.SmallIntegerField(
+        'Статус', choices=EXEC_TYPE, default=0)
     amount = models.DecimalField("Сумма", max_digits=7, decimal_places=2)
     date_pub = models.DateTimeField("Дата", auto_now_add=True)

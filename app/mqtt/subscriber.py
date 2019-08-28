@@ -6,11 +6,12 @@ import pytz
 from django.conf import settings
 from app.utils import get_object_or_none
 from django.core.exceptions import ValidationError, FieldError
-#**xdsi*update
+# **xdsi*update
 from decimal import *
 import logging
 
 logger = logging.getLogger('mqtt')
+
 
 def on_connect(client, userdata, flags, rc):
     logger.debug("Connected with result code "+str(rc))
@@ -20,32 +21,28 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     from app.models import Post, Card, Partner, Transaction, Station
     logger.debug('Has a message:' + str(msg.payload))
-    payload=json.loads(msg.payload)
-    topic=msg.topic.split('/')
+    payload = json.loads(msg.payload)
+    topic = msg.topic.split('/')
     payload['rpi'] = topic[0]
     payload['command'] = topic[1]
 
     # logger.debug('Payload is: ' + str(payload))
     logger.debug('Topic is: ' + msg.topic)
 
-
     if payload["command"] == 'account_balance' or payload["command"] == 'start_washing' or payload["command"] == 'srv_ping':
         logger.debug('No action required')
-
 
     elif payload["command"] == 'get_account_balance':
 
         logger.debug('Get account balance start')
 
-
         #- payload["rpi"]
         #- payload["client"]
 
-        rpi=str(payload['rpi'])
+        rpi = str(payload['rpi'])
         logger.debug('RPI is ' + rpi)
         topic = payload['rpi'] + '/account_balance'
         logger.debug('Topic is ' + topic)
-
 
         client = str(payload['client'])
         # card = Card.objects.get(data=client)
@@ -57,39 +54,38 @@ def on_message(client, userdata, msg):
             client_balance = card.partner.balance
             logger.debug('Balance is ' + str(client_balance))
 
-            #**************************
-            #*******xdsi***************
-            ## rpi=str(payload['rpi'])
+            # **************************
+            # *******xdsi***************
+            # rpi=str(payload['rpi'])
             ## logger.debug('RPI is ' + rpi)
             post = get_object_or_none(Post, mac_uid=rpi)
             logger.debug(post.mac_uid)
-            station=post.station
+            station = post.station
             logger.debug('Course is ' + str(station.course))
-            #- fuction check balance and send it
+            # - fuction check balance and send it
             ## topic = payload['rpi'] + '/account_balance'
             ## logger.debug('Topic is ' + topic)
 
-            #**************************
-            #*******xdsi***************
-            data = json.dumps({'client': payload["client"], 'balance': float(client_balance), 'course': station.course})
-            logger.debug( str(data) )
-            ## try:
+            # **************************
+            # *******xdsi***************
+            data = json.dumps({'client': payload["client"], 'balance': float(
+                client_balance), 'course': station.course})
+            logger.debug(str(data))
+            # try:
             ##     publish_data(topic, data)
             ##     logger.debug( data )
-            ## except:
+            # except:
             ##     logger.error("Can't send data for account balance")
         else:
             logger.error('card is not defined')
             data = json.dumps({'client': "NONE"})
-            logger.debug( str(data) )
+            logger.debug(str(data))
 
         try:
             publish_data(topic, data)
-            logger.debug( data )
+            logger.debug(data)
         except:
             logger.error("Can't send data for account balance")
-
-
 
     # TRANSACTIONS
     elif payload["command"] == 'transaction':
@@ -115,8 +111,8 @@ def on_message(client, userdata, msg):
         logger.debug('Start date is ' + str(start_time))
 
 
-#**************************
-#*******xdsi***************
+# **************************
+# *******xdsi***************
         points = int(payload['points'])
         logger.debug('Points is ' + str(points))
         station = post.station
@@ -135,7 +131,8 @@ def on_message(client, userdata, msg):
 
             logger.debug(type(partner.balance))
             partner.balance -= Decimal(price)
-            logger.debug('Partner balance after payment is ' + str(partner.balance))
+            logger.debug('Partner balance after payment is ' +
+                         str(partner.balance))
 
             try:
                 partner.save()
@@ -144,13 +141,13 @@ def on_message(client, userdata, msg):
 
             try:
                 t = Transaction.objects.create(
-                    card = card,
-                    partner = partner,
-                    station = station,
-                    post = post,
-                    start_time = start_time,
-                    price = price,
-                    initiator_type = init_type
+                    card=card,
+                    partner=partner,
+                    station=station,
+                    post=post,
+                    start_time=start_time,
+                    price=price,
+                    initiator_type=init_type
                 )
                 logger.debug(t)
             except:
@@ -158,16 +155,15 @@ def on_message(client, userdata, msg):
         else:
             try:
                 t = Transaction.objects.create(
-                    station = station,
-                    post = post,
-                    start_time = start_time,
-                    price = price,
-                    initiator_type = init_type
+                    station=station,
+                    post=post,
+                    start_time=start_time,
+                    price=price,
+                    initiator_type=init_type
                 )
                 logger.debug(t)
             except:
                 logger.error('Transaction not created')
-
 
     elif payload["command"] == 'init':
 
@@ -188,9 +184,9 @@ def on_message(client, userdata, msg):
 
             try:
                 p = Post.objects.create(
-                    post_id = post_id,
-                    station = station,
-                    mac_uid = rpi
+                    post_id=post_id,
+                    station=station,
+                    mac_uid=rpi
                 )
                 logger.debug('New post is ' + str(p.mac_uid))
             except:
@@ -200,9 +196,10 @@ def on_message(client, userdata, msg):
         rpi = payload['rpi']
         logger.debug('Rpi ' + rpi + ' is available!')
 
+
 # client = mqtt.Client()
 client = mqtt.Client()
-client.username_pw_set(username="mqttuseruser",password="Uwxd_D41")
+client.username_pw_set(username="mqttuseruser", password="Uwxd_D41")
 client.on_connect = on_connect
 client.on_message = on_message
 

@@ -1,6 +1,7 @@
 from .models import *
 from django import forms
 
+
 class PartnerForm(forms.ModelForm):
 
     class Meta:
@@ -20,7 +21,7 @@ class PartnerForm(forms.ModelForm):
             'contractor': forms.Select(attrs={'class': 'form-control'})
         }
 
-        
+
 class ContractorForm(forms.ModelForm):
 
     class Meta:
@@ -39,9 +40,6 @@ class ContractorForm(forms.ModelForm):
         }
 
 
-
-
-
 class StationForm(forms.ModelForm):
     class Meta:
         model = Station
@@ -51,9 +49,9 @@ class StationForm(forms.ModelForm):
             'info'
         ]
         widgets = {
-            'station_id' : forms.NumberInput(attrs={'class': 'form-control'}),
-            'owner' : forms.TextInput(attrs={'class': 'form-control'}),
-            'info' : forms.Textarea(attrs={'class': 'form-control'})
+            'station_id': forms.NumberInput(attrs={'class': 'form-control'}),
+            'owner': forms.TextInput(attrs={'class': 'form-control'}),
+            'info': forms.Textarea(attrs={'class': 'form-control'})
         }
 
 
@@ -65,8 +63,8 @@ class CardForm(forms.ModelForm):
             'partner'
         ]
         widgets = {
-            'data' : forms.TextInput(attrs={'class': 'form-control'}),
-            'partner' : forms.Select(attrs={'class': 'form-control'})
+            'data': forms.TextInput(attrs={'class': 'form-control'}),
+            'partner': forms.Select(attrs={'class': 'form-control'})
         }
 
 
@@ -77,28 +75,30 @@ class PartnerCoinForm(forms.ModelForm):
             'balance'
         ]
         widgets = {
-            'balance' : forms.NumberInput(attrs={'class': 'form-control'}),
+            'balance': forms.NumberInput(attrs={'class': 'form-control'}),
         }
 
 
 class StartWashingForm(forms.Form):
-        station = forms.ModelChoiceField(label="Станция",queryset=Station.objects.all(), empty_label=None)
-        post = forms.ModelChoiceField(label="Пост",queryset=Post.objects.all())
-        partner = forms.ModelChoiceField(label="Клиент",queryset=Partner.objects.all(), required=False)
-        card = forms.ModelChoiceField(label="Карта",queryset=Card.objects.all(), required=False)
-        payment = forms.DecimalField(label="Сумма")
+    station = forms.ModelChoiceField(
+        label="Станция", queryset=Station.objects.all(), empty_label=None)
+    post = forms.ModelChoiceField(label="Пост", queryset=Post.objects.all())
+    partner = forms.ModelChoiceField(
+        label="Клиент", queryset=Partner.objects.all(), required=False)
+    card = forms.ModelChoiceField(
+        label="Карта", queryset=Card.objects.all(), required=False)
+    payment = forms.DecimalField(label="Сумма")
 
-        station.widget.attrs.update({'class':'form-control'})
-        post.widget.attrs.update({'class':'form-control'})
-        payment.widget.attrs.update({'class':'form-control'})
-        card.widget.attrs.update({'class':'form-control'})
-        partner.widget.attrs.update({'class':'form-control'})
+    station.widget.attrs.update({'class': 'form-control'})
+    post.widget.attrs.update({'class': 'form-control'})
+    payment.widget.attrs.update({'class': 'form-control'})
+    card.widget.attrs.update({'class': 'form-control'})
+    partner.widget.attrs.update({'class': 'form-control'})
 
-
-        def __init__(self, *args, **kwargs):
-            super().__init__(*args, **kwargs)
-            # self.fields['post'].queryset = Post.objects.none()
-            # self.fields['card'].queryset = Card.objects.none()
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # self.fields['post'].queryset = Post.objects.none()
+        # self.fields['card'].queryset = Card.objects.none()
 
 
 class PaymentForm(forms.ModelForm):
