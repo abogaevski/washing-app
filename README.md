@@ -1,42 +1,84 @@
-# washing-app
+# Washing app
 
-1. apt update
-2. apt install python3-pip python3-dev libpq-dev postgresql postgresql-contrib nginx curl mysql-server
+## Getting Started
 
-2.1. if you create new database
-   
-    1. create database 
-        create database <database_name> character set utf8;
-    2. create user 
-        CREATE USER '<username>'@'localhost' IDENTIFIED BY '<password>';
-    3. grant privileges
-        grant all privileges on <database_name>.* to '<username>'@'localhost';
+### Installing
 
-    backup database
-        mysqldump -uroot -p django_db > /home/odmen/dj_db.sql
-    restore database
-        mysql -uroot -p django_db < /home/ubuntu/dj_db.sql
+Install some prerequisites
 
-3. cd /path/to/www;
-4. virtualenv env
-5. git pull https://github.com/abogaevski/washing-app
-6. source env/bin/activate
-7. pip install -r requirements.txt
-8. python3 manage.py runserver #test
+    apt update
+    apt install python3-pip python3-dev nginx curl mysql-server virtualenv
 
-9. nano /etc/systemd/system/gunicorn.socket
+###Configuring
+
+#### Configuring a database
+
+If you have a database dump from another server you should to restore database from dump file.
+For example:
+
+    mysql -uroot -p <your_database_name> < /home/ubuntu/<your_database_dump_name>
+
+If you create a new database:
     
-        [Unit]
-        Description=gunicorn socket
+    1. CREATE DATABASE <database_name> CHARACTER SET UTF8;
+    2. CREATE USER '<username>'@'localhost' IDENTIFIED BY '<password>';
+    3. GRANT ALL PRIVILEGES ON <database_name>.* TO '<username>'@'localhost';
 
-        [Socket]
-        ListenStream=/run/gunicorn.sock
+* [Create MySQL Database, Table & User From Command Line Guide](https://www.a2hosting.com/kb/developer-corner/mysql/managing-mysql-databases-and-users-from-the-command-line)
+* [Creating and Selecting a Database](https://dev.mysql.com/doc/refman/8.0/en/creating-database.html)
 
-        [Install]
-        WantedBy=sockets.target
 
-10. nano /etc/systemd/system/gunicorn.service
-    
+#### Configuring a Django webapp
+
+Virtual environment:
+
+    cd <your/www/path/>;
+    virtualenv env
+
+Configure a django webapp:
+
+    git pull https://github.com/abogaevski/washing-app
+    source env/bin/activate
+    pip install -r requirements.txt
+
+Test your app:
+
+    python3 manage.py runserver
+
+If your database is new, run:
+
+    python3 manage.py migrate
+
+And test again.
+
+[Установка Django](https://tutorial.djangogirls.org/ru/django_installation/)
+
+#### Configuring python container Gunicorn
+
+##### Configuring systemd socket.
+
+Run:
+
+    nano /etc/systemd/system/gunicorn.socket
+
+And paste: 
+
+    [Unit]
+    Description=gunicorn socket
+
+    [Socket]
+    ListenStream=/run/gunicorn.sock
+
+    [Install]
+    WantedBy=sockets.target
+
+##### Configuring systemd service.
+Run:
+
+    nano /etc/systemd/system/gunicorn.service
+
+Paste:
+
         [Unit]
         Description=gunicorn daemon
         Requires=gunicorn.socket
@@ -47,7 +89,8 @@
         Group=www-data
         WorkingDirectory=/var/www/washing-app
         ExecStart=/var/www/washing-app/env/bin/gunicorn \
-                --access-logfile - \
+                --error-logfile /var/log/gunicorn/error.log \
+                --access-logfile /var/log/gunicorn/access.log \
                 --workers 3 \
                 --bind unix:/run/gunicorn.sock \
                 engine.wsgi:application
@@ -55,15 +98,34 @@
         [Install]
         WantedBy=multi-user.target
 
-11. systemctl start gunicorn.socket
-12. systemctl enable gunicorn.socket
-13. systemctl enable gunicorn.socket
-14. file /run/gunicorn.sock
-15. journalctl -u gunicorn.socket
-16. systemctl status gunicorn
-17. curl --unix-socket /run/gunicorn.sock localhost
-18. systemctl status gunicorn
-19. nano /etc/nginx/sites-available/washing-app
+##### Enabling new systemd service
+
+Run:
+
+    systemctl start gunicorn.socket
+    systemctl enable gunicorn.socket
+    systemctl enable gunicorn.socket
+    
+    # Check if file is exist
+    file /run/gunicorn.sock
+
+    # Check last service logs
+    journalctl -u gunicorn.socket
+    systemctl status gunicorn
+
+    # Check if you get a response
+    curl --unix-socket /run/gunicorn.sock localhost
+
+    # Check your service status
+    systemctl status gunicorn
+
+##### Configuring Nginx
+
+Run:
+    
+    nano /etc/nginx/sites-available/washing-app
+
+And paste:
 
         server {
             listen 80;
@@ -80,6 +142,8 @@
             }
         }
 
-20. ln -s /etc/nginx/sites-available/washing-app /etc/nginx/sites-enabled
-21. nginx -t
-22. systemctl restart nginx
+Enabling new site:
+
+    ln -s /etc/nginx/sites-available/washing-app /etc/nginx/sites-enabled
+    nginx -t
+    systemctl restart nginx
