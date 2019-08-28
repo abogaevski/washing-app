@@ -89,7 +89,7 @@ def on_message(client, userdata, msg):
         except:
             logger.error("Can't send data for account balance")
 
-    
+
 
     # TRANSACTIONS
     elif payload["command"] == 'transaction':
@@ -99,13 +99,14 @@ def on_message(client, userdata, msg):
         logger.debug('Init type is ' + str(init_type))
 
         rpi = str(payload['rpi'])
+        logger.debug(rpi)
         # post = Post.objects.get(mac_uid=rpi)
         post = get_object_or_none(Post, mac_uid=rpi)
         if post:
             logger.debug('Post is ' + str(post.mac_uid))
             station = post.station
-            logger.debug('Station is ' + station.owner)       
-
+            logger.debug('Station is ' + station.owner)
+        logger.debug(str(post))
         timestamp = int(payload['date'])
         start_time_from_timestamp = datetime.fromtimestamp(timestamp)
         tz = pytz.timezone(settings.TIME_ZONE)
@@ -123,14 +124,14 @@ def on_message(client, userdata, msg):
         logger.debug('Price is ' + str(price))
 
         if init_type != 2:
-            
+
             client = str(payload['client'])
 
             card = get_object_or_none(Card, data=client)
             if card:
                 logger.debug('Card is ' + str(card))
                 partner = card.partner
-                logger.debug('Partner is ' + partner.name)     
+                logger.debug('Partner is ' + partner.name)
 
             logger.debug(type(partner.balance))
             partner.balance -= Decimal(price)
@@ -166,8 +167,8 @@ def on_message(client, userdata, msg):
                 logger.debug(t)
             except:
                 logger.error('Transaction not created')
-                
-        
+
+
     elif payload["command"] == 'init':
 
         logger.debug('Init start')
@@ -180,7 +181,7 @@ def on_message(client, userdata, msg):
 
         rpi = int(payload['rpi'])
         logger.debug('MAC is ' + str(rpi))
-        
+
         station = get_object_or_none(Station, station_id=station_id)
         if station:
             logger.debug('Station is ' + station.owner)
