@@ -9,7 +9,7 @@ Install some prerequisites
     apt update
     apt install python3-pip python3-dev nginx curl mysql-server virtualenv
 
-###Configuring
+### Configuring
 
 #### Configuring a database
 
