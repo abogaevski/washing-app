@@ -99,7 +99,6 @@ def on_message(client, userdata, msg):
             # points/price define
             points = int(payload['points'])
             logger.debug('Points is ' + str(points))
-#            station = post.station
             price = points/station.course
             logger.debug('Price is ' + str(price))
 
@@ -205,7 +204,7 @@ def on_message(client, userdata, msg):
             else:
                 logger.error('Undefined transaction type. Not created')
         else:
-        logger.error('Undefined post')
+            logger.error('Undefined post')
 
     elif payload["command"] == 'init':
 
