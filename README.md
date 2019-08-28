@@ -85,7 +85,7 @@ Paste:
         After=network.target
 
         [Service]
-        User=sammy
+        User=www-data
         Group=www-data
         WorkingDirectory=/var/www/washing-app
         ExecStart=/var/www/washing-app/env/bin/gunicorn \
