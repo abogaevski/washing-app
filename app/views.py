@@ -72,6 +72,7 @@ class StartWash(View):
                 }
             else:
                 data = {
+                    'client': 'NONE',
                     'points': points
                 }
 
@@ -229,7 +230,7 @@ class CardActive(LoginRequiredMixin, View):
         return render(request, 'app/card/card_create.html', context={'form': form})
 
     def post(self, request):
-        bound_form = CardForm(request.POST['data'])
+        bound_form = CardForm(request.POST)
         if bound_form.is_valid():
             bound_obj = ''
             try:
