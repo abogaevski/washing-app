@@ -28,8 +28,8 @@ import os
 class Dashboard(LoginRequiredMixin, View):
     def get(self, request):
         last_day = datetime.now() - timedelta(hours=24)
-        tz = pytz.timezone(settings.TIME_ZONE)
-        last_day = tz.localize(last_day)
+        #tz = pytz.timezone(settings.TIME_ZONE)
+        #last_day = tz.localize(last_day)
 
         transactions = Transaction.objects.filter(start_time__gte=last_day)
         partners = Partner.objects.filter(balance__lte=5)

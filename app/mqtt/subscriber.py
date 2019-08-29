@@ -2,7 +2,7 @@ import paho.mqtt.client as mqtt
 from .publisher import publish_data
 import json
 from datetime import datetime
-import pytz
+#import pytz
 from django.conf import settings
 from app.utils import get_object_or_none
 from django.core.exceptions import ValidationError, FieldError
@@ -93,8 +93,9 @@ def on_message(client, userdata, msg):
             # time define
             timestamp = int(payload['date'])
             start_time_from_timestamp = datetime.fromtimestamp(timestamp)
-            tz = pytz.timezone(settings.TIME_ZONE)
-            start_time = tz.localize(start_time_from_timestamp)
+            # removing localization
+            #tz = pytz.timezone(settings.TIME_ZONE)
+            #start_time = tz.localize(start_time_from_timestamp)
             logger.debug('Start date is ' + str(start_time))
 
             # points/price define
@@ -257,31 +258,6 @@ def on_message(client, userdata, msg):
         else:
             status = "postExist"
             logger.debug('Post already exist')
-
-###
-
-        # # is station+post+mac exist
-        # if not get_object_or_none(Post, station=station, post_id=post_id, mac_uid=rpi):
-        #     logger.debug('station+post+mac not exist')
-        #     # is station+post exist
-        #     if not get_object_or_none(Post, station=station, post_id=post_id):
-        #         logger.debug('station+post not exist')
-        #         # is device exist
-        #         if not get_object_or_none(Post, mac_uid=rpi):  
-        #             logger.debug('device not exist')
-        #             logger.debug('initOK')
-        #         else:
-        #             data = "devExist"
-        #             logger.error('Device ' + str(rpi) +
-        #                          'already exist on other post/station')
-        #     else:
-        #         status = "postDuplicate"
-        #         logger.error('Another device is set to station ' +
-        #                      str(station_id) + 'post ' + str(post_id))
-        # else:
-        #     status = "postExist"
-        #     logger.debug('Post' + str(rpi) + 'already exist')
-
 
         topic = payload['rpi'] + '/init_reply'
         data = json.dumps({'status': status})
