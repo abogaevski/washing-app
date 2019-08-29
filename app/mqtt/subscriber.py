@@ -220,11 +220,9 @@ def on_message(client, userdata, msg):
         rpi = str(payload['rpi'])
         logger.debug('MAC is ' + str(rpi))
 
-        station = get_object_or_none(Station, station_id=station_id)
-
-        if not get_object_or_none(Post, Q(station=station),Q(post_id=post_id),Q(mac_uid=rpi)): #is station+post+mac exist
-            if not get_object_or_none(Post, Q(station=station),Q(post_id=post_id)): #is station+post exist
-                if not get_object_or_none(Post, Q(mac_uid=rpi)): #is device exist
+        if not get_object_or_none(Post, station=station,post_id=post_id,mac_uid=rpi): #is station+post+mac exist
+            if not get_object_or_none(Post, station=station,post_id=post_id): #is station+post exist
+                if not get_object_or_none(Post, mac_uid=rpi): #is device exist
 
                     try:
                         p = Post.objects.create(
