@@ -20,13 +20,24 @@ For example:
 
 If you create a new database:
     
-    1. CREATE DATABASE <database_name> CHARACTER SET UTF8;
-    2. CREATE USER '<username>'@'localhost' IDENTIFIED BY '<password>';
-    3. GRANT ALL PRIVILEGES ON <database_name>.* TO '<username>'@'localhost';
+    CREATE DATABASE <database_name> CHARACTER SET UTF8;
+    CREATE USER '<username>'@'localhost' IDENTIFIED BY '<password>';
+    GRANT ALL PRIVILEGES ON <database_name>.* TO '<username>'@'localhost';
 
 * [Create MySQL Database, Table & User From Command Line Guide](https://www.a2hosting.com/kb/developer-corner/mysql/managing-mysql-databases-and-users-from-the-command-line)
 * [Creating and Selecting a Database](https://dev.mysql.com/doc/refman/8.0/en/creating-database.html)
 
+Adding user for access from 1C server
+
+    CREATE USER '<1c_user>'@'%' IDENTIFIED BY 'password';
+    GRANT select on django_db.app_card to '<1c_user>'@'%';
+    GRANT select on django_db.app_contractor to '<1c_user>'@'%';
+    GRANT select on django_db.app_partner to '<1c_user>'@'%';
+    GRANT select on django_db.app_payment to '<1c_user>'@'%';
+    GRANT select on django_db.app_post to '<1c_user>'@'%';
+    GRANT select on django_db.app_station to '<1c_user>'@'%';
+    GRANT select on django_db.app_transaction to '<1c_user>'@'%';
+    GRANT select on django_db.app_usertransaction to '<1c_user>'@'%';
 
 #### Configuring a Django webapp
 
