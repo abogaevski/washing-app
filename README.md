@@ -7,7 +7,7 @@
 Install some prerequisites
 
     apt update
-    apt install python3-pip python3-dev nginx curl mysql-server virtualenv
+    apt install python3-pip python3-dev nginx curl mysql-server virtualenv mosquitto mosquitto-clients
 
 ### Configuring
 
@@ -142,11 +142,22 @@ And paste:
         }
     }
 
-Enabling new site:
 
-    ln -s /etc/nginx/sites-available/washing-app /etc/nginx/sites-enabled
-    nginx -t
-    systemctl restart nginx
+##### Configuring MQTT
+
+Run:
+    
+    sudo mosquitto_passwd -c /etc/mosquitto/passwd {%mqttuser%}
+    nano /etc/mosquitto/conf.d/default.conf
+
+And paste:
+
+    allow_anonymous false
+    password_file /etc/mosquitto/passwd
+
+Enabling MQTT brocker:
+
+    systemctl restart mosquitto
 
 ## What we have now
 
