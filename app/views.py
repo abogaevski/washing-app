@@ -95,7 +95,7 @@ def load_posts(request):
 def load_cards(request):
     if request.is_ajax():
         partner_id = request.POST.get('partner')
-        cards = Card.objects.filter(partner_id=partner_id).order_by('id')
+        cards = Card.objects.filter(partner_id=partner_id, is_active=True).order_by('id')
         return render(request, 'app/dashboard/cards_options.html', {'cards': cards})
 
 # ----------------------------------------------
