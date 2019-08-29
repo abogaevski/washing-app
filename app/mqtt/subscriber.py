@@ -223,7 +223,7 @@ def on_message(client, userdata, msg):
         logger.debug('MAC is ' + str(rpi))
 
         station = get_object_or_none(Station, station_id=station_id)
-        logger.debug(station.owner)
+        logger.debug('Station is ' + str(station))
 
         # is station+post+mac exist
         if not get_object_or_none(Post, station=station, post_id=post_id, mac_uid=rpi):
@@ -247,7 +247,7 @@ def on_message(client, userdata, msg):
                 else:
                     data = "devExist"
                     logger.error('Device ' + str(rpi) +
-                                 'already exist on other post/station')
+                                 ' already exist on other post/station')
 
             else:
                 status = "postDuplicate"
@@ -256,10 +256,9 @@ def on_message(client, userdata, msg):
 
         else:
             status = "postExist"
-            logger.debug('Post' + str(rpi) + 'already exist')
+            logger.debug('Post already exist')
 
 ###
-
 
         # # is station+post+mac exist
         # if not get_object_or_none(Post, station=station, post_id=post_id, mac_uid=rpi):
@@ -284,13 +283,13 @@ def on_message(client, userdata, msg):
         #     logger.debug('Post' + str(rpi) + 'already exist')
 
 
-        # topic = payload['rpi'] + '/init_reply'
-        # data = json.dumps({'status': status})
-        # try:
-        #     publish_data(topic, data)
-        #     logger.debug('Sent data' + data)
-        # except:
-        #     logger.error("Can't send init reply data")
+        topic = payload['rpi'] + '/init_reply'
+        data = json.dumps({'status': status})
+        try:
+            publish_data(topic, data)
+            logger.debug('Sent data' + data)
+        except:
+            logger.error("Can't send init reply data")
 
 # PING
     elif payload["command"] == 'rpi_ping':
