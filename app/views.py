@@ -11,7 +11,6 @@ import time
 from django.db.models import Sum
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models.signals import post_save
 from datetime import datetime, timedelta
 import pytz
 from django.conf import settings
