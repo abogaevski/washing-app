@@ -179,6 +179,14 @@ Enabling MQTT brocker:
 - Django logs: **var/www/washing-app/logs/** 
 > Mqtt logs are the same path as specified above
 
+### Changes
+
+Just pull the changes and restart gunicorn server
+
+    cd /var/www/washing-app/
+    git pull
+    service gunicorn restart
+
 ### Some info
 
 #### Django
@@ -191,3 +199,5 @@ Enabling MQTT brocker:
 
 #### Gunicorn
 - [Gunicorn configuration](http://docs.gunicorn.org/en/latest/configure.html)
+
+
