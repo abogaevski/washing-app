@@ -103,16 +103,17 @@
                     </thead>
                     <tbody>
                         {% for card in partner.cards.all %}
-
-                            <tr>
-                                <td>{{card.id}}</td>
-                                <td>{{card.data}}</td>
-                                <td>
-                                    {{card.partner.data}}
-                                </td>
-                                <td>{{card.partner.balance}}</td>
-                                <td>{{card.partner.contractor}}</td>
-                            </tr>
+                            {% if card.is_active %}
+                                <tr>
+                                    <td>{{card.id}}</td>
+                                    <td>{{card.data}}</td>
+                                    <td>
+                                        {{card.partner.data}}
+                                    </td>
+                                    <td>{{card.partner.balance}}</td>
+                                    <td>{{card.partner.contractor}}</td>
+                                </tr>
+                            {% endif %}
                         {% endfor %}
                     </tbody>
                 </table>

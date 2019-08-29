@@ -16,16 +16,17 @@
         </thead>
         <tbody>
             {% for card in cards %}
-
-                <tr>
-                    <td>{{card.id}}</td>
-                    <td>{{card.data}}</td>
-                    <td>
-                        <b>{{card.partner.data}}</b>
-                    </td>
-                    <td>{{card.partner.balance}}</td>
-                    <td>{{card.partner.contractor}}</td>
-                </tr>
+                {% if card.is_active %}
+                    <tr>
+                        <td>{{card.id}}</td>
+                        <td>{{card.data}}</td>
+                        <td>
+                            <b>{{card.partner.data}}</b>
+                        </td>
+                        <td>{{card.partner.balance}}</td>
+                        <td>{{card.partner.contractor}}</td>
+                    </tr>
+                {% endif %}
             {% endfor %}
         </tbody>
     </table>
