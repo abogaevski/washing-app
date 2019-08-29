@@ -147,3 +147,25 @@ Enabling new site:
     ln -s /etc/nginx/sites-available/washing-app /etc/nginx/sites-enabled
     nginx -t
     systemctl restart nginx
+
+## What we have now
+
+- Database: **django_db**
+- WWW path: **/var/www/washing-app/**
+- Nginx logs: **/var/log/nginx**
+- Gunicorn logs: **/var/log/gunicorn**
+- Django logs: **var/www/washing-app/logs/** 
+> Mqtt logs are the same path as specified above
+
+### Some info
+
+#### Django
+- [Django documentation](https://docs.djangoproject.com/en/2.2/)
+- [Paho MQTT](https://www.eclipse.org/paho/clients/python/docs/)
+
+#### Nginx
+- [Nginx docs](https://nginx.org/ru/docs/)
+- [Nginx ngx_http_proxy_module](http://nginx.org/ru/docs/http/ngx_http_proxy_module.html)
+
+#### Gunicorn
+- [Gunicorn configuration](http://docs.gunicorn.org/en/latest/configure.html)
