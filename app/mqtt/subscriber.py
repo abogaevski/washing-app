@@ -27,9 +27,10 @@ def on_message(client, userdata, msg):
 
     logger.debug('Topic is: ' + msg.topic)
 
-    if payload["command"] == 'account_balance' or payload["command"] == 'start_washing' or payload["command"] == 'srv_ping':
+    if payload["command"] == 'account_balance' or payload["command"] == 'start_washing' or payload["command"] == 'srv_ping' or payload["command"] == 'init_reply':
         logger.debug('No action required')
 
+#GET ACCOUNT BALANCE
     elif payload["command"] == 'get_account_balance':
 
         logger.debug('Get account balance start')
@@ -69,7 +70,7 @@ def on_message(client, userdata, msg):
         except:
             logger.error("Can't send data for account balance")
 
-    # TRANSACTIONS
+# TRANSACTIONS
     elif payload["command"] == 'transaction':
         logger.debug('Transaction start')
 
@@ -162,8 +163,7 @@ def on_message(client, userdata, msg):
 
                         logger.debug(type(partner.balance))
                         partner.balance -= Decimal(price)
-                        logger.debug('Partner balance after payment is ' +
-                                     str(partner.balance))
+                        logger.debug('Partner balance after payment is ' + str(partner.balance))
 
                     try:
                         partner.save()
@@ -182,11 +182,10 @@ def on_message(client, userdata, msg):
                         )
                         logger.debug(t)
                     except:
-                        logger.error(
-                            'Transaction with partner and card not created')
+                        logger.error('Transaction with partner and card not created')
                 else:
                     logger.error(
-                        'Client is not defined. Transaction not created')
+                        'Undefined client. Not created')
 
             elif init_type == 2:
                 try:
@@ -204,8 +203,10 @@ def on_message(client, userdata, msg):
             else:
                 logger.error('Undefined transaction type. Not created')
         else:
-            logger.error('Undefined post')
+            logger.error('Undefined post. Not created')
 
+
+#INITIALIZATION
     elif payload["command"] == 'init':
 
         logger.debug('Init start')
@@ -219,20 +220,44 @@ def on_message(client, userdata, msg):
         rpi = str(payload['rpi'])
         logger.debug('MAC is ' + str(rpi))
 
-        station = get_object_or_none(Station, station_id=station_id)
-        if station:
-            logger.debug('Station is ' + station.owner)
+        
+        if not get_object_or_none(Post, Q(station=station),Q(post_id=post_id),Q(mac_uid=rpi)): #is station+post+mac exist
+            if not get_object_or_none(Post, Q(station=station),Q(post_id=post_id)): #is station+post exist
+                if not get_object_or_none(Post, Q(mac_uid=rpi)): #is device exist
 
-            try:
-                p = Post.objects.create(
-                    post_id=post_id,
-                    station=station,
-                    mac_uid=rpi
-                )
-                logger.debug('New post is ' + str(p.mac_uid))
-            except:
-                logger.error('New post is not created')
+                    try:
+                        p = Post.objects.create(
+                            post_id=post_id,
+                            station=station,
+                            mac_uid=rpi
+                        )
+                        logger.debug('New post is ' + str(p.mac_uid))
+                        status = "initOK"
+                    except:
+                        logger.error('New post is not created')
+                        status = "error"
 
+                else:
+                    data = "devExist"
+                    logger.error('Device ' + str(p.mac_uid) + 'already exist on other post/station')
+
+            else: 
+                status = "postDuplicate"
+                logger.error('Another device is set to' + str(station_id) + 'station' + str(post_id) + 'post')
+
+        else:
+            status = "postExist"
+            logger.debug('Post' + str(p.mac_uid) + 'already exist')
+
+        topic = payload['rpi'] + '/init_reply'
+        data = json.dumps({'status': status})
+        try:
+            publish_data(topic, data)
+            logger.debug('Sent data' + data)
+        except:
+            logger.error("Can't send init reply data")
+
+#PING
     elif payload["command"] == 'rpi_ping':
         rpi = payload['rpi']
         logger.debug('Rpi ' + rpi + ' is available!')
