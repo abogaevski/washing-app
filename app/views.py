@@ -547,7 +547,7 @@ class TransactionListJson(LoginRequiredMixin, BaseDatatableView):
                 # escape HTML for security reasons
                 escape("{0}".format(item.station.owner)),
                 # escape HTML for security reasons
-                escape("{0}".format(item.post.id)),
+                escape("{0}".format(item.post.post_id)),
                 item.start_time.strftime("%d.%m.%Y %H:%M:%S"),
                 escape("{0}".format(item.price)),
                 escape("{0}".format(item.get_initiator_type_display()))
