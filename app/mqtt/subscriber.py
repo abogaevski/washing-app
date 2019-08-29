@@ -94,8 +94,8 @@ def on_message(client, userdata, msg):
             timestamp = int(payload['date'])
             start_time_from_timestamp = datetime.fromtimestamp(timestamp)
             # removing localization
-            #tz = pytz.timezone(settings.TIME_ZONE)
-            #start_time = tz.localize(start_time_from_timestamp)
+            tz = pytz.timezone(settings.TIME_ZONE)
+            start_time = tz.localize(start_time_from_timestamp)
             start_time = start_time_from_timestamp
             logger.debug('Start date is ' + str(start_time))
 
