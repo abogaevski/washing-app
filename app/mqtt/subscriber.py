@@ -30,7 +30,7 @@ def on_message(client, userdata, msg):
     if payload["command"] == 'account_balance' or payload["command"] == 'start_washing' or payload["command"] == 'srv_ping' or payload["command"] == 'init_reply':
         logger.debug('No action required')
 
-#GET ACCOUNT BALANCE
+# GET ACCOUNT BALANCE
     elif payload["command"] == 'get_account_balance':
 
         logger.debug('Get account balance start')
@@ -163,7 +163,8 @@ def on_message(client, userdata, msg):
 
                         logger.debug(type(partner.balance))
                         partner.balance -= Decimal(price)
-                        logger.debug('Partner balance after payment is ' + str(partner.balance))
+                        logger.debug(
+                            'Partner balance after payment is ' + str(partner.balance))
 
                     try:
                         partner.save()
@@ -182,7 +183,8 @@ def on_message(client, userdata, msg):
                         )
                         logger.debug(t)
                     except:
-                        logger.error('Transaction with partner and card not created')
+                        logger.error(
+                            'Transaction with partner and card not created')
                 else:
                     logger.error(
                         'Undefined client. Not created')
@@ -206,7 +208,7 @@ def on_message(client, userdata, msg):
             logger.error('Undefined post. Not created')
 
 
-#INITIALIZATION
+# INITIALIZATION
     elif payload["command"] == 'init':
 
         logger.debug('Init start')
@@ -220,45 +222,74 @@ def on_message(client, userdata, msg):
         rpi = str(payload['rpi'])
         logger.debug('MAC is ' + str(rpi))
 
-        station=get_object_or_none(Station, station_id=station_id)
-        
-        if not get_object_or_none(Post, station=station,post_id=post_id,mac_uid=rpi): #is station+post+mac exist
-            if not get_object_or_none(Post, station=station,post_id=post_id): #is station+post exist
-                if not get_object_or_none(Post, mac_uid=rpi): #is device exist
+        station = get_object_or_none(Station, station_id=station_id)
+        logger.debug(station.owner)
 
-                    try:
-                        p = Post.objects.create(
-                            post_id=post_id,
-                            station=station,
-                            mac_uid=rpi
-                        )
-                        logger.debug('New post is ' + str(p.mac_uid))
-                        status = "initOK"
-                    except:
-                        logger.error('New post is not created')
-                        status = "error"
+        # # is station+post+mac exist
+        # if not get_object_or_none(Post, station=station, post_id=post_id, mac_uid=rpi):
+        #     # is station+post exist
+        #     if not get_object_or_none(Post, station=station, post_id=post_id):
+        #         # is device exist
+        #         if not get_object_or_none(Post, mac_uid=rpi):  
 
+        #             try:
+        #                 p = Post.objects.create(
+        #                     post_id=post_id,
+        #                     station=station,
+        #                     mac_uid=rpi
+        #                 )
+        #                 logger.debug('New post is ' + str(p.mac_uid))
+        #                 status = "initOK"
+        #             except:
+        #                 logger.error('New post is not created')
+        #                 status = "error"
+
+        #         else:
+        #             data = "devExist"
+        #             logger.error('Device ' + str(p.mac_uid) +
+        #                          'already exist on other post/station')
+
+        #     else:
+        #         status = "postDuplicate"
+        #         logger.error('Another device is set to' +
+        #                      str(station_id) + 'station' + str(post_id) + 'post')
+
+        # else:
+        #     status = "postExist"
+        #     logger.debug('Post' + str(p.mac_uid) + 'already exist')
+
+        # is station+post+mac exist
+        if not get_object_or_none(Post, station=station, post_id=post_id, mac_uid=rpi):
+            logger.debug('station+post+mac not exist')
+            # is station+post exist
+            if not get_object_or_none(Post, station=station, post_id=post_id):
+                logger.debug('station+post not exist')
+                # is device exist
+                if not get_object_or_none(Post, mac_uid=rpi):  
+                    logger.debug('device not exist')
+                    logger.debug('initOK')
                 else:
                     data = "devExist"
-                    logger.error('Device ' + str(p.mac_uid) + 'already exist on other post/station')
-
-            else: 
+                    logger.error('Device ' + str(p.mac_uid) +
+                                 'already exist on other post/station')
+            else:
                 status = "postDuplicate"
-                logger.error('Another device is set to' + str(station_id) + 'station' + str(post_id) + 'post')
-
+                logger.error('Another device is set to station ' +
+                             str(station_id) + 'post ' + str(post_id))
         else:
             status = "postExist"
             logger.debug('Post' + str(p.mac_uid) + 'already exist')
 
-        topic = payload['rpi'] + '/init_reply'
-        data = json.dumps({'status': status})
-        try:
-            publish_data(topic, data)
-            logger.debug('Sent data' + data)
-        except:
-            logger.error("Can't send init reply data")
 
-#PING
+        # topic = payload['rpi'] + '/init_reply'
+        # data = json.dumps({'status': status})
+        # try:
+        #     publish_data(topic, data)
+        #     logger.debug('Sent data' + data)
+        # except:
+        #     logger.error("Can't send init reply data")
+
+# PING
     elif payload["command"] == 'rpi_ping':
         rpi = payload['rpi']
         logger.debug('Rpi ' + rpi + ' is available!')
