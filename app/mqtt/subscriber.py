@@ -96,6 +96,7 @@ def on_message(client, userdata, msg):
             # removing localization
             #tz = pytz.timezone(settings.TIME_ZONE)
             #start_time = tz.localize(start_time_from_timestamp)
+            start_time = start_time_from_timestamp
             logger.debug('Start date is ' + str(start_time))
 
             # points/price define
