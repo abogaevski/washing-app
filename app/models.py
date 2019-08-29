@@ -35,7 +35,8 @@ class Partner(models.Model):
         Contractor, verbose_name="Контрагент", on_delete=models.CASCADE, related_name="partners")
 
     def __str__(self):
-        return self.name
+        return str("{} - {}".format(self.contractor.name, self.name))
+
 
 
 class Station(models.Model):
@@ -56,7 +57,7 @@ class Post(models.Model):
     mac_uid = models.CharField("MAC UID", max_length=12, unique=True)
 
     def __str__(self):
-        return str(self.post_id)
+        return str("{}: Пост {}".format(self.station.owner, self.post_id))
 
 
 class Card(models.Model):
@@ -66,7 +67,7 @@ class Card(models.Model):
     is_active = models.BooleanField("Активна", default=True)
 
     def __str__(self):
-        return self.data
+        return str("{}: {}".format(self.data, int(self.is_active)))
 
 
 class Transaction(models.Model):
