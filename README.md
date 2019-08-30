@@ -29,15 +29,22 @@ If you create a new database:
 
 Adding user for access from 1C server
 
-    CREATE USER '<1c_user>'@'%' IDENTIFIED BY 'password';
-    GRANT select on django_db.app_card to '<1c_user>'@'%';
-    GRANT select on django_db.app_contractor to '<1c_user>'@'%';
-    GRANT select on django_db.app_partner to '<1c_user>'@'%';
-    GRANT select on django_db.app_payment to '<1c_user>'@'%';
-    GRANT select on django_db.app_post to '<1c_user>'@'%';
-    GRANT select on django_db.app_station to '<1c_user>'@'%';
-    GRANT select on django_db.app_transaction to '<1c_user>'@'%';
-    GRANT select on django_db.app_usertransaction to '<1c_user>'@'%';
+    CREATE USER '<1c_user>'@'%' IDENTIFIED BY '<password>';
+    GRANT select on <database_name>.app_card to '<1c_user>'@'%';
+    GRANT select on <database_name>.app_contractor to '<1c_user>'@'%';
+    GRANT select on <database_name>.app_partner to '<1c_user>'@'%';
+    GRANT select on <database_name>.app_payment to '<1c_user>'@'%';
+    GRANT select on <database_name>.app_post to '<1c_user>'@'%';
+    GRANT select on <database_name>.app_station to '<1c_user>'@'%';
+    GRANT select on <database_name>.app_transaction to '<1c_user>'@'%';
+    GRANT select on <database_name>.app_usertransaction to '<1c_user>'@'%';
+
+Database cleaning
+
+    DROP DATABASE <database_name>;
+    #create new database as shown above
+    #DROP action do not affect on users
+
 
 #### Configuring a Django webapp
 
