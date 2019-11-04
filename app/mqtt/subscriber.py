@@ -2,7 +2,7 @@ import paho.mqtt.client as mqtt
 from .publisher import publish_data
 import json
 from datetime import datetime
-import pytz
+#import pytz
 from django.conf import settings
 from app.utils import get_object_or_none
 from django.core.exceptions import ValidationError, FieldError
@@ -93,8 +93,10 @@ def on_message(client, userdata, msg):
             # time define
             timestamp = int(payload['date'])
             start_time_from_timestamp = datetime.fromtimestamp(timestamp)
-            tz = pytz.timezone(settings.TIME_ZONE)
-            start_time = tz.localize(start_time_from_timestamp)
+            # removing localization
+            #tz = pytz.timezone(settings.TIME_ZONE)
+            #start_time = tz.localize(start_time_from_timestamp)
+            start_time = start_time_from_timestamp
             logger.debug('Start date is ' + str(start_time))
 
             # points/price define
