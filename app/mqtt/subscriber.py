@@ -2,7 +2,7 @@ import paho.mqtt.client as mqtt
 from .publisher import publish_data
 import json
 from datetime import datetime
-#import pytz
+import pytz
 from django.conf import settings
 from app.utils import get_object_or_none
 from django.core.exceptions import ValidationError, FieldError
@@ -44,7 +44,9 @@ def on_message(client, userdata, msg):
         logger.debug('Topic is ' + topic)
 
         client = str(payload['client'])
+        logger.debug("!!! {} !!!".format(client))
         card = get_object_or_none(Card, data=client)
+        logger.debug("!!! {} !!!".format(card.data))
 
         if card:
             logger.debug('Card is ' + str(card.data))
@@ -93,10 +95,8 @@ def on_message(client, userdata, msg):
             # time define
             timestamp = int(payload['date'])
             start_time_from_timestamp = datetime.fromtimestamp(timestamp)
-            # removing localization
-            #tz = pytz.timezone(settings.TIME_ZONE)
-            #start_time = tz.localize(start_time_from_timestamp)
-            start_time = start_time_from_timestamp
+            tz = pytz.timezone(settings.TIME_ZONE)
+            start_time = tz.localize(start_time_from_timestamp)
             logger.debug('Start date is ' + str(start_time))
 
             # points/price define
@@ -254,7 +254,7 @@ def on_message(client, userdata, msg):
             else:
                 status = "postDuplicate"
                 logger.error('Another device is set to station ' + str(station_id) + ' post ' + str(post_id))
-                             
+
 
         else:
             status = "postExist"
@@ -270,7 +270,7 @@ def on_message(client, userdata, msg):
 
 # PING
     elif payload["command"] == 'rpi_ping':
-        rpi = payload['rpi']
+        rpi = str(payload['rpi'])
         logger.debug('Rpi ' + rpi + ' is available!')
 
 

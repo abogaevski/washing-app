@@ -15,4 +15,3 @@ def publish_data(topic, data):
     client.publish(topic, payload=str(data), retain=False)
     client.disconnect()
 
-    

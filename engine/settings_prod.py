@@ -82,6 +82,7 @@ DATABASES = {
         'NAME': 'django_db',
         'USER': 'djangouser',
         'PASSWORD': 'xdsI_Abah%wash',
+        'CONN_MAX_AGE': None
     }
 }
 
@@ -147,15 +148,15 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(BASE_DIR, 'logs/mqtt_debug.log'),
-            'maxBytes': 1024 * 1024 * 5,
-            'backupCount': 7,
+            'maxBytes': 1024 * 1024,
+            'backupCount': 50,
             'formatter': 'verbose'
         },
         'django_file': {
-            'level': 'INFO',
+            'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(BASE_DIR, 'logs/django.log'),
-            'maxBytes': 1024 * 1024 * 5,
+            'maxBytes': 1024 * 1024,
             'backupCount': 7,
             'formatter': 'verbose'
         },
@@ -167,7 +168,7 @@ LOGGING = {
             'propagate': True,
         },
         'django': {
-            'level': 'INFO',
+            'level': 'DEBUG',
             'handlers': ['django_file'],
             'propagate': True,
         }

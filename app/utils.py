@@ -3,6 +3,10 @@ from django.template import loader
 from django.http import HttpResponse
 from django.contrib import messages
 from django.db.models.deletion import ProtectedError
+import logging
+
+logger = logging.getLogger('mqtt')
+
 
 
 class ObjectListMixin:
@@ -27,10 +31,14 @@ def objectDetailRequest(request, model, template):
 
 
 def get_object_or_none(model, **kwargs):
+    logger.debug(type(model))
     try:
         return model.objects.get(**kwargs)
     except model.DoesNotExist:
+        logger.debug("OBJECTDOESTNOTEXIST!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         return None
+    except:
+        logger.debug("WTF!!!!!!!!!!!!!@#$@#%#$%@#")
 
 
 class ObjectCreateMixin:
