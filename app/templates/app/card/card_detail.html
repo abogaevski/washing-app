@@ -90,45 +90,8 @@
 
     <div class="detail-transactions ">
 
-        <div class="datepicker input-group-sm d-inline-block mb-3">
-            <input type="text" id='min' class="form-control" placeholder='От'>
-        </div>
-        <div class="datepicker input-group-sm  d-inline-block mb-3">
-            <input type="text" id='max' class="form-control d-inline-block" placeholder='До'>
-        </div>
+            {% include "app/transaction/transaction_table_ajax.html" with filter_key=card.data %}
 
-        <table class="table-transactions table table-bordered table-sm mx-auto" id"table-transactions-list">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Карта</th>
-                    <th scope="col">Станция</th>
-                    <th scope="col">Пост</th>
-                    <th scope="col">Сумма</th>
-                    <th scope="col">Время</th>
-                    <th scope="col">Инициатор</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for transaction in card.transactions.all %}
-
-                    <tr>
-                        <td>{{transaction.id}}</td>
-                         {% if transaction.card == None %}
-                            <td>Нет карты</td>
-                        {% else %}
-                            <td>{{transaction.card}}</td>
-                        {% endif %}
-                        <td>{{transaction.station.owner}}</td>
-                        <td>{{transaction.post.post_id}}</td>
-                        <td>{{transaction.price}}</td>
-                        <td>{{transaction.start_time|date:"d.m.Y H:i"}}</td>
-                        <td>{{transaction.get_initiator_type_display}}</td>
-
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
 
     </div>
 {% else %}

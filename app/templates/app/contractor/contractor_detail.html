@@ -118,12 +118,12 @@
                 });
                 
                     $('button[data-item-id]').click(function(){
-                        csrf = $(document).find('input[name=csrfmiddlewaretoken]').val()
-                        item = $(this).data('itemId')
-                        balance = $('input#id_balance_'+item).val()
-                        url = "{% url 'partner_ajax_add_coins_url' %}"
-                        addCoinsForPartner(csrf, item, balance, url)
-                    })
+                        csrf = $(document).find('input[name=csrfmiddlewaretoken]').val();
+                        item = $(this).data('itemId');
+                        balance = $('input#id_balance_'+item).val();
+                        url = "{% url 'partner_ajax_add_coins_url' %}";
+                        addCoinsForPartner(csrf, item, balance, url);
+                    });
 
                 </script>
                         {% comment %} addCoinsForPartner(this, "{% url 'partner_ajax_add_coins_url' %}" ) {% endcomment %}
@@ -132,7 +132,7 @@
             <div class="pt-3 pb-2 mb-3">
                 <h5 class='d-inline'>
                     Карты
-                    {{contractor.name}}
+                    {{ contractor.name }}
                 </h5>
                 <a href="{% url 'partner_create_url' %}" class="btn btn-success">Добавить</a>
             </div>
@@ -180,47 +180,16 @@
 <h5 class='pt-3 pb-2 mb-3'>Транзакции по "{{contractor.name}}"</h5>
 {% if contractor.partners.all %}
 
-    <div class="detail-transactions ">
-        <div class="datepicker input-group-sm d-inline-block mb-3">
-            <input type="text" id='min' class="form-control" placeholder='От'>
-        </div>
-        <div class="datepicker input-group-sm  d-inline-block mb-3">
-            <input type="text" id='max' class="form-control d-inline-block" placeholder='До'>
-        </div>
+    <div class="detail-transactions">
 
-        <table class="table-transactions table table-bordered table-sm mx-auto">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Карта</th>
-                    <th scope="col">Станция</th>
-                    <th scope="col">Пост</th>
-                    <th data-price-col scope="col">Сумма</th>
-                    <th scope="col">Время</th>
-                    <th scope="col">Инициатор</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for partner in contractor.partners.all %}
 
-                    {% for transaction in partner.transactions.all %}
+    {% include "app/transaction/transaction_table_ajax.html" with filter_key=contractor.partner.name %}
 
-                        <tr>
-                            <td>{{transaction.id}}</td>
-                            <td>{{transaction.card}}</td>
-                            <td>{{transaction.station.owner}}</td>
-                            <td>{{transaction.post.post_id}}</td>
-                            <td>{{transaction.price}}</td>
-                            <td>{{transaction.start_time|date:"d.m.Y H:i"}}</td>
-                            <td>{{transaction.get_initiator_type_display}}</td>
-                        </tr>
-                    {% endfor %}
-                {% endfor %}
-
-            </tbody>
-        </table>
 
     </div>
+
+
+        
 {% else %}
     <p>Транзакций по "{{contractor.name}}
         " не существует</p>

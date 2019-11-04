@@ -1,16 +1,21 @@
 body {
-    font-size: .875rem;
+    font-size: .775rem;
     background: #fdfdfd;
 
 }
+
 .login-page {
-    width:100%;
+    width: 100%;
     height: 100%;
-    background: #232526;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to left, #414345, #232526);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to left, #414345, #232526); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    
+    background: #232526;
+    /* fallback for old browsers */
+    background: -webkit-linear-gradient(to left, #414345, #232526);
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to left, #414345, #232526);
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
 }
+
 .login-form {
     width: 360px;
     padding: 8% 0 0;
@@ -76,7 +81,9 @@ body {
     cursor: pointer;
 }
 
-.form button:hover, .form button:active, .form button:focus {
+.form button:hover,
+.form button:active,
+.form button:focus {
     background: #008799;
 }
 
@@ -102,7 +109,8 @@ body {
     margin: 0 auto;
 }
 
-.container:before, .container:after {
+.container:before,
+.container:after {
     content: "";
     display: block;
     clear: both;
@@ -138,10 +146,13 @@ body {
 /* NAVBAR */
 
 .navbar {
-   
-    background: #232526;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to left, #414345, #232526);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to left, #414345, #232526); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+    background: #232526;
+    /* fallback for old browsers */
+    background: -webkit-linear-gradient(to left, #414345, #232526);
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to left, #414345, #232526);
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
 }
 
@@ -173,7 +184,7 @@ body {
     left: 0;
     z-index: 100;
     padding: 50px 0 0;
-    border-right:1px solid rgba(0, 0, 0, .1);
+    border-right: 1px solid rgba(0, 0, 0, .1);
 
 }
 
@@ -185,18 +196,22 @@ body {
     overflow-x: hidden;
     overflow-y: auto;
 }
+
 .sidebar .nav-link {
     font-weight: 500;
 }
+
 .sidebar ul li a.nav-link {
     font-size: .875rem;
     color: #555;
     padding: .5rem 1rem;
 }
+
 .sidebar .nav-link.active,
 .sidebar .nav-link.active i {
     color: #007bff;
 }
+
 .sidebar ul li a.nav-link i {
     width: 16px;
     height: 16px;
@@ -205,29 +220,36 @@ body {
     color: #999;
     transition: 0.2s;
 }
+
 .sidebar .nav-link:hover,
 .sidebar .nav-link:hover i {
     color: inherit;
 }
+
 .sidebar-heading {
     font-size: .75rem;
     text-transform: uppercase;
 }
+
 [role="main"] {
     padding-top: 50px;
-    margin-bottom: 4.5rem!important;
+    margin-bottom: 4.5rem !important;
 }
+
 .table {
-    font-size: .875rem;
+    font-size: .775rem;
 }
+
 .table.has-detail tr td {
     cursor: pointer;
+    vertical-align: middle;
 }
 
 .content-item {
     padding: 2rem 0 1rem 0;
     border-bottom: 2px solid #eee;
-} 
+}
+
 .details-table .table tr>td:nth-child(1),
 .detail-summary .table tr>td:nth-child(1) {
     font-weight: bold;
@@ -254,12 +276,21 @@ body {
     /* font-size: 14px; */
 }
 
+.input-group-sm>.form-control,
+.input-group-sm>.custom-select,
+.input-group-sm>.input-group-prepend>.input-group-text,
+.input-group-sm>.input-group-append>.input-group-text,
+.input-group-sm>.input-group-prepend>.btn,
+.input-group-sm>.input-group-append>.btn {
+    font-size: 0.775rem;
+}
+
 /* FOOTER */
-.footer{
+.footer {
     width: 100%;
     position: absolute;
     bottom: 0;
-    border-top:1px solid rgba(0, 0, 0, .1);
+    border-top: 1px solid rgba(0, 0, 0, .1);
 }
 
 .footer-container {
@@ -267,16 +298,19 @@ body {
     display: block;
     margin: 15px 10%;
 }
-.footer-container span{
+
+.footer-container span {
     color: #999;
     padding: 4px 7px;
     border-radius: 2px;
     transition: 0.3s;
     margin-right: 10px;
 }
+
 .start-wash-input {
     display: inline-block;
 }
+
 .start-wash-input input,
 .start-wash-input select {
     font-family: "Roboto", sans-serif;
@@ -295,22 +329,26 @@ body {
     background: white;
     box-shadow: 0px 24px 30px #eee
 }
+
 .status-icon {
     text-align: center;
-    color:white;
+    color: white;
     font-size: 16px;
     padding: 7px;
 }
+
 .btn {
     border-radius: 0.35rem
 }
+
 .btn-group .btn-secondary {
     border: 1px solid #8e99a4;
 }
+
 .ui-widget-header .ui-icon {
     background-image: url('/static/img/ui-icons_444444_256x240.png')
 }
+
 .ui-state-hover .ui-icon {
     background-image: url('/static/img/ui-icons_444444_256x240.png')
-
 }

@@ -520,6 +520,27 @@ class TransactionListJson(LoginRequiredMixin, BaseDatatableView):
     order_columns = ['id', 'card', 'partner',
                'station', 'post', 'start_time', 'price', 'initiator_type']
 
+
+    def get_initial_queryset(self):
+        filter_key = self.request.GET.get('filter_key', None)
+        qs_params = None
+
+        if filter_key:
+            q = Q(id__istartswith=filter_key) |\
+                Q(card__data__istartswith=filter_key) |\
+                Q(partner__name__istartswith=filter_key) |\
+                Q(station__owner__istartswith=filter_key) |\
+                Q(post__id__istartswith=filter_key) |\
+                Q(price__istartswith=filter_key)
+
+            qs_params = qs_params & q if qs_params else q
+            return Transaction.objects.filter(qs_params)
+            
+        else:
+            return Transaction.objects.filter()
+
+        
+
     def prepare_results(self, qs):
         # prepare list with output column data
         # queryset is already paginated here
@@ -527,6 +548,7 @@ class TransactionListJson(LoginRequiredMixin, BaseDatatableView):
         tz = pytz.timezone(settings.TIME_ZONE)
 
         for item in qs:
+
             if item.card:
                 new_card = item.card.data
             else:
@@ -539,6 +561,7 @@ class TransactionListJson(LoginRequiredMixin, BaseDatatableView):
 
             if item.start_time:
                 item.start_time = tz.normalize(item.start_time)
+            
 
             json_data.append([
                 escape(item.id),  # escape HTML for security reasons
@@ -561,29 +584,48 @@ class TransactionListJson(LoginRequiredMixin, BaseDatatableView):
         date_from = self.request.GET.get('date_from', None)
         date_to = self.request.GET.get('date_to', None)
 
+        search_column_filter = ""
+        filter_column_name = ""
+        filter_columns = ['id', 'card__data', 'partner__name', 'station__owner', 'post__id', 'price']
+        filter_query =""
+
+        for i in range(len(filter_columns)):
+            search_column_filter = self.request.GET.get("columns[{}][search][value]".format(i))
+            if search_column_filter:
+                filter_column_name = filter_columns[i].lower() 
+
+                filter_query = "{}__icontains='{}'".format(filter_column_name, search_column_filter) 
+                q = Q(filter_query)
+                # qs = str(qs.filter(q))
+                print(Q(station__owner__icontains=search_column_filter))
+
+                break
+        print(qs.filter(Q(station__owner__icontains=search_column_filter)))
+
+                
+
         if search:
             search_parts = search.split('?')
 
             for part in search_parts:
-                q = Q(id__istartswith=part) |\
-                    Q(card__data__istartswith=part) |\
-                    Q(partner__name__istartswith=part) |\
-                    Q(station__owner__istartswith=part) |\
-                    Q(post__id__istartswith=part) |\
-                    Q(price__istartswith=part)
+                q = Q(id__icontains=part) |\
+                    Q(card__data__icontains=part) |\
+                    Q(partner__name__icontains=part) |\
+                    Q(station__owner__icontains=part) |\
+                    Q(post__id__icontains=part) |\
+                    Q(price__icontains=part)
 
                 qs_params = qs_params & q if qs_params else q
+
             qs = qs.filter(qs_params)
 
         if date_from:
-            print(datetime.strptime(date_from, "%d.%m.%Y"))
             q = Q(start_time__gte=datetime.strptime(date_from, "%d.%m.%Y"))
             qs_params = qs_params & q if qs_params else q
 
             qs = qs.filter(qs_params)
 
         if date_to:
-            print(datetime.strptime(date_to, "%d.%m.%Y"))
             q = Q(start_time__lte=datetime.strptime(date_to, "%d.%m.%Y"))
             qs_params = qs_params & q if qs_params else q
 

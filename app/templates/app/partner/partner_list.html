@@ -17,15 +17,14 @@
 {% block content %}
 
     <div class="content-item pb-5 align-self-start mb-3">
-        <table class="table-list table table-sm table-hover mx-auto has-detail">
+        <table class="table-list table table-sm table-hover mx-auto has-detail" style="width: 100%;">
             <thead>
                 <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Имя</th>
-                    <th scope="col">Контрагент</th>
-                    <th scope="col">Тип идентификации</th>
-                    <th scope="col">Данные Клиента</th>
-                    <th scope="col">Баланс контрагента</th>
+                    <th scope="col" data-filterable>#</th>
+                    <th scope="col" data-filterable>Имя</th>
+                    <th scope="col" data-filterable>Тип идентификации</th>
+                    <th scope="col" data-filterable>Данные Клиента</th>
+                    <th scope="col" data-filterable>Контрагент</th>
                     <th scope="col">Баланс</th>
                     <th scope="col">Действия</th>
 
@@ -38,17 +37,17 @@
 
                         <td>{{partner.id}}</td>
                         <td>{{partner.name}}</td>
-                        <td>{{partner.contractor}}</td>
                         <td>{{partner.get_identification_type_display}}</td>
                         <td>{{partner.data}}</td>
-                        <td>{{partner.contractor.balance}}
+                        <td>
+                            <b>{{partner.contractor}}</b> <br> с балансом {{partner.contractor.balance}}
                         </td>
                         <td data-col-id='partner_balance_{{ partner.id }}'><b>{{partner.balance}}</b>
                             Добавить:
                             <form action="{% url 'partner_add_coins_url' partner.id %}" method="POST">
                                 {% csrf_token %}
                                 <div class="input-group input-group-sm mb-3">
-                                    <input type="number" name="balance" step="0.25" value="" class="form-control" required="" id="id_balance_{{ partner.id }}">
+                                    <input type="number" name="balance" step="0.25" value="" class="form-control" required="" id="id_balance_{{ partner.id }}" style="max-width: 100px;">
                                     <div  class="input-group-append">
                                         <button type='submit' class="btn btn-outline-success" style="height:100%;">
                                             OK
