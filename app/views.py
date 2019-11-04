@@ -20,6 +20,7 @@ import re
 
 from django_datatables_view.base_datatable_view import BaseDatatableView
 from django.utils.html import escape
+from django.core.exceptions import ValidationError
 
 import os
 
@@ -538,9 +539,8 @@ class TransactionListJson(LoginRequiredMixin, BaseDatatableView):
             
         else:
             return Transaction.objects.filter()
-
-        
-
+   
+   
     def prepare_results(self, qs):
         # prepare list with output column data
         # queryset is already paginated here
@@ -585,24 +585,28 @@ class TransactionListJson(LoginRequiredMixin, BaseDatatableView):
         date_to = self.request.GET.get('date_to', None)
 
         search_column_filter = ""
-        filter_column_name = ""
-        filter_columns = ['id', 'card__data', 'partner__name', 'station__owner', 'post__id', 'price']
+        filter_columns_name = {}
+        filter_columns = ['id', 'card__data', 'partner__name', 'station__owner', 'post__post_id', 'start_time', 'price', 'initiator_type']
         filter_query =""
 
         for i in range(len(filter_columns)):
             search_column_filter = self.request.GET.get("columns[{}][search][value]".format(i))
             if search_column_filter:
-                filter_column_name = filter_columns[i].lower() 
+                filter_columns_name[filter_columns[i].lower()] = search_column_filter
 
-                filter_query = "{}__icontains='{}'".format(filter_column_name, search_column_filter) 
-                q = Q(filter_query)
-                # qs = str(qs.filter(q))
-                print(Q(station__owner__icontains=search_column_filter))
+        if filter_columns_name.values():
+            for column, value in filter_columns_name.items():
 
-                break
-        print(qs.filter(Q(station__owner__icontains=search_column_filter)))
+                if column == "post__post_id" or column == "price":
+                    filter_query = { "{}".format(column): value }
+                else:
+                    filter_query = { "{}__icontains".format(column): value }
 
-                
+                q = Q(**filter_query)
+                qs_params = qs_params & q if qs_params else q
+
+            qs = qs.filter(qs_params) 
+           
 
         if search:
             search_parts = search.split('?')
@@ -612,7 +616,7 @@ class TransactionListJson(LoginRequiredMixin, BaseDatatableView):
                     Q(card__data__icontains=part) |\
                     Q(partner__name__icontains=part) |\
                     Q(station__owner__icontains=part) |\
-                    Q(post__id__icontains=part) |\
+                    Q(post__post_id__icontains=part) |\
                     Q(price__icontains=part)
 
                 qs_params = qs_params & q if qs_params else q
@@ -630,7 +634,6 @@ class TransactionListJson(LoginRequiredMixin, BaseDatatableView):
             qs_params = qs_params & q if qs_params else q
 
             qs = qs.filter(qs_params)
-
         return qs
 
 
