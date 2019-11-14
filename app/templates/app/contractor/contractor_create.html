@@ -45,7 +45,7 @@
                         </div>
                     </td>
                 </tr>
-                <tr>
+                {% comment %} <tr>
                     <td>{{form.balance.label}}: *</td>
                     <td>
                         <div class="input-group-sm">
@@ -53,7 +53,7 @@
                         </div>
                     </td>
                 </tr>
-                                
+                                 {% endcomment %}
             </table>
             <button type='submit' class='btn btn-success'>Создать</button>
             <a href="{% url 'contractor_list_url' %}" class="btn btn-light">Отмена</a>

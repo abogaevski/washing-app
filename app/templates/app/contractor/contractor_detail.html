@@ -1,197 +1,74 @@
-{% load staticfiles %}
-<script src="{% static 'js/addCoins.js' %}"></script>
+<div class="detail-container modal-dialog modal-lg p-3">
 
-<div class="row">
-    <div class="col">
-        <div class="pt-3 pb-2 mb-3">
-            <h5 class='d-inline-block'>
-               Сводная информация по {{contractor.name}}
-            </h5>
-            <div class="btn-group">
-                <a href="{% url 'contractor_delete_url' contractor.id %}" class="btn btn-secondary ">Удалить</a>
-                <a href="{% url 'contractor_update_url' contractor.id %}" class="btn btn-secondary ">Изменить</a>
-            </div>
-        </div>
+    <div class="slider-close"></div>
 
-        <div class="detail-summary align-self-center  ">
-            <table class="table table-bordered table-sm mx-auto">
-                <tbody>
-                    <tr>
-                        <td>Имя контрагента</td>
-                        <td>
-                            {{contractor.name}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>УНП</td>
-                        <td>
-                            {{contractor.UNP}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Адрес</td>
-                        <td>
-                            {{contractor.address}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Баланс</td>
-                        <td>
-                            {{contractor.balance}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Клиенты</td>
-                        <td>
-                            {{contractor.partners.count}}
-                        </td>
-
-                    </tr>
-
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <div class="col">
-        <div class="pt-3 pb-2 mb-3">
-            <h5 class='d-inline-block'>
-                Клиенты
-                {{contractor.name}}
-            </h5>
-            <a href="{% url 'partner_create_url' %}" class="btn btn-success">Добавить</a>
-        </div>
-        <div class="alert d-none" id="message-text">
-            <span></span>
-        </div>
-
-        {% if contractor.partners.all %}
-            <div class="">
-                <table class="table table-bordered table-sm mx-auto ">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Имя организации Клиента</th>
-                            <th scope="col">Данные Клиента</th>
-                            <th scope="col" id="contractor-balance">
-                                Баланс
-                                <hr>
-                                У контрагента <span>{{contractor.balance}}</span>
-                                            
-                            </th>
-                            <th scope="col">Контрагент</th>
-
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for partner in contractor.partners.all %}
-                            <tr>
-                                <td>{{partner.id}}</td>
-                                <td>{{partner.name}}</td>
-                                <td>{{partner.data}}</td>
-                                <td data-col-id='partner_balance_{{ partner.id }}'><b>{{partner.balance}}</b>
-                                    Добавить:
-                                    <form action="{% url 'partner_ajax_add_coins_url' %}" method="POST">
-                                        <div class="input-group input-group-sm mb-3">
-                                            <input type="number" name="balance" step="0.25" value=""  data-item-balance="{{ partner.balance }}" class="form-control" required="" id="id_balance_{{ partner.id }}">
-                                            <div  class="input-group-append">
-                                                <button type='button' data-item-id='{{ partner.id }}' class="btn btn-outline-success" style="height:100%;">
-                                                    OK
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </form>
-
-                                </td>
-                                <td>{{partner.contractor}}</td>
-                            </tr>
-
-                        {% endfor %}
-
-                    </tbody>
-                </table>
-                <script>
-                $('form input').keydown(function (e) {
-                    if (e.keyCode == 13) {
-                        e.preventDefault();
-                        return false;
-                    }
-                });
-                
-                    $('button[data-item-id]').click(function(){
-                        csrf = $(document).find('input[name=csrfmiddlewaretoken]').val();
-                        item = $(this).data('itemId');
-                        balance = $('input#id_balance_'+item).val();
-                        url = "{% url 'partner_ajax_add_coins_url' %}";
-                        addCoinsForPartner(csrf, item, balance, url);
-                    });
-
-                </script>
-                        {% comment %} addCoinsForPartner(this, "{% url 'partner_ajax_add_coins_url' %}" ) {% endcomment %}
-
-            </div>
+    <div class="row">
+        <div class="col">
             <div class="pt-3 pb-2 mb-3">
-                <h5 class='d-inline'>
-                    Карты
-                    {{ contractor.name }}
+                <h5 class='d-inline-block'>
+                Сводная информация по {{contractor.name}}
+                </h5>
+                <div class="btn-group">
+                    <a href="{% url 'contractor_delete_url' contractor.id %}" class="btn btn-secondary ">Удалить</a>
+                    <a href="{% url 'contractor_update_url' contractor.id %}" class="btn btn-secondary ">Изменить</a>
+                </div>
+            </div>
+
+            <div class="detail-summary align-self-center  ">
+                {% include "app/contractor/contractor_sum.html" %}
+            </div>
+
+            <div class="pt-3 pb-2 mb-3">
+                    <h5 class='d-inline'>
+                        Карты
+                        {{ contractor.name }}
+                    </h5>
+                    <a href="{% url 'partner_create_url' %}" class="btn btn-success">Добавить</a>
+                </div>
+                {% include "app/card/card_table_list.html" with is_details=True partners=contractor.partners.all %}
+   
+        </div>
+        <div class="col">
+            <div class="pt-3 pb-2 mb-3">
+                <h5 class='d-inline-block'>
+                    Клиенты
+                    {{contractor.name}}
                 </h5>
                 <a href="{% url 'partner_create_url' %}" class="btn btn-success">Добавить</a>
             </div>
-            <div class="">
-                <table class="table table-bordered table-sm mx-auto">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Данные карты</th>
-                            <th scope="col">Данные Клиента</th>
-                            <th scope="col">Баланс Клиента</th>
-                            <th scope="col">Контрагент</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for partner in contractor.partners.all %}
-                            {% for card in partner.cards.all %}
-                                {% if card.is_active %}
-                                    <tr>
-                                        <td>{{card.id}}</td>
-                                        <td>{{card.data}}</td>
-                                        <td>{{card.partner.data}}</td>
-                                        <td>{{card.partner.balance}}</td>
-                                        <td>{{card.partner.contractor}}</td>
-                                    </tr>
-                                {% endif %}
-                            {% endfor %}
-                        {% endfor %}
+            {% if contractor.partners.all %}
+                {% include "app/partner/partner_table_list.html" with partners=contractor.partners.all is_details=True %}
 
-                    </tbody>
-                </table>
-            </div>
+            {% else %}
+                <p>Клиентов у "{{contractor.name}}
+                    " не существует</p>
+            {% endif %}
 
-        {% else %}
-            <p>Клиентов у "{{contractor.name}}
-                " не существует</p>
-        {% endif %}
+
+        </div>
 
 
     </div>
 
+    <h5 class='pt-3 pb-2 mb-3'>Транзакции по "{{contractor.name}}"</h5>
+    {% if contractor.partners.all %}
 
+        <div class="detail-transactions">
+
+
+        {% include "app/transaction/transaction_table_ajax.html" with filter_key=contractor.name %}
+
+
+        </div>
+
+
+            
+    {% else %}
+        <p>Транзакций по "{{contractor.name}}
+            " не существует</p>
+
+    {% endif %}
 </div>
-
-<h5 class='pt-3 pb-2 mb-3'>Транзакции по "{{contractor.name}}"</h5>
-{% if contractor.partners.all %}
-
-    <div class="detail-transactions">
-
-
-    {% include "app/transaction/transaction_table_ajax.html" with filter_key=contractor.partner.name %}
-
-
-    </div>
-
-
-        
-{% else %}
-    <p>Транзакций по "{{contractor.name}}
-        " не существует</p>
-
-{% endif %}
+<script>
+    closeModal();
+</script>

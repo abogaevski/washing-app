@@ -22,6 +22,14 @@
             {% endfor %}
             <table class="table table-sm">
                 <tr>
+                    <td>{{form.contractor.label}}: </td>
+                    <td>
+                        <div class="input-group-sm">
+                            {{form.contractor}}
+                        </div>
+                    </td>
+                </tr>
+                <tr>
                     <td>{{form.name.label}}: *</td>
                     <td>
                         <div class="input-group-sm">
@@ -44,23 +52,7 @@
                             {{form.data}}
                         </div>
                     </td>
-                </tr>
-                <tr>
-                    <td>{{form.balance.label}}: *</td>
-                    <td>
-                        <div class="input-group-sm">
-                            {{form.balance}}
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>{{form.contractor.label}}: </td>
-                    <td>
-                        <div class="input-group-sm">
-                            {{form.contractor}}
-                        </div>
-                    </td>
-                </tr>
+                </tr>                
                 
             </table>
             <button type='submit' class='btn btn-success'>Создать</button>

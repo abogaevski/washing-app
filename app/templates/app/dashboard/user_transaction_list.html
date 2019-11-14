@@ -1,36 +1,32 @@
-    <table class="table-list table table-sm mx-auto table-sm">
-        <thead>
-            <tr>
-                <th colspan="6">
-                    <h5>Работа с активами</h5>
-                </th>
-            </tr>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Пользователь</th>
-                <th scope="col">Кому</th>
-                <th scope="col">Количество</th>
-                <th scope="col">Дата</th>
-                <th scope="col">Статус</th>          
-            </tr>
-        </thead>
-        <tbody>
-            {% for user_transaction in user_transactions %}
-            <tr>
-                <td>{{user_transaction.id}}</td>
-                <td>{{user_transaction.user}}</td>
-                <td>{{user_transaction.entity}}</td>
-                <td>{{user_transaction.amount}}</td>
-                <td>{{user_transaction.date_pub}}</td>
-                <td>
-                    {% if user_transaction.exec_type == 1 %}
-                        <i class="fas fa-check bg-success rounded-circle status-icon"></i>
-                    {% elif user_transaction.exec_type == 0 %}
-                        <i class="fas fa-ban bg-danger rounded-circle status-icon"></i>
-                    {% endif %}
-                </td> 
-                {% comment %} {{user_transaction.get_exec_type_display}}</td> {% endcomment %}
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<h5>Работа с активами</h5>
+<table class="table-list table table-sm mx-auto table-sm">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Пользователь</th>
+            <th scope="col">Кому</th>
+            <th scope="col">Количество</th>
+            <th scope="col">Дата</th>
+            <th scope="col">Статус</th>          
+        </tr>
+    </thead>
+    <tbody>
+        {% for user_transaction in user_transactions %}
+        <tr>
+            <td>{{user_transaction.id}}</td>
+            <td>{{user_transaction.user}}</td>
+            <td>{{user_transaction.entity}}</td>
+            <td>{{user_transaction.amount}}</td>
+            <td>{{user_transaction.date_pub}}</td>
+            <td>
+                {% if user_transaction.exec_type == 1 %}
+                    <i class="fas fa-check bg-success rounded-circle status-icon"></i>
+                {% elif user_transaction.exec_type == 0 %}
+                    <i class="fas fa-ban bg-danger rounded-circle status-icon"></i>
+                {% endif %}
+            </td> 
+            {% comment %} {{user_transaction.get_exec_type_display}}</td> {% endcomment %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

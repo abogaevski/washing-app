@@ -14,11 +14,4 @@
 
 {% block content %}
     {% include 'app/partner/partner_list.html' %}
-    <div class="detail-container">
-    </div>
-     <script>
-        $('tr[data-item-id], .btn-detail').click(function () {
-            getDetailForEntity(this, "{% url 'partner_detail_url' %}")
-        })
-    </script>
 {% endblock content %}

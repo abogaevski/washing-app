@@ -25,10 +25,10 @@ class Partner(models.Model):
         (3, 'УНП'),
         (4, 'ТС'),
     )
-    name = models.CharField("Название организации Клиента", max_length=100)
+    name = models.CharField("Название клиента", max_length=100)
     identification_type = models.PositiveSmallIntegerField(
         "Тип идентификации", choices=TYPES, default=1)
-    data = models.CharField("Данные Клиента", max_length=200)
+    data = models.CharField("Данные клиента", max_length=200)
     balance = models.DecimalField(
         verbose_name="Баланс", max_digits=7, decimal_places=2)
     contractor = models.ForeignKey(

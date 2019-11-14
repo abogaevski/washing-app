@@ -20,51 +20,8 @@
 
 {% block content %}
     <div class="content-item pb-5 align-self-start mb-3">
-
-        <table class="table-list table-hover table table-sm mx-auto has-detail">
-            <thead>
-                <tr >
-                    <th scope="col">#</th>
-                    <th scope="col">Владелец</th>
-                    <th scope="col">Информация</th>
-                    <th scope="col">Посты</th>
-                    <th scope="col">Курс</th>
-                    <th scope="col">Действия</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for station in stations %}
-
-                    <tr data-item-id='{{station.id}}'>
-                        <td>{{station.id}}</td>
-                        <td>{{station.owner}}</td>
-                        <td>{{ station.info }}</td>
-                        <td>{{ station.posts.count }}</td>
-                        <td>{{ station.course }}</td>
-
-                        <td>
-                            <div class="btn-group" role="group">
-                                {% comment %} <a href="{% url 'station_delete_url' station.id %}" class="btn btn-secondary ">Удалить</a> {% endcomment %}
-                                <a href="{% url 'station_update_url' station.id %}" class="btn btn-secondary">Изменить</a>
-                                <a href="#" class="btn btn-secondary  btn-detail" data-item-id='{{station.id}}'>
-                                    {% csrf_token %}
-                                    Подробности
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        {% include "app/station/station_table_list.html" %}
     </div>
-    <div class="detail-container">
-
-    </div>
-
-    <script>
-            $('tr[data-item-id], .btn-detail').click(function () {
-            getDetailForEntity(this, "{% url 'station_detail_url' %}")
-        })
-    </script>
+    <div class="details"></div>
 
 {% endblock content %}

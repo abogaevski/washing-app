@@ -19,25 +19,28 @@
             {% include "app/dashboard/start_washing_form.html" %}
         </div>
     </div>
-    <h4 class="d-block mb-2 mt-3">Баланс меньше 5:</h4>
+    <h4 class="d-block mb-2 mt-3">Низкий баланс</h4>
     <div class="row content-item">
         <div class="col">
-            {% include "app/dashboard/partner_list.html" %}
+            <h5 class="d-block mb-2 mt-3">Баланс партнера меньше 5:</h5>
+            {% include "app/partner/partner_table_list.html" with is_details=True %}
         </div>
         <div class="col">
-        {% include 'app/dashboard/contractor_list.html' %}
-            {% comment %} {% include 'app/dashboard/user_transaction_list.html' %} {% endcomment %}
-        </div>
-    </div>
-    <h4 class="d-block mb-2 mt-3">Журнал за последние 24 часа:</h4>
-    <div class="row content-item">
-        <div class="col">
-                {% include "app/dashboard/transaction_list.html" %}
+            <h5 class="d-block mb-2 mt-3">Баланс контрагента меньше 100:</h5>
+            {% include "app/contractor/contractor_table_list.html" with is_details=True %}
         </div>
     </div>
+    <h4 class="d-block mb-2 mt-3">Журнал:</h4>
     <div class="row content-item">
         <div class="col">
-                {% include "app/dashboard/user_transaction_list.html" %}
+                <h5 class="d-block mb-2 mt-3">Журнал транзакций:</h5>
+                {% include "app/transaction/transaction_table_ajax.html" %}
+        </div>
+    </div>
+    <div class="row content-item">
+        <div class="col">
+            <h5 class="d-block mb-2 mt-3">Журнал работы с активами:</h5>
+            {% include "app/user_transaction/user_transaction_table_list.html" with transactions=user_transactions %}
         </div>
     </div>
 

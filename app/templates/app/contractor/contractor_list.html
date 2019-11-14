@@ -14,53 +14,9 @@
 
 {% block content %}
 <div class="content-item pb-5 align-self-start mb-3">
-
-<table class="table-list table table-sm table-hover mx-auto has-detail ">
-    <thead>
-        <tr>
-            <th scope="col" data-filterable>#</th>
-            <th scope="col" data-filterable>Имя организации контрагента</th>
-            <th scope="col" data-filterable>УНП</th>
-            <th scope="col" data-filterable>Адрес</th>
-            <th scope="col">Баланс</th>
-            <th scope="col">Действия</th>
-
-        </tr>
-    </thead>
-    <tbody>
-        {% for contractor in contractors %}
-        
-        <tr data-item-id='{{contractor.id}}'>
-            <td>{{contractor.id}}</td>
-            <td>{{contractor.name}}</td>
-            <td>{{contractor.UNP}}</td>
-            <td>{{contractor.address}}</td>
-            <td>{{contractor.balance}}</td>
-            <td>
-                <div class="btn-group" role="group" aria-label="Basic example">
-                    <a href="{% url 'contractor_delete_url' contractor.id %}" class="btn btn-secondary ">Удалить</a>
-                    <a href="{% url 'contractor_update_url' contractor.id %}" class="btn btn-secondary ">Изменить</a>
-                    <a href="#" class="btn btn-secondary  btn-detail" data-item-id='{{contractor.id}}'>
-                        {% csrf_token %}                   
-                        Подробности
-                    </a>
-                </div>
-            </td>
-
-        </tr>
-        {% endfor %}
-    </tbody>
-</table> 
-
+    {% include "app/contractor/contractor_table_list.html" %}
 </div>
-<div class="detail-container">
+<div class="details"></div>
 
-    </div>
-
-    <script>
-            $('tr[data-item-id], .btn-detail').click(function () {
-            getDetailForEntity(this, "{% url 'contractor_detail_url' %}")
-        })
-    </script>
 
 {% endblock content %}

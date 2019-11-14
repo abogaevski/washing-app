@@ -1,0 +1,78 @@
+<table class="table-list table table-sm table-hover mx-auto has-detail" id="contractor_table" style="width:100%;">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Имя организации контрагента</th>
+            <th scope="col">УНП</th>
+            <th scope="col">Адрес</th>
+            <th scope="col">Баланс</th>
+            {% if not is_details %}
+                <th scope="col">Действия</th>
+            {% endif %}
+
+
+        </tr>
+    </thead>
+    <tbody>
+        {% for contractor in contractors %}
+        
+        <tr data-item-id='{{contractor.id}}'>
+            <td>{{contractor.id}}</td>
+            <td>{{contractor.name}}</td>
+            <td>{{contractor.UNP}}</td>
+            <td>{{contractor.address}}</td>
+            <td id="contractor-balance"><span>{{contractor.balance}}</span></td>
+            {% if not is_details %}           
+                <td>
+                    <div class="btn-group" role="group" aria-label="btn-group">
+                        <a href="{% url 'contractor_delete_url' contractor.id %}" class="btn btn-secondary ">Удалить</a>
+                        <a href="{% url 'contractor_update_url' contractor.id %}" class="btn btn-secondary ">Изменить</a>
+                        <a href="#" class="btn btn-secondary btn-detail" data-item-id='{{contractor.id}}'>
+                            {% csrf_token %}                   
+                            Подробности
+                        </a>
+                    </div>
+                </td>
+            {% endif %}
+
+
+        </tr>
+        {% endfor %}
+    </tbody>
+</table> 
+
+<script>
+    $(document).ready(function(){
+        table = $("#contractor_table").DataTable({
+            select: true,
+            "order": [[ 0, "desc" ]],
+            "language": {
+                "lengthMenu": "_MENU_",
+                "zeroRecords": "Ничего не найдено",
+                "info": "Страниц: _PAGE_ из _PAGES_",
+                "zeroRecords":    "Записей нет",
+                "infoEmpty": "Не найдено",
+                "infoFiltered": "(Поиск по _MAX_ записям)",
+                "search" : "Фильтр",
+                "paginate": {
+                    "first":      "Первая",
+                    "last":       "Последняя",
+                    "next":       "Следующая",
+                    "previous":   "Предыдущая"
+                },
+            },
+            destroy: false,  
+            orderCellsTop: true,
+        });
+    {% if not is_details %}
+
+        table.on("click", "tr[data-item-id], .btn-detail", function() {
+            getDetailForEntity(this, "{% url 'contractor_detail_url' %}");
+        });
+
+    {% endif %}
+
+    });
+
+            
+</script>

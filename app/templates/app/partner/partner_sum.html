@@ -1,0 +1,33 @@
+{% load staticfiles %}
+<script src="{% static 'js/addCoins.js' %}"></script>
+
+<div class="detail-summary align-self-center">
+    <table class="table table-sm mx-auto">
+        <tbody>
+            <tr>
+                <td>Имя Клиента</td>
+                <td>
+                    {{partner.name}}
+                </td>
+            </tr>
+            <tr>
+                <td>Идентификация</td>
+                <td>
+                    {{partner.get_identification_type_display}}
+                </td>
+            </tr>
+            <tr>
+                <td>Данные Клиента</td>
+                <td>
+                    {{partner.data}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Баланс
+                </td>
+                <td>{{ partner.balance }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

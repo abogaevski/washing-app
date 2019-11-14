@@ -20,33 +20,6 @@ var config = {
     orderCellsTop: true,
 }
 
-$(document).ready(function () {
-
-    $('.table-list thead tr').clone(true).appendTo( '.table-list thead' );
-    $('.table-list thead tr:eq(1) th').each( function (i) {
-
-        if ( $(this).data().hasOwnProperty("filterable") ) {
-            var title = $(this).text();
-            $(this).html( '<div class="input-group input-group-sm"><input class="form-control" type="text" placeholder="Найти '+title+'" /></div>' );
-        } else {
-            $(this).html(" ");
-        }
-       
- 
-        $( 'input', this ).on( 'keyup change', function () {
-            if ( table.column(i).search() !== this.value ) {
-                table
-                    .column(i)
-                    .search( this.value )
-                    .draw();
-            }
-        } );
-    } );
-    
-    table = dataTable('.table-list', config);
-
-});
-
 function getDetailForEntity(item, url) {
     // elem = $(item).find('[data-item-id]')
     itemID = $(item).data('itemId')
@@ -59,13 +32,17 @@ function getDetailForEntity(item, url) {
             'itemid': itemID
         },
         success: function (data) {
-            $('.detail-container').hide();
-            $('.detail-container').html(data);
+            // $('.detail-container').hide();
+            $('.details').html(data);
+            $(".background-overlay").addClass("active");
+            $("body").css("overflow", "hidden");
             setTimeout(function () {
-                $('.detail-container').fadeIn('slow'), 1000
+                // $('.detail-container').fadeIn('slow'), 1000
+                $(".details").addClass("active"), 1000
             });
-            var table = dataTable('.table-transactions', config);
+            // var table = dataTable('.table-transactions', config);
         }
+        
     });
 }
 
@@ -77,3 +54,40 @@ function dataTable(table, config) {
     
 }
 
+function addCoinsHandle(url) {
+    $('form input').keydown(function (e) {
+        if (e.keyCode == 13) {
+            e.preventDefault();
+            return false;
+        }
+    });
+    
+    $('button[data-item-id]').click(function(){
+        csrf = $(document).find('input[name=csrfmiddlewaretoken]').val();
+        item = $(this).data('itemId');
+        balance = $('input#id_balance_'+item).val();
+        addCoinsForPartner(csrf, item, balance, url);
+    });
+}
+
+function closeModal() {
+    $(".slider-close").click(function(){
+        $(".background-overlay").removeClass("active");
+        $(".details").removeClass("active");
+        $("body").css("overflow", "unset");
+    });
+
+    $(document).keydown(function (e) {
+        if (e.keyCode == 27) {
+            $(".background-overlay").removeClass("active");
+            $(".details").removeClass("active");
+            $("body").css("overflow", "unset");
+        }
+    });
+
+    $(".background-overlay").click(function(){
+        $(".background-overlay").removeClass("active");
+        $(".details").removeClass("active");
+        $("body").css("overflow", "unset");
+    });
+}

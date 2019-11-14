@@ -1,0 +1,30 @@
+<div class="detail-container modal-dialog modal-lg p-3">
+    <div class="slider-close"></div>
+    <div class="row">
+        <div class="col">
+            <h5 class="pt-3 pb-2 mb-3">Станция: {{post.station.owner}}. Пост: {{post.post_id}}</h5>
+            <div class="detail-summary align-self-center">
+                {% include "app/station/station_sum.html" with station=post.station %}
+            </div>
+        </div>
+        <div class="col">
+            <h5 class="pt-3 pb-2 mb-3">Информация по посту {{post.post_id}}</h5>
+            <div class="detail-summary align-self-center">
+                {% include "app/post/post_sum.html" %}
+            </div>
+        </div>
+    </div>
+    <h5 class='pt-3 pb-2 mb-3'>Транзакции по посту {{post.post_id}}</h5>
+
+    {% if post.transactions.all %}
+        <div class="detail-transactions">
+            {% include "app/transaction/transaction_table_ajax.html" with filter_key=post.id %}
+        </div>
+    {% else %}
+        <p>Транзакций по "{{post.post_id}}" не существует</p>
+    {% endif %}
+</div>
+
+<script>
+    closeModal();
+</script>

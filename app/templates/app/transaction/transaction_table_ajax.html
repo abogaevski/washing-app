@@ -8,7 +8,7 @@
     <button class="btn btn-secondary" id="cancel-filters">Сбросить фильтры</button>
 </div>
 
-<table class="table table-sm mx-auto" id="table-transactions-list">
+<table class="table table-sm mx-auto" id="table-transactions-list" style="width: 100%;">
     <thead>
         <tr>
             <th scope="col">#</th>
@@ -64,7 +64,7 @@ $(document).ready(function(){
     $('#table-transactions-list thead tr:eq(1) th').each( function (i) {
 
         $( 'input, select', this ).on( 'keyup change', function () {
-            if ( table.column(i).search() !== this.value ) {
+           if ( table.column(i).search() !== this.value ) {
                 table
                     .column(i)
                     .search( this.value )
@@ -130,17 +130,13 @@ $(document).ready(function(){
             }
         })
 
-        $("#table-transactions-list input, select").val(function(i){
+        $("#table-transactions-list input, #table-transactions-list select").val(function(i){
             if ( table.column(i).search() !== "" ) {
                 this.value = "";
                 table.column(i).search("").draw();
             } 
         });
-        
-
-        
-
-    })
+    });
 
 
 });

@@ -1,0 +1,135 @@
+<table class="table-list table-hover table table-sm mx-auto has-detail" id="cards_table" style="width:100%;">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Данные карты</th>
+            <th scope="col">Клиент</th>
+            <th scope="col">Баланс Клиента</th>
+            <th scope="col">Контрагент</th>
+            <th scope="col">Транзакций по карте</th>
+            {% if not is_details %}
+                <th scope="col">Действия</th>
+            {% endif %}
+        </tr>
+            <tr>
+                <th>
+                    <input class="form-control form-control-sm" type="number" placeholder="Найти по ID" />
+                </th>
+                <th>
+                    <input class="form-control form-control-sm" type="text" placeholder="Найти по данным" />
+                </th>
+                <th>
+                    <input class="form-control form-control-sm" type="text" placeholder="Найти по клиенту" />
+                </th>
+                <th>
+                    <input class="form-control form-control-sm" type="number" placeholder="Найти по балансу клиента" />               
+                </th>
+                <th>
+                    <input class="form-control form-control-sm" type="text" placeholder="Найти по контрагенту" />
+                </th>
+                <th>
+                    <input class="form-control form-control-sm" type="number" placeholder="Найти по количеству транзакций" />
+                </th>
+                {% if not is_details %}
+                    <th></th>
+                {% endif %}
+                
+            </tr>
+    </thead>
+    <tbody>
+        {% if partners %}
+            {% for partner in partners %}
+                {% for card in partner.cards.all %}
+                    {% if card.is_active %}
+                        <tr data-item-id='{{card.id}}'>
+                            <td>{{card.id}}</td>
+                            <td>{{card.data}}</td>
+                            <td>{{card.partner.name}}</td>
+                            <td>{{card.partner.balance}}</td>
+                            <td>{{card.partner.contractor}}</td>
+                            <td>{{card.transactions.count}}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        {% else %}
+            {% for card in cards %}
+                {% if card.is_active %}
+                    <tr data-item-id='{{card.id}}'>
+                        <td>{{card.id}}</td>
+                        <td>{{card.data}}</td>
+                        <td>{{card.partner.name}}</td>
+                        <td>{{card.partner.balance}}</td>
+                        <td>{{card.partner.contractor}}</td>
+                        <td>{{card.transactions.count}}</td>
+                        {% if not is_details %}
+                            <td>
+                                <div class="btn-group" role="group" aria-label="Basic example">
+                                    <a href="{% url 'card_delete_url' card.id %}" class="btn btn-secondary ">Удалить</a>
+                                    <a href="{% url 'card_update_url' card.id %}" class="btn btn-secondary ">Изменить</a>
+                                    <a href="#" class="btn btn-secondary  btn-detail" data-item-id='{{card.id}}'>
+                                    {% csrf_token %}                   
+                                    Подробности
+                                    </a>
+                                </div>
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endif %}
+            {% endfor %}
+
+        {% endif %}
+    </tbody>
+</table>
+<script>
+
+    $(document).ready(function() {
+        $('#cards_table thead tr:eq(1) th').each( function (i) {
+
+            $( 'input, select', this ).on( 'keyup change', function () {
+            if ( table.column(i).search() !== this.value ) {
+                    table
+                        .column(i)
+                        .search( this.value )
+                        .draw();
+                }
+            } );
+        } );
+
+        var table = $("#cards_table").DataTable({
+            select: true,
+            "order": [[ 0, "desc" ]],
+            "language": {
+                "lengthMenu": "_MENU_",
+                "zeroRecords": "Ничего не найдено",
+                "info": "Страниц: _PAGE_ из _PAGES_",
+                "zeroRecords":    "Записей нет",
+                "infoEmpty": "Не найдено",
+                "infoFiltered": "(Поиск по _MAX_ записям)",
+                "search" : "Фильтр",
+                "paginate": {
+                    "first":      "Первая",
+                    "last":       "Последняя",
+                    "next":       "Следующая",
+                    "previous":   "Предыдущая"
+                },
+            },
+            destroy: true,
+            orderCellsTop: true
+        });
+
+        {% if not is_details %}
+            
+            table.on("click", "tr[data-item-id], .btn-detail", function() {
+                getDetailForEntity(this, "{% url 'card_detail_url' %}");
+            })
+            table.on("click", "tr[data-item-id] form, .btn-group", function(e) {
+                e.stopPropagation();
+            });
+
+        {% endif %}
+
+});
+
+
+</script>

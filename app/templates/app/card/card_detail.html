@@ -1,100 +1,31 @@
-<div class="row">
-    <div class="col-6">
-        <h5 class="pt-3 pb-2 mb-3">Клиент по карте "{{card.data}}"</h5>
+<div class="detail-container modal-dialog modal-lg p-3">
+    <div class="slider-close"></div>
+    <div class="row">
+        <div class="col-6">
+            <h5 class="pt-3 pb-2 mb-3">Клиент по карте "{{card.data}}"</h5>
+            <div class="detail-summary align-self-center">
+                {% include "app/partner/partner_sum.html" with partner=card.partner %}
+            </div>
+        </div>
+        <div class="col-6">
+        <h5 class="pt-3 pb-2 mb-3">Контрагент по карте "{{card.data}}"</h5>
 
-        <div class="detail-summary align-self-center  ">
-            <table class="table table-bordered table-sm mx-auto ">
-                <tbody>
-                    <tr>
-                        <td>Имя Клиента</td>
-                        <td>
-                            {{card.partner.name}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Идентификация</td>
-                        <td>
-                            {{card.partner.identification_type}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Данные Клиента</td>
-                        <td>
-                            {{card.partner.data}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Баланс</td>
-                        <td>
-                            {{card.partner.balance}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Контрагент</td>
-                        <td>
-                            {{card.partner.contractor}}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="detail-summary align-self-center  ">
+                {% include "app/contractor/contractor_sum.html" with contractor=card.partner.contractor %}
+            </div>
         </div>
     </div>
-    <div class="col-6">
-    <h5 class="pt-3 pb-2 mb-3">Контрагент по карте "{{card.data}}"</h5>
+    <h5 class='pt-3 pb-2 mb-3'>Транзакции по "{{card.data}}"</h5>
 
-        <div class="detail-summary align-self-center  ">
-
-      <table class="table table-bordered table-sm mx-auto">
-                <tbody>
-                    <tr>
-                        <td>Имя контрагента</td>
-                        <td>
-                            {{card.partner.contractor.name}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>УНП</td>
-                        <td>
-                            {{card.partner.contractor.UNP}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Адрес</td>
-                        <td>
-                            {{card.partner.contractor.address}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Баланс</td>
-                        <td>
-                            {{card.partner.contractor.balance}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Клиенты</td>
-                        <td>
-                            {{card.partner.contractor.partners.count}}
-                        </td>
-                        
-                    </tr>
-                    
-                </tbody>
-            </table>
-            </div>
-
-    </div>
-</div>
-<h5 class='pt-3 pb-2 mb-3'>Транзакции по "{{card.data}}"</h5>
-
-{% if card.transactions.all %}
-
-    <div class="detail-transactions ">
-
+    {% if card.transactions.all %}
+        <div class="detail-transactions">
             {% include "app/transaction/transaction_table_ajax.html" with filter_key=card.data %}
+        </div>
+    {% else %}
+        <p>Транзакций по "{{card.data}}" не существует</p>
+    {% endif %}
+</div>
 
-
-    </div>
-{% else %}
-    <p>Транзакций по "{{card.data}}" не существует</p>
-
-{% endif %}
+<script>
+    closeModal();
+</script>

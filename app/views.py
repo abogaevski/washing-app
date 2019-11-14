@@ -28,24 +28,21 @@ import os
 # Create your views here.
 class Dashboard(LoginRequiredMixin, View):
     def get(self, request):
-        last_day = datetime.now() - timedelta(hours=24)
-        #tz = pytz.timezone(settings.TIME_ZONE)
-        #last_day = tz.localize(last_day)
-
-        transactions = Transaction.objects.filter(start_time__gte=last_day)
         partners = Partner.objects.filter(balance__lte=5)
-        contractors = Contractor.objects.filter(balance__lte=5)
+        contractors = Contractor.objects.filter(balance__lte=100)
         wash_form = StartWashingForm()
-        user_transactions = UserTransaction.objects.filter(
-            date_pub__gte=last_day)
+        user_transactions = UserTransaction.objects.all()
+        payments = Payment.objects.all()
 
         return render(request,
                       'app/dashboard/dashboard.html',
-                      context={'transactions': transactions,
+                      context={
+                            #    'transactions': transactions,
                                'partners': partners,
                                'contractors': contractors,
                                'wash_form': wash_form,
-                               'user_transactions': user_transactions
+                               'user_transactions': user_transactions,
+                               'payments': payments
                                }
                       )
 
@@ -183,6 +180,11 @@ def cardDetailRequest(request):
 def stationDetailRequest(request):
     model = Station
     template = 'app/station/station_detail.html'
+    return HttpResponse(objectDetailRequest(request, model, template))
+
+def postDetailRequest(request):
+    model = Post
+    template = 'app/post/post_detail.html'
     return HttpResponse(objectDetailRequest(request, model, template))
 
 
@@ -528,6 +530,7 @@ class TransactionListJson(LoginRequiredMixin, BaseDatatableView):
 
         if filter_key:
             q = Q(id__istartswith=filter_key) |\
+                Q(partner__contractor__name__istartswith=filter_key)|\
                 Q(card__data__istartswith=filter_key) |\
                 Q(partner__name__istartswith=filter_key) |\
                 Q(station__owner__istartswith=filter_key) |\

@@ -20,8 +20,8 @@
     </div>
     <script>
             $('tr[data-item-id], .btn-detail').click(function () {
-            getDetailForEntity(this, "{% url 'contractor_detail_url' %}")
-        })
+            getDetailForEntity(this, "{% url 'contractor_detail_url' %}");
+        });
     </script>
 {% endblock content %}
 

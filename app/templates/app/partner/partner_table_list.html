@@ -1,0 +1,167 @@
+{% if is_details %}
+    {% load staticfiles %}
+    <script src="{% static 'js/addCoins.js' %}"></script>
+{% endif %}
+
+<div class="alert d-none" id="message-text">
+    <span></span>
+</div>
+
+<table class="table-list table table-sm table-hover mx-auto has-detail" style="width: 100%;" id="clients_table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Имя</th>
+            <th scope="col">Тип идент.</th>
+            <th scope="col">Данные клиента</th>
+            <th scope="col">Контрагент</th>
+            <th scope="col">Баланс</th>
+            {% if not is_details %}
+                <th scope="col">Действия</th>
+            {% endif %}
+        </tr>
+        {% comment %} {% if not is_details %} {% endcomment %}
+            <tr>
+                <th scope="col">
+                    <input class="form-control form-control-sm" type="number" placeholder="Найти по ID" />
+                </th>
+                <th scope="col">
+                    <input class="form-control form-control-sm" type="text" placeholder="Найти по имени" />
+                </th>
+                <th scope="col">
+                    <select class="form-control form-control-sm">
+                        <option disabled>Выбрать по типу идент.</option>
+                        <option value="">Любой</option>
+                        <option value="ФИО">ФИО</option>
+                        <option value="Госномер">Госномер</option>
+                        <option value="УНП">УНП</option>
+                        <option value="ТС">ТС</option>
+
+                    </select>
+                </th>
+                <th scope="col">
+                    <input class="form-control form-control-sm" type="text" placeholder="Найти по данным" />
+                </th>
+                <th scope="col">
+                    <input class="form-control form-control-sm" type="text" placeholder="Найти по контрагенту" />
+                </th>
+                <th scope="col">
+                    <input class="form-control form-control-sm" type="number" placeholder="Найти по балансу" />
+                </th>
+                {% if not is_details %}
+                <th scope="col"></th>
+                {% endif %}
+            </tr>
+        {% comment %} {% endif %} {% endcomment %}
+    </thead>
+    <tbody>
+        {% for partner in partners %}
+            <tr data-item-id='{{partner.id}}'>
+            
+
+                <td>{{partner.id}}</td>
+                <td>{{partner.name}}</td>
+                <td>{{partner.get_identification_type_display}}</td>
+                <td>{{partner.data}}</td>
+                <td id="contractor-balance">
+                    <b>{{partner.contractor}}</b> <br> с балансом <span>{{partner.contractor.balance}}</span>
+                </td>
+                <td data-col-id='partner_balance_{{ partner.id }}'><b>{{partner.balance}}</b>
+                    Добавить:
+                    <form action="{% url 'partner_add_coins_url' partner.id %}" method="POST">
+                        {% csrf_token %}
+                        <div class="input-group input-group-sm mb-3">
+                            {% if is_details %}
+                                <input type="number" name="balance" step="0.25" value=""  data-item-balance="{{ partner.balance }}" class="form-control" required="" id="id_balance_{{ partner.id }}">
+                                <div  class="input-group-append">
+                                    <button type='button' data-item-id='{{ partner.id }}' class="btn btn-outline-success" style="height:100%;">
+                                        OK
+                                    </button>
+                                </div>
+                            {% else %}
+                                <input type="number" name="balance" step="0.25" value="" class="form-control" required="" id="id_balance_{{ partner.id }}" style="max-width: 100px;">
+                                <div  class="input-group-append">
+                                    <button type='submit' class="btn btn-outline-success" style="height:100%;">
+                                        OK
+                                    </button>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </form>
+                </td>
+                {% if not is_details %}
+                    <td>
+                        <div class="btn-group" role="group" aria-label="btn-group">
+                            <a href="{% url 'partner_delete_url' partner.id %}" class="btn btn-secondary">Удалить</a>
+                            <a href="{% url 'partner_update_url' partner.id %}" class="btn btn-secondary ">Изменить</a>
+                            <a href="#" class="btn btn-secondary btn-detail" data-item-id='{{partner.id}}'>
+                                {% csrf_token %}                   
+                                Подробности
+                            </a>
+                            {% comment %} <a href="{% url 'partner_add_coins_url' partner.id %}" class="btn btn-success ">Добавить баланс</a> {% endcomment %}
+                        </div>
+                    </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+
+    $(document).ready(function(){
+
+
+        $('#clients_table thead tr:eq(1) th').each( function (i) {
+
+            $( 'input, select', this ).on( 'keyup change', function () {
+            if ( table.column(i).search() !== this.value ) {
+                    table
+                        .column(i)
+                        .search( this.value )
+                        .draw();
+                }
+            } );
+        } );
+
+        var table = $("#clients_table").DataTable({
+            select: true,
+            "order": [[ 0, "desc" ]],
+            "language": {
+                "lengthMenu": "_MENU_",
+                "zeroRecords": "Ничего не найдено",
+                "info": "Страниц: _PAGE_ из _PAGES_",
+                "zeroRecords":    "Записей нет",
+                "infoEmpty": "Не найдено",
+                "infoFiltered": "(Поиск по _MAX_ записям)",
+                "search" : "Фильтр",
+                "paginate": {
+                    "first":      "Первая",
+                    "last":       "Последняя",
+                    "next":       "Следующая",
+                    "previous":   "Предыдущая"
+                },
+            },
+            destroy: true,
+            orderCellsTop: true
+        });
+
+    {% if not is_details %}
+        
+        table.on("click", "tr[data-item-id], .btn-detail", function() {
+            getDetailForEntity(this, "{% url 'partner_detail_url' %}");
+        })
+        table.on("click", "tr[data-item-id] form, .btn-group", function(e) {
+            e.stopPropagation();
+        })
+
+    {% else %}
+        addCoinsHandle("{% url 'partner_ajax_add_coins_url' %}");
+    {% endif %}
+
+
+
+    });
+       
+
+</script>

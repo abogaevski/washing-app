@@ -16,32 +16,8 @@
 
 
 {% block content %}
-    <div class="content-item pb-5">
-        <table class="table-list table table-sm mx-auto table-bordered">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Номер поста</th>
-                    <th scope="col">Станция</th>
-                    <th scope="col">UID</th>
-                    {# <th scope="col">Инициатор</th> #}
-                </tr>
-            </thead>
-            <tbody>
-                {% for post in posts %}
-
-                    <tr>
-                        <td>{{post.id}}</td>
-                        <td>{{post.post_id}}</td>
-                        <td>{{post.station}}</td>
-                        <td>
-                            {{post.mac_uid}}
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="content-item pb-5 align-self-start mb-3">
+        {% include "app/post/post_table_list.html" %}
     </div>
-
-
+    <div class="details"></div>
 {% endblock content %}

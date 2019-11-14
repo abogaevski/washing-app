@@ -1,0 +1,98 @@
+<table class="table-list table table-sm mx-auto has-detail table-hover" id="posts_table" style="width:100%;">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Номер поста</th>
+            <th scope="col">Станция</th>
+            <th scope="col">UID</th>
+            {% if not is_details %}
+                <th scope="col">Действия</th>
+            {% endif %}
+        </tr>
+        <tr>
+            <th>
+                <input class="form-control form-control-sm" type="number" placeholder="Найти по ID" />
+            </th>
+            <th>
+                <input class="form-control form-control-sm" type="number" placeholder="Найти по номеру поста" />
+            </th>
+            <th>
+                <input class="form-control form-control-sm" type="text" placeholder="Найти по станции" />
+            </th>
+            <th>
+                <input class="form-control form-control-sm" type="text" placeholder="Найти по UID" />
+            </th>
+            {% if not is_details %}
+                <th></th>
+            {% endif %}
+            
+        </tr>
+    </thead>
+    <tbody>
+        {% for post in posts %}
+            <tr data-item-id='{{post.id}}'>
+                <td>{{post.id}}</td>
+                <td>{{post.post_id}}</td>
+                <td>{{post.station}}</td>
+                <td>
+                    {{post.mac_uid}}
+                </td>
+                {% if not is_details %}
+                    <td>
+                        <a href="#" class="btn btn-secondary  btn-detail" data-item-id='{{post.id}}'>
+                            {% csrf_token %}
+                            Подробности
+                        </a>
+                    </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+
+    $(document).ready(function() {
+        $('#posts_table thead tr:eq(1) th').each( function (i) {
+
+            $( 'input, select', this ).on( 'keyup change', function () {
+            if ( table.column(i).search() !== this.value ) {
+                    table
+                        .column(i)
+                        .search( this.value )
+                        .draw();
+                }
+            } );
+        } );
+
+        var table = $("#posts_table").DataTable({
+            select: true,
+            "order": [[ 0, "desc" ]],
+            "language": {
+                "lengthMenu": "_MENU_",
+                "zeroRecords": "Ничего не найдено",
+                "info": "Страниц: _PAGE_ из _PAGES_",
+                "zeroRecords":    "Записей нет",
+                "infoEmpty": "Не найдено",
+                "infoFiltered": "(Поиск по _MAX_ записям)",
+                "search" : "Фильтр",
+                "paginate": {
+                    "first":      "Первая",
+                    "last":       "Последняя",
+                    "next":       "Следующая",
+                    "previous":   "Предыдущая"
+                },
+            },
+            destroy: true,
+            orderCellsTop: true
+        });          
+        table.on("click", "tr[data-item-id], .btn-detail", function() {
+            getDetailForEntity(this, "{% url 'post_detail_url' %}");
+        })
+        table.on("click", "tr[data-item-id] form, .btn-group", function(e) {
+            e.stopPropagation();
+        });
+});
+
+
+</script>
