@@ -107,6 +107,15 @@ def on_message(client, userdata, msg):
 
             client = str(payload['client'])
 
+            topic = payload['rpi']+'/transaction_reply'
+            data = '{"date" : ' + str(payload['date']) + '}'
+
+            try:
+                publish_data(topic, data)
+                logger.debug(data)
+            except:
+                logger.error("Can't send data for transaction reply")
+
             if init_type == 0:
 
                 card = get_object_or_none(Card, data=client)
@@ -275,8 +284,8 @@ def on_message(client, userdata, msg):
 
 
 client = mqtt.Client()
-client.username_pw_set(username="mqttuseruser", password="Uwxd_D41")
+client.username_pw_set(username="mqttuser", password="Uwxd_D41")
 client.on_connect = on_connect
 client.on_message = on_message
 
-client.connect("192.168.147.14", 1883, 60)
+client.connect("localhost", 1883, 60)
