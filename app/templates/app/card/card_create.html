@@ -22,6 +22,14 @@
             {% endfor %}
             <table class="table table-sm">
                 <tr>
+                    <td>{{form.name.label}}: *</td>
+                    <td>
+                        <div class="input-group-sm">
+                            {{form.name}}
+                        </div>
+                    </td>
+                </tr>
+                <tr>
                     <td>{{form.data.label}}: *</td>
                     <td>
                         <div class="input-group-sm">

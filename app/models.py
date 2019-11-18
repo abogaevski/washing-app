@@ -61,6 +61,7 @@ class Post(models.Model):
 
 
 class Card(models.Model):
+    name = models.CharField("Название карты", max_length=100)
     data = models.CharField('Данные карты', max_length=200)
     partner = models.ForeignKey(
         Partner, verbose_name="Клиент", on_delete=models.CASCADE, related_name="cards")

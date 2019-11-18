@@ -62,10 +62,12 @@ class CardForm(forms.ModelForm):
     class Meta:
         model = Card
         fields = [
+            'name',
             'data',
             'partner'
         ]
         widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
             'data': forms.TextInput(attrs={'class': 'form-control'}),
             'partner': forms.Select(attrs={'class': 'form-control'})
         }

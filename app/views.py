@@ -531,7 +531,7 @@ class TransactionListJson(LoginRequiredMixin, BaseDatatableView):
         if filter_key:
             q = Q(id__istartswith=filter_key) |\
                 Q(partner__contractor__name__istartswith=filter_key)|\
-                Q(card__data__istartswith=filter_key) |\
+                Q(card__name__istartswith=filter_key) |\
                 Q(partner__name__istartswith=filter_key) |\
                 Q(station__owner__istartswith=filter_key) |\
                 Q(post__id__istartswith=filter_key) |\
@@ -553,7 +553,7 @@ class TransactionListJson(LoginRequiredMixin, BaseDatatableView):
         for item in qs:
 
             if item.card:
-                new_card = item.card.data
+                new_card = item.card.name
             else:
                 new_card = "Нет карты"
 
@@ -589,7 +589,7 @@ class TransactionListJson(LoginRequiredMixin, BaseDatatableView):
 
         search_column_filter = ""
         filter_columns_name = {}
-        filter_columns = ['id', 'card__data', 'partner__name', 'station__owner', 'post__post_id', 'start_time', 'price', 'initiator_type']
+        filter_columns = ['id','card__name', 'partner__name', 'station__owner', 'post__post_id', 'start_time', 'price', 'initiator_type']
         filter_query =""
 
         for i in range(len(filter_columns)):
@@ -616,7 +616,7 @@ class TransactionListJson(LoginRequiredMixin, BaseDatatableView):
 
             for part in search_parts:
                 q = Q(id__icontains=part) |\
-                    Q(card__data__icontains=part) |\
+                    Q(card__name__icontains=part) |\
                     Q(partner__name__icontains=part) |\
                     Q(station__owner__icontains=part) |\
                     Q(post__post_id__icontains=part) |\

@@ -2,6 +2,7 @@
     <thead>
         <tr>
             <th scope="col">#</th>
+            <th scope="col">Название карты</th>
             <th scope="col">Данные карты</th>
             <th scope="col">Клиент</th>
             <th scope="col">Баланс Клиента</th>
@@ -12,8 +13,12 @@
             {% endif %}
         </tr>
             <tr>
+            
                 <th>
                     <input class="form-control form-control-sm" type="number" placeholder="Найти по ID" />
+                </th>
+                <th>
+                    <input class="form-control form-control-sm" type="text" placeholder="Найти по названию" />
                 </th>
                 <th>
                     <input class="form-control form-control-sm" type="text" placeholder="Найти по данным" />
@@ -43,6 +48,7 @@
                     {% if card.is_active %}
                         <tr data-item-id='{{card.id}}'>
                             <td>{{card.id}}</td>
+                            <td>{{card.name}}</td>
                             <td>{{card.data}}</td>
                             <td>{{card.partner.name}}</td>
                             <td>{{card.partner.balance}}</td>
@@ -57,6 +63,7 @@
                 {% if card.is_active %}
                     <tr data-item-id='{{card.id}}'>
                         <td>{{card.id}}</td>
+                        <td>{{card.name}}</td>                        
                         <td>{{card.data}}</td>
                         <td>{{card.partner.name}}</td>
                         <td>{{card.partner.balance}}</td>
