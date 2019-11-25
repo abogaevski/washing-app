@@ -10,14 +10,12 @@ class PartnerForm(forms.ModelForm):
             'name',
             'identification_type',
             'data',
-            'balance',
             'contractor'
         ]
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'identification_type': forms.Select(attrs={'class': 'form-control'}),
             'data': forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
-            'balance': forms.NumberInput(attrs={'class': 'form-control'}),
             'contractor': forms.Select(attrs={'class': 'form-control'})
         }
 
@@ -30,13 +28,11 @@ class ContractorForm(forms.ModelForm):
             'name',
             'UNP',
             'address',
-            'balance',
         ]
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'UNP': forms.TextInput(attrs={'class': 'form-control'}),
             'address': forms.TextInput(attrs={'class': 'form-control'}),
-            'balance': forms.NumberInput(attrs={'class': 'form-control'}),
         }
 
 

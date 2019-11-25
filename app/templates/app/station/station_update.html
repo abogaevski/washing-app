@@ -14,10 +14,10 @@
         <div class="details-table">
         <form method="POST" action="{% url 'station_update_url' station.id %}">
             {% csrf_token %}
-            {% for field in form %}
+            {% for field in stationform %}
                 {% if field.errors %}
                     <div class="alert alert-danger" role="alert">
-                        {{field.errors}}
+                        {{field.label}} - {{field.errors.as_text}}
                     </div>
                 {% endif %}
             {% endfor %}

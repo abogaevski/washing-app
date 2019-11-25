@@ -12,7 +12,7 @@ class Contractor(models.Model):
     UNP = models.CharField("УНП", max_length=50)
     address = models.CharField("Адрес", max_length=50)
     balance = models.DecimalField(
-        verbose_name="Баланс", max_digits=7, decimal_places=2)
+        verbose_name="Баланс", max_digits=7, decimal_places=2, default=0)
 
     def __str__(self):
         return self.name
@@ -30,7 +30,7 @@ class Partner(models.Model):
         "Тип идентификации", choices=TYPES, default=1)
     data = models.CharField("Данные клиента", max_length=200)
     balance = models.DecimalField(
-        verbose_name="Баланс", max_digits=7, decimal_places=2)
+        verbose_name="Баланс", max_digits=7, decimal_places=2, default=0)
     contractor = models.ForeignKey(
         Contractor, verbose_name="Контрагент", on_delete=models.CASCADE, related_name="partners")
 

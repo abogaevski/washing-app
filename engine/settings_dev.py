@@ -165,7 +165,7 @@ LOGGING = {
             'propagate': True,
         },
         'django': {
-            'level': 'INFO',
+            'level': 'DEBUG',
             'handlers': ['django_file'],
             'propagate': True,
         }
