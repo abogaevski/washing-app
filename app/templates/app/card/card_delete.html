@@ -1,12 +1,12 @@
 {% extends 'app/index.html' %}
 
 {% block header %}
-    Удаление станции "{{ card.data }}"
+    Удаление станции "{{ card.name }}"
 {% endblock header %}
 
 
 {% block content %}
-    <h5>Вы действительно хотите удалить карту "{{ card.data }}"</h5>
+    <h5>Вы действительно хотите удалить карту "{{ card.name }}"</h5>
 <form action="{% url 'card_delete_url' card.id %}" method='POST'>
     {% csrf_token %}
     <button type="submit" class="btn btn-secondary">Удалить</button>

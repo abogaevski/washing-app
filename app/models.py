@@ -68,7 +68,10 @@ class Card(models.Model):
     is_active = models.BooleanField("Активна", default=True)
 
     def __str__(self):
-        return str("{}: {}".format(self.data, int(self.is_active)))
+        if self.is_active:
+            return str("{}: Активна".format(self.data))
+        else: 
+            return str("{}: Отключена".format(self.data))
 
 
 class Transaction(models.Model):

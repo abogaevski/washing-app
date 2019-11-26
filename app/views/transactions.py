@@ -33,7 +33,7 @@ class TransactionListJson(LoginRequiredMixin, BaseDatatableView):
         if filter_key:
             q = Q(id__istartswith=filter_key) |\
                 Q(partner__contractor__name__istartswith=filter_key)|\
-                Q(card__name__istartswith=filter_key) |\
+                Q(card__data__istartswith=filter_key) |\
                 Q(partner__name__istartswith=filter_key) |\
                 Q(station__owner__istartswith=filter_key) |\
                 Q(post__id__istartswith=filter_key) |\
@@ -90,16 +90,17 @@ class TransactionListJson(LoginRequiredMixin, BaseDatatableView):
 
         if filter_columns_name.values():
             for column, value in filter_columns_name.items():
-                if column == "post__post_id" or column == "price":
-                    filter_query = { "{}".format(column): value }
-                else:
-                    filter_query = { "{}__icontains".format(column): value }
-                q = Q(**filter_query)
-                qs_params = qs_params & q if qs_params else q
+                for value in value.split():
+                    if column == "post__post_id" or column == "price":
+                        filter_query = { "{}".format(column): value }
+                    else:
+                        filter_query = { "{}__icontains".format(column): value }
+                    q = Q(**filter_query)
+                    qs_params = qs_params & q if qs_params else q
             qs = qs.filter(qs_params) 
            
         if search:
-            search_parts = search.split('?')
+            search_parts = search.split()
             for part in search_parts:
                 q = Q(id__icontains=part) |\
                     Q(card__name__icontains=part) |\

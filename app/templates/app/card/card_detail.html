@@ -1,13 +1,25 @@
 <div class="detail-container modal-dialog modal-lg p-3">
     <div class="slider-close"></div>
     <div class="row">
-        <div class="col-6">
+        <div class="col">
+            <div class="pt-3 pb-2 mb-3">
+                <h5 class='d-inline-block'>
+                Сводная информация по {{card.name}}
+                </h5>
+                <div class="btn-group">
+                    <a href="{% url 'card_delete_url' card.id %}" class="btn btn-secondary ">Удалить</a>
+                    <a href="{% url 'card_update_url' card.id %}" class="btn btn-secondary ">Изменить</a>
+                </div> 
+            </div>
+            <div class="detail-summary align-self-center">
+                    {% include "app/card/card_sum.html"%}
+                </div>
             <h5 class="pt-3 pb-2 mb-3">Клиент по карте "{{card.name}}"</h5>
             <div class="detail-summary align-self-center">
                 {% include "app/partner/partner_sum.html" with partner=card.partner %}
             </div>
         </div>
-        <div class="col-6">
+        <div class="col">
         <h5 class="pt-3 pb-2 mb-3">Контрагент по карте "{{card.name}}"</h5>
 
             <div class="detail-summary align-self-center  ">

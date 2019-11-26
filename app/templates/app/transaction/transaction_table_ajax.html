@@ -73,8 +73,6 @@ $(document).ready(function(){
         } );
     } );
 
-    
-
     var table = $("#table-transactions-list").DataTable({
         select: true,
         "order": [[ 0, "desc" ]],
@@ -106,7 +104,6 @@ $(document).ready(function(){
                 data.filter_key = filter_key;
                 data.date_from = date_from;
                 data.date_to = date_to;
-
             }
         }
     });
@@ -114,11 +111,9 @@ $(document).ready(function(){
     $("#min").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true });
     $("#max").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true });
 
-
     $('#min, #max').change(function () {
         table.draw();
     });
-
 
     // Cancel all filters   
     $('#cancel-filters').click(function(){
@@ -137,7 +132,6 @@ $(document).ready(function(){
             } 
         });
     });
-
 
 });
 

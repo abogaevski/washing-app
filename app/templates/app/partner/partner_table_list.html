@@ -20,7 +20,6 @@
                 <th scope="col">Действия</th>
             {% endif %}
         </tr>
-        {% comment %} {% if not is_details %} {% endcomment %}
             <tr>
                 <th scope="col">
                     <input class="form-control form-control-sm" type="number" placeholder="Найти по ID" />
@@ -52,7 +51,6 @@
                 <th scope="col"></th>
                 {% endif %}
             </tr>
-        {% comment %} {% endif %} {% endcomment %}
     </thead>
     <tbody>
         {% for partner in partners %}
@@ -70,7 +68,7 @@
                     Добавить:
                     <form action="{% url 'partner_add_coins_url' partner.id %}" method="POST">
                         {% csrf_token %}
-                        <div class="input-group input-group-sm mb-3">
+                        <div class="input-group input-group-sm">
                             {% if is_details %}
                                 <input type="number" name="balance" step="0.25" value=""  data-item-balance="{{ partner.balance }}" class="form-control" required="" id="id_balance_{{ partner.id }}">
                                 <div  class="input-group-append">
