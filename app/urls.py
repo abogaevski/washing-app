@@ -1,4 +1,4 @@
-from django.urls import path, re_path
+from django.urls import path
 from app.views import *
 from django.contrib.auth.views import LoginView, LogoutView
 
@@ -73,7 +73,5 @@ urlpatterns = [
 
     path('transactions/ajax/', TransactionListJson.as_view(),
          name="transactions_ajax_request"),
-
-    path('mqttlogs', openLogs)
 
 ]

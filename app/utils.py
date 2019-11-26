@@ -110,7 +110,7 @@ class ObjectDeleteMixin:
         return redirect("{}_list_url".format(self.model.__name__.lower()))
 
 
-class OjectDisableMixin:
+class ObjectDisableMixin:
     model = None
     template = None
 
