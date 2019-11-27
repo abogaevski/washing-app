@@ -8,7 +8,7 @@ from django.contrib import messages
 
 # Create your models here.
 class Contractor(models.Model):
-    name = models.CharField("Название организации контрагента", max_length=100)
+    name = models.CharField("Название организации контрагента", max_length=100, db_index=True)
     UNP = models.CharField("УНП", max_length=50)
     address = models.CharField("Адрес", max_length=50)
     balance = models.DecimalField(
@@ -25,7 +25,7 @@ class Partner(models.Model):
         (3, 'УНП'),
         (4, 'ТС'),
     )
-    name = models.CharField("Название клиента", max_length=100)
+    name = models.CharField("Название клиента", max_length=100, db_index=True)
     identification_type = models.PositiveSmallIntegerField(
         "Тип идентификации", choices=TYPES, default=1)
     data = models.CharField("Данные клиента", max_length=200)
@@ -51,7 +51,7 @@ class Station(models.Model):
 
 
 class Post(models.Model):
-    post_id = models.PositiveSmallIntegerField("Номер поста", default=1)
+    post_id = models.PositiveSmallIntegerField("Номер поста", default=1, db_index=True)
     station = models.ForeignKey(
         Station, verbose_name='Станция', on_delete=models.CASCADE, related_name="posts")
     mac_uid = models.CharField("MAC UID", max_length=12, unique=True)
@@ -62,7 +62,7 @@ class Post(models.Model):
 
 class Card(models.Model):
     name = models.CharField("Название карты", max_length=100)
-    data = models.CharField('Данные карты', max_length=200)
+    data = models.CharField('Данные карты', max_length=200, db_index=True)
     partner = models.ForeignKey(
         Partner, verbose_name="Клиент", on_delete=models.CASCADE, related_name="cards")
     is_active = models.BooleanField("Активна", default=True)
