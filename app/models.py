@@ -125,7 +125,7 @@ class UserTransaction(models.Model):
     user = models.ForeignKey(User, verbose_name="Пользователь",
                              on_delete=models.PROTECT, related_name="user_transactions")
     entity = models.CharField("Кому", max_length=100)
-    annotation = models.CharField("Примечание", max_length=150, blank=True)
+    annotation = models.CharField("Примечание", max_length=255, blank=True)
     exec_type = models.SmallIntegerField(
         'Статус', choices=EXEC_TYPE, default=0)
     amount = models.DecimalField("Сумма", max_digits=7, decimal_places=2)

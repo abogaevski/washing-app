@@ -150,7 +150,7 @@ LOGGING = {
             'formatter': 'verbose'
         },
         'django_file': {
-            'level': 'INFO',
+            'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(BASE_DIR, 'logs/django.log'),
             'maxBytes': 1024 * 1024 * 5,

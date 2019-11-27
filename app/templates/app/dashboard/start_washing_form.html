@@ -26,12 +26,9 @@
 </form>
 <script>
     $("#id_station").change(function () {
-
         var url = '{% url "load_posts_url" %}' 
         var stationId = $(this).val(); 
         csrf = $('form').find('input[name=csrfmiddlewaretoken]').val()
-
-
         $.ajax({ 
             type: 'POST',
             url: url, 
@@ -43,27 +40,21 @@
                 $("#id_post").html(data); 
             }
         });
-
-
     });
     $("#id_partner").change(function () {
         var url = '{% url "load_cards_url" %}' 
         var partnerId = $(this).val(); 
         csrf = $('form').find('input[name=csrfmiddlewaretoken]').val()
-
-
         $.ajax({ 
             type: 'POST',
             url: url, 
             data: {
                 'partner': partnerId,
                 'csrfmiddlewaretoken': csrf,
-
             },
             success: function (data) { 
                 $("#id_card").html(data);
             }
         });
-
     });
 </script>
