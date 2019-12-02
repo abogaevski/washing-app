@@ -1,78 +1,82 @@
-<div class="datepicker input-group-sm d-inline-block mb-3">
-    <input type="text" id='min' class="form-control" placeholder='От'>
-</div>
-<div class="datepicker input-group-sm  d-inline-block mb-3">
-    <input type="text" id='max' class="form-control d-inline-block" placeholder='До'>
-</div>
-<div class="input-group-sm  d-inline-block mb-3">
-    <button class="btn btn-secondary" id="cancel-filters">Сбросить фильтры</button>
-</div>
+<div id="user_transactions">
+    {% if not is_details %}
+        <div class="datepicker input-group-sm d-inline-block mb-3">
+            <input type="text" id='min' class="form-control" placeholder='От'>
+        </div>
+        <div class="datepicker input-group-sm  d-inline-block mb-3">
+            <input type="text" id='max' class="form-control d-inline-block" placeholder='До'>
+        </div>
+        <div class="input-group-sm  d-inline-block mb-3">
+            <button class="btn btn-secondary" id="cancel-filters">Сбросить фильтры</button>
+        </div>
+    {% endif %}
 
-<table class="table-list table table-sm mx-auto" id="user_transaction_table">
-    <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Пользователь</th>
-            <th scope="col">Кому</th>
-            <th scope="col">Количество</th>
-            <th scope="col">Примечание</th>
-            <th scope="col">Дата</th>
-            <th scope="col">Статус</th>          
-        </tr>
-        <tr>
-            <th>
-                <input class="form-control form-control-sm" type="number" placeholder="Найти по ID" />
-            </th>
-            <th>
-                <input class="form-control form-control-sm" type="text" placeholder="Найти по пользователю" />
-            </th>
-            <th>
-                <input class="form-control form-control-sm" type="text" placeholder="Найти 'Кому отправили'" />
-            </th>
-            <th>
-                <input class="form-control form-control-sm" type="number" placeholder="Найти по сумме" />
-            </th>
-            <th>
-                <input class="form-control form-control-sm" type="text" placeholder="Найти по примечанию" />
-            </th>
-            <th>
-                <i>Выберите диапазон дат выше</i>
-            </th>
-            <th>
-                 <select class="form-control form-control-sm">
-                        <option disabled>Выбрать по типу идент.</option>
-                        <option value="">Любой</option>
-                        <option value="1">Проведен</option>
-                        <option value="0">Не проведен</option>
+    <table class="table-list table table-sm mx-auto" id="user_transaction_table" style="width:100%;">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Пользователь</th>
+                <th scope="col">Кому</th>
+                <th scope="col">Количество</th>
+                <th scope="col">Примечание</th>
+                <th scope="col">Дата</th>
+                <th scope="col">Статус</th>          
+            </tr>
+            <tr>
+                <th>
+                    <input class="form-control form-control-sm" type="number" placeholder="Найти по ID" />
+                </th>
+                <th>
+                    <input class="form-control form-control-sm" type="text" placeholder="Найти по пользователю" />
+                </th>
+                <th>
+                    <input class="form-control form-control-sm" type="text" placeholder="Найти 'Кому отправили'" />
+                </th>
+                <th>
+                    <input class="form-control form-control-sm" type="number" placeholder="Найти по сумме" />
+                </th>
+                <th>
+                    <input class="form-control form-control-sm" type="text" placeholder="Найти по примечанию" />
+                </th>
+                <th>
+                    <i>Выберите диапазон дат выше</i>
+                </th>
+                <th>
+                    <select class="form-control form-control-sm">
+                            <option disabled>Выбрать по типу идент.</option>
+                            <option value="">Любой</option>
+                            <option value="1">Проведен</option>
+                            <option value="0">Не проведен</option>
 
-                </select>
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for transaction in transactions %}
-        <tr>
-            <td>{{transaction.id}}</td>
-            <td>{{transaction.user}}</td>
-            <td>{{transaction.entity}}</td>
-            <td>{{transaction.amount}}</td>
-            <td>{{transaction.annotation}}</td>
-            <td>{{transaction.date_pub|date:"d.m.Y H:i"}}</td>
-            <td>
-                {% if transaction.exec_type == 1 %}
-                    <i class="fas fa-check bg-success rounded-circle status-icon">
-                        <span class="d-none">1</span>
-                    </i>
-                {% elif transaction.exec_type == 0 %}
-                    <i class="fas fa-ban bg-danger rounded-circle status-icon">
-                        <span class="d-none">0</span>
-                    </i>
-                {% endif %}
-            </td> 
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+                    </select>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transactions %}
+            <tr>
+                <td>{{transaction.id}}</td>
+                <td>{{transaction.user}}</td>
+                <td>{{transaction.entity}}</td>
+                <td>{{transaction.amount}}</td>
+                <td>{{transaction.annotation}}</td>
+                <td>{{transaction.date_pub|date:"d.m.Y H:i"}}</td>
+                <td>
+                    {% if transaction.exec_type == 1 %}
+                        <i class="fas fa-check bg-success rounded-circle status-icon">
+                            <span class="d-none">1</span>
+                        </i>
+                    {% elif transaction.exec_type == 0 %}
+                        <i class="fas fa-ban bg-danger rounded-circle status-icon">
+                            <span class="d-none">0</span>
+                        </i>
+                    {% endif %}
+                </td> 
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
 <script>
 
@@ -111,10 +115,11 @@ $(document).ready(function() {
         orderCellsTop: true
     });
 
+    {% if not is_details %}
      $.fn.dataTable.ext.search.push(
         function (settings, data, dataIndex) {
-            var min = $('#min').datepicker("getDate");
-            var max = $('#max').datepicker("getDate");
+            var min = $('#user_transactions #min').datepicker("getDate");
+            var max = $('#user_transactions #max').datepicker("getDate");
             splitDate = data[5].split(' ');
             splitDate = splitDate[0].split('.');
             startDate = new Date(parseInt(splitDate[2]), parseInt(splitDate[1]) - 1, parseInt(splitDate[0]));
@@ -127,16 +132,16 @@ $(document).ready(function() {
         }
     );
 
-    $("#min").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true });
-    $("#max").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true });
+    $("#user_transactions #min").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true });
+    $("#user_transactions #max").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true });
     
-    $('#min, #max').change(function () {
+    $('#user_transactions #min, #user_transactions #max').change(function () {
         table.draw();
     });
 
     // Cancel all filters   
-    $('#cancel-filters').click(function(){
-        $("#min, #max").val(function(i){
+    $('#user_transactions #cancel-filters').click(function(){
+        $("#user_transactions #min, #user_transactions #max").val(function(i){
             if (this.value !== "") {
                 this.value = "";
                 table.search("").draw();
@@ -148,7 +153,10 @@ $(document).ready(function() {
                 table.column(i).search("").draw();
             } 
         });
+        
+        
     });
+    {% endif %}
 
 });
 

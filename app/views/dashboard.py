@@ -13,14 +13,13 @@ from app.mqtt.publisher import publish_data
 
 class Dashboard(LoginRequiredMixin, View):
     def get(self, request):
-        available_time = datetime.now() - timedelta(minutes=100)
-        print(available_time)
-
+        post_available_time = datetime.now() - timedelta(minutes=1)
+        user_transactions_filter_time = datetime.now() - timedelta(days=1)
         partners = Partner.objects.filter(balance__lte=5)
         contractors = Contractor.objects.filter(balance__lte=100)
-        posts = Post.objects.filter(last_seen__lte=available_time)
+        posts = Post.objects.filter(last_seen__lte=post_available_time)
         wash_form = StartWashingForm()
-        user_transactions = UserTransaction.objects.all()
+        user_transactions = UserTransaction.objects.filter(date_pub__gte=user_transactions_filter_time)
         payments = Payment.objects.all()
 
         return render(request,

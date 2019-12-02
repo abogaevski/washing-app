@@ -19,6 +19,16 @@
             {% include "app/dashboard/start_washing_form.html" %}
         </div>
     </div>
+    <div class="row content-item">
+        <div class="col">
+            <h5 class="d-block mb-2 mt-3">Недоступные посты</h5>
+            {% if posts %}
+                {% include "app/post/post_table_list.html" with is_details=True %}
+            {% else %}
+                <p>Недоступных постов не найдено</p>
+            {% endif %}
+        </div>
+    </div>
     <h4 class="d-block mb-2 mt-3">Низкий баланс</h4>
     <div class="row content-item">
         <div class="col">
@@ -30,6 +40,7 @@
             {% include "app/contractor/contractor_table_list.html" with is_details=True %}
         </div>
     </div>
+    
     <h4 class="d-block mb-2 mt-3">Журнал:</h4>
     <div class="row content-item">
         <div class="col">
@@ -39,13 +50,9 @@
     </div>
     <div class="row content-item">
         <div class="col">
-            <h5 class="d-block mb-2 mt-3">Журнал работы с активами:</h5>
-            {% include "app/user_transaction/user_transaction_table_list.html" with transactions=user_transactions %}
+            <h5 class="d-block mb-2 mt-3">Журнал работы с активами (за последний день):</h5>
+            {% include "app/user_transaction/user_transaction_table_list.html" with transactions=user_transactions is_details=True %}
         </div>
     </div>
-    {% for post in posts %}
-    {{post}}
-    {% endfor %}
-
 
 {% endblock content %}

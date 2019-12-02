@@ -1,62 +1,64 @@
-<div class="datepicker input-group-sm d-inline-block mb-3">
-    <input type="text" id='min' class="form-control" placeholder='От'>
-</div>
-<div class="datepicker input-group-sm  d-inline-block mb-3">
-    <input type="text" id='max' class="form-control d-inline-block" placeholder='До'>
-</div>
-<div class="input-group-sm  d-inline-block mb-3">
-    <button class="btn btn-secondary" id="cancel-filters">Сбросить фильтры</button>
-</div>
+<div id="transactions">
+    <div class="datepicker input-group-sm d-inline-block mb-3">
+        <input type="text" id='min' class="form-control" placeholder='От'>
+    </div>
+    <div class="datepicker input-group-sm  d-inline-block mb-3">
+        <input type="text" id='max' class="form-control d-inline-block" placeholder='До'>
+    </div>
+    <div class="input-group-sm  d-inline-block mb-3">
+        <button class="btn btn-secondary" id="cancel-filters">Сбросить фильтры</button>
+    </div>
 
-<table class="table table-sm mx-auto" id="table-transactions-list" style="width: 100%;">
-    <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Карта</th>
-            <th scope="col">Клиент</th>
-            <th scope="col">Станция</th>
-            <th scope="col">Пост</th>
-            <th scope="col">Время</th>
-            <th scope="col">Сумма</th>
-            <th scope="col">Инициатор</th>
-        </tr>
-        <tr>
-            <th scope="col">
-                <input class="form-control form-control-sm" type="number" placeholder="Найти по ID" />
-            </th>
-            <th scope="col">
-                <input class="form-control form-control-sm" type="text" placeholder="Найти по карте" />
-            </th>
-            <th scope="col">
-                <input class="form-control form-control-sm" type="text" placeholder="Найти по клиенту" />
-            </th>
-            <th scope="col">
-                <input class="form-control form-control-sm" type="text" placeholder="Найти по станции" />
-            </th>
-            <th scope="col">
-                <input class="form-control form-control-sm" type="number" placeholder="Найти по посту" />
-            </th>
-            <th scope="col">
-                <span class="text-sm"><i>Выберите диапазон дат выше</i></span>
-            </th>
-            <th scope="col">
-                <input class="form-control form-control-sm" step="0.2" type="number" placeholder="Найти по сумме" />
-            </th>
-            <th scope="col">
-                <select class="form-control form-control-sm">
-                    <option disabled>Выбрать по типу запуска</option>
-                    <option value="">Любой</option>
-                    <option value="0">Контроллер</option>
-                    <option value="1">Веб-приложение</option>
-                    <option value="2">Купюроприемник</option>
-                </select>
-            </th>
-        </tr>
-    </thead>
-    <tbody>
+    <table class="table table-sm mx-auto" id="table-transactions-list" style="width: 100%;">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Карта</th>
+                <th scope="col">Клиент</th>
+                <th scope="col">Станция</th>
+                <th scope="col">Пост</th>
+                <th scope="col">Время</th>
+                <th scope="col">Сумма</th>
+                <th scope="col">Инициатор</th>
+            </tr>
+            <tr>
+                <th scope="col">
+                    <input class="form-control form-control-sm" type="number" placeholder="Найти по ID" />
+                </th>
+                <th scope="col">
+                    <input class="form-control form-control-sm" type="text" placeholder="Найти по карте" />
+                </th>
+                <th scope="col">
+                    <input class="form-control form-control-sm" type="text" placeholder="Найти по клиенту" />
+                </th>
+                <th scope="col">
+                    <input class="form-control form-control-sm" type="text" placeholder="Найти по станции" />
+                </th>
+                <th scope="col">
+                    <input class="form-control form-control-sm" type="number" placeholder="Найти по посту" />
+                </th>
+                <th scope="col">
+                    <span class="text-sm"><i>Выберите диапазон дат выше</i></span>
+                </th>
+                <th scope="col">
+                    <input class="form-control form-control-sm" step="0.2" type="number" placeholder="Найти по сумме" />
+                </th>
+                <th scope="col">
+                    <select class="form-control form-control-sm">
+                        <option disabled>Выбрать по типу запуска</option>
+                        <option value="">Любой</option>
+                        <option value="0">Контроллер</option>
+                        <option value="1">Веб-приложение</option>
+                        <option value="2">Купюроприемник</option>
+                    </select>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
 
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>
 
 <script>
 $(document).ready(function(){
@@ -108,17 +110,17 @@ $(document).ready(function(){
         }
     });
 
-    $("#min").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true });
-    $("#max").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true });
+    $("#transactions #min").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true });
+    $("#transactions #max").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true });
 
-    $('#min, #max').change(function () {
+    $('#transactions #min, #transactions #max').change(function () {
         table.draw();
     });
 
     // Cancel all filters   
-    $('#cancel-filters').click(function(){
+    $('#transactions #cancel-filters').click(function(){
 
-        $("#min, #max").val(function(i){
+        $("#transactions #min, #transactions #max").val(function(i){
             if (this.value !== "") {
                 this.value = "";
                 table.search("").draw();
