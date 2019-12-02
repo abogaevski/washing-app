@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 import json
 
 from django.shortcuts import render, redirect
@@ -12,8 +13,12 @@ from app.mqtt.publisher import publish_data
 
 class Dashboard(LoginRequiredMixin, View):
     def get(self, request):
+        available_time = datetime.now() - timedelta(minutes=100)
+        print(available_time)
+
         partners = Partner.objects.filter(balance__lte=5)
         contractors = Contractor.objects.filter(balance__lte=100)
+        posts = Post.objects.filter(last_seen__lte=available_time)
         wash_form = StartWashingForm()
         user_transactions = UserTransaction.objects.all()
         payments = Payment.objects.all()
@@ -26,7 +31,8 @@ class Dashboard(LoginRequiredMixin, View):
                                'contractors': contractors,
                                'wash_form': wash_form,
                                'user_transactions': user_transactions,
-                               'payments': payments
+                               'payments': payments,
+                               'posts': posts
                                }
                       )
 

@@ -43,6 +43,9 @@
             {% include "app/user_transaction/user_transaction_table_list.html" with transactions=user_transactions %}
         </div>
     </div>
+    {% for post in posts %}
+    {{post}}
+    {% endfor %}
 
 
 {% endblock content %}

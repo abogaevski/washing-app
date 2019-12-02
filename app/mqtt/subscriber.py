@@ -280,6 +280,19 @@ def on_message(client, userdata, msg):
 # PING
     elif payload["command"] == 'rpi_ping':
         rpi = str(payload['rpi'])
+        timestamp = int(payload['date'])
+        start_time_from_timestamp = datetime.fromtimestamp(timestamp)
+        tz = pytz.timezone(settings.TIME_ZONE)
+        last_seen = tz.localize(start_time_from_timestamp)
+        post = get_object_or_none(Post, mac_uid=rpi)
+        if post:
+            logger.debug("Post is {}".format(post.station.owner))
+            post.last_seen = last_seen
+            try:
+                partner.save()
+            except (ValidationError, FieldError) as err:
+                logger.error('Post is not save ' + str(err))
+
         logger.debug('Rpi ' + rpi + ' is available!')
 
 
