@@ -160,6 +160,14 @@ LOGGING = {
             'backupCount': 7,
             'formatter': 'verbose'
         },
+        'tasks_file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/tasks.log'),
+            'maxBytes': 1024 * 1024 * 10,
+            'backupCount': 7,
+            'formatter': 'verbose'
+        },
     },
     'loggers': {
         'mqtt': {
@@ -170,6 +178,11 @@ LOGGING = {
         'django': {
             'level': 'DEBUG',
             'handlers': ['django_file'],
+            'propagate': True,
+        },
+        'tasks': {
+            'level': 'DEBUG',
+            'handlers': ['tasks_file'],
             'propagate': True,
         }
     },
