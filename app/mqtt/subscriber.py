@@ -290,7 +290,7 @@ def on_message(client, userdata, msg):
             post.last_seen = last_seen
             post.is_available = True
             try:
-                partner.save()
+                post.save()
             except (ValidationError, FieldError) as err:
                 logger.error('Post is not save ' + str(err))
 
