@@ -179,7 +179,7 @@ LOGGING = {
             'level': 'DEBUG',
             'handlers': ['django_file'],
             'propagate': True,
-        },``
+        },
         'tasks': {
             'level': 'DEBUG',
             'handlers': ['tasks_file'],
