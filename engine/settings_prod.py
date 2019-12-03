@@ -197,3 +197,17 @@ LOGGING = {
         },
     },
 }
+
+# REDIS related settings 
+CELERY_REDIS_HOST = 'localhost'
+CELERY_REDIS_PORT = '6379'
+CELERY_BROKER_URL = 'redis://' + CELERY_REDIS_HOST + ':' + CELERY_REDIS_PORT + '/0'
+CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600} 
+CELERY_CELERY_RESULT_BACKEND = 'redis://' + CELERY_REDIS_HOST + ':' + CELERY_REDIS_PORT + '/0'
+
+CELERY_BEAT_SCHEDULE = {
+    'check_post_availability': {
+        'task': 'app.tasks.check_post_availability',
+        'schedule': 60.0,
+    }
+}
