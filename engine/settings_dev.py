@@ -157,6 +157,14 @@ LOGGING = {
             'backupCount': 7,
             'formatter': 'verbose'
         },
+        'tasks_file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/tasks.log'),
+            'maxBytes': 1024 * 1024 * 5,
+            'backupCount': 7,
+            'formatter': 'verbose'
+        },
     },
     'loggers': {
         'mqtt': {
@@ -167,6 +175,11 @@ LOGGING = {
         'django': {
             'level': 'DEBUG',
             'handlers': ['django_file'],
+            'propagate': True,
+        },
+        'tasks': {
+            'level': 'DEBUG',
+            'handlers': ['tasks_file'],
             'propagate': True,
         }
     },
@@ -180,4 +193,18 @@ LOGGING = {
             'style': '{',
         },
     },
+}
+
+# REDIS related settings 
+CELERY_REDIS_HOST = 'localhost'
+CELERY_REDIS_PORT = '6379'
+CELERY_BROKER_URL = 'redis://' + CELERY_REDIS_HOST + ':' + CELERY_REDIS_PORT + '/0'
+CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600} 
+CELERY_CELERY_RESULT_BACKEND = 'redis://' + CELERY_REDIS_HOST + ':' + CELERY_REDIS_PORT + '/0'
+
+CELERY_BEAT_SCHEDULE = {
+    'check_post_availability': {
+        'task': 'app.tasks.check_post_availability',
+        'schedule': 60.0,
+    }
 }

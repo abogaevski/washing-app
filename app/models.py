@@ -56,6 +56,7 @@ class Post(models.Model):
         Station, verbose_name='Станция', on_delete=models.CASCADE, related_name="posts")
     mac_uid = models.CharField("MAC UID", max_length=12, unique=True)
     last_seen = models.DateTimeField("Последний раз отвечал")
+    is_available = models.BooleanField("Доступность", default=True)
 
     def __str__(self):
         return str("{}: Пост {}".format(self.station.owner, self.post_id))

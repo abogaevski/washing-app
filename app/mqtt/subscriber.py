@@ -288,6 +288,7 @@ def on_message(client, userdata, msg):
         if post:
             logger.debug("Post is {}".format(post.station.owner))
             post.last_seen = last_seen
+            post.is_available = True
             try:
                 partner.save()
             except (ValidationError, FieldError) as err:
