@@ -2,7 +2,7 @@ import requests
 from django.core.mail import send_mass_mail
 from app.models import User, Post
 
-def sms_notification(msg)
+def sms_notification(msg):
 
     # http://api.rocketsms.by/simple/send?username=%smsuser%&password=%smspass%&phone=%ph1%&sender=%sender%&text=%msgph%
 
@@ -19,7 +19,7 @@ def sms_notification(msg)
 
 
 
-def email_notification(msg)
+def email_notification(msg):
 
     send_mass_mail(
     'Post are unavailable', 
