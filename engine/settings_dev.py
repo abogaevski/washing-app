@@ -208,3 +208,9 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': 60.0,
     }
 }
+
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_HOST_USER = 'notify.by.carwash@yandex.by'
+EMAIL_HOST_PASSWORD = '8y#c4rW45h'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
