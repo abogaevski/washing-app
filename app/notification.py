@@ -6,7 +6,7 @@ def sms_notification(msg):
 
     # http://api.rocketsms.by/simple/send?username=%smsuser%&password=%smspass%&phone=%ph1%&sender=%sender%&text=%msgph%
 
-    URL = "http://ec2-18-223-155-31.us-east-2.compute.amazonaws.com/epos"
+    URL = "http://ec2-18-223-155-31.us-east-2.compute.amazonaws.com/epos-payment"
     
     username = "login"
     password = "smspass"
@@ -14,7 +14,7 @@ def sms_notification(msg):
     sender = "washer"
     #message = msg
     PARAMS = {'username':username, 'password':password, 'phone':phone, 'sender':sender, 'message':msg}
-    req.requests(url=URL, params=PARAMS)
+    req = requests.get(url = URL, params = PARAMS)
 
 
 

@@ -5,6 +5,8 @@ import logging
 from datetime import timedelta, datetime
 
 from django.conf import settings
+from django.core.exceptions import ValidationError, FieldError
+
 from celery import shared_task
 from app.models import Post
 from app.notification import *
