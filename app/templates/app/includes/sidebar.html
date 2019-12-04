@@ -87,6 +87,7 @@
 </div>
 
 <script>
+    // Show unavailable posts
     $(document).ready(function(){
         csrf = $("#unavailable_post_list").find("input[name=csrfmiddlewaretoken]").val();
         url = "{% url 'unavailable_post_list_request_url' %}";
