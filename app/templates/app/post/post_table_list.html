@@ -34,7 +34,14 @@
     <tbody>
         {% for post in posts %}
             <tr data-item-id='{{post.id}}'>
-                <td>{{post.id}}</td>
+                <td>
+                {% if post.is_available %}
+                    <i class="bg-success rounded-circle status-icon"></i>
+                {% elif not is_available %}
+                    <i class="bg-danger rounded-circle status-icon"></i>
+                    {% endif %}
+                {{post.id}}
+                </td>
                 <td>{{post.post_id}}</td>
                 <td>{{post.station}}</td>
                 <td>
@@ -99,6 +106,25 @@
             e.stopPropagation();
         });
         {% endif %}
+
+        $(".status-icon").click(function(){
+            console.log("Clicked")
+
+            csrftoken = $("body").find('input[name=csrfmiddlewaretoken]').val()
+            $.ajax({
+                type: 'POST',
+                url: '{% url "unavailable_post_list_request_url" %}',
+                data: {
+                    'csrfmiddlewaretoken': csrftoken,
+                },
+                success: function (data) {
+                    console.log(data)
+                }
+                
+            });
+
+        })
+
 });
 
 

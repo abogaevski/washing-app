@@ -108,3 +108,4 @@ venv.bak/
 /paho.mqtt.python/
 /mysql*
 /*.old
+/logs/

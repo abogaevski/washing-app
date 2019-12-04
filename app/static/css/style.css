@@ -336,6 +336,14 @@ body {
     color: white;
     font-size: 16px;
     padding: 7px;
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    vertical-align: text-bottom;
+}
+.status-icon.user_transaction {
+    width: auto;
+    height: auto;
 }
 
 .btn {

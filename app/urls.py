@@ -26,6 +26,7 @@ urlpatterns = [
 
     path('posts/', PostList.as_view(), name='post_list_url'),
     path('posts/detail', postDetailRequest, name='post_detail_url'),
+    path('posts/unavailable', UnavailablePostListRequest.as_view(), name='unavailable_post_list_request_url'),
 
     path('payments/', PaymentList.as_view(), name='payment_list_url'),
     path('transactions/', TransactionList.as_view(), name='transaction_list_url'),

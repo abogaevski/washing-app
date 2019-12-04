@@ -91,3 +91,24 @@ function closeModal() {
         $("body").css("overflow", "unset");
     });
 }
+
+
+
+// $(document).ready(function(){
+
+//     setInterval( function(){
+//         csrftoken = $("body").find('input[name=csrfmiddlewaretoken]').val()
+//         $.ajax({
+//             type: 'POST',
+//             url: '/posts/unavailable',
+//             data: {
+//                 'csrfmiddlewaretoken': csrftoken,
+//             },
+//             success: function (data) {
+//                 console.log(data)
+//             }
+            
+//         });
+//     }, 1000 );
+
+// });

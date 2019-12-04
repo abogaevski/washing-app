@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, reverse
 from django.template import loader
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 from django.db.models.deletion import ProtectedError
 import logging
