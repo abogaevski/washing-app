@@ -27,7 +27,7 @@ def check_post_availability():
 
         for post in posts:
 
-            
+
             logger.debug("Working with {}".format(post.mac_uid))
 
             tz = pytz.timezone(settings.TIME_ZONE)
@@ -36,7 +36,7 @@ def check_post_availability():
             if post.last_seen < av_time and post.is_available:
 
                 logger.info("Post {} isn't available".format(post.mac_uid))
-                
+
                 post.is_available = False
                 unavailable_posts.append(post.mac_uid)
 
@@ -45,9 +45,9 @@ def check_post_availability():
 
                 except (ValidationError, FieldError) as err:
                     logger.exception("Post isn't save with errors: {}".format(err))
-        
+
         if unavailable_posts:
-            
+
             logger.debug("{} posts are unavailable".format(unavailable_posts))
 
             sms_notification("{} posts are unavailable".format(unavailable_posts))

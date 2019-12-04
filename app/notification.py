@@ -7,7 +7,7 @@ def sms_notification(msg):
     # http://api.rocketsms.by/simple/send?username=%smsuser%&password=%smspass%&phone=%ph1%&sender=%sender%&text=%msgph%
 
     URL = "http://ec2-18-223-155-31.us-east-2.compute.amazonaws.com/epos-payment"
-    
+
     username = "login"
     password = "smspass"
     phone = "phonenum" #check multinum
@@ -26,8 +26,8 @@ def email_notification(msg):
     str(msg),    #'Here is the message.'
     'notify.by.carwash@yandex.ru',
     'notify.by.carwash@yandex.ru',
-    fail_silently=False)
-    
-    
+    )
+
+
     # notify.by.carwash@yandex.ru
     # 8y#c4rW45h
