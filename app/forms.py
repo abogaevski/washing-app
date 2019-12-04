@@ -1,7 +1,6 @@
 from .models import *
 from django import forms
 
-
 class PartnerForm(forms.ModelForm):
 
     class Meta:
@@ -116,6 +115,16 @@ class PaymentForm(forms.ModelForm):
             'annotation': forms.Textarea(attrs={'class': 'form-control'})
         }
 
-
-# class TestMessageForm(forms.Form):
-#     data = forms.CharField(max_length=100)
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = [
+            'email',
+            'displayname',
+            'is_notify'
+        ]
+        widgets = {
+            'email': forms.TextInput(attrs={'class': 'form-control'}),
+            'displayname': forms.TextInput(attrs={'class': 'form-control'}),
+            'is_notify': forms.CheckboxInput(attrs={'class': 'form-control'})
+        }

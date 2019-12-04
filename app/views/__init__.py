@@ -7,3 +7,4 @@ from app.views.stations import StationCreate, StationList, StationUpdate, statio
 from app.views.posts import PostList, postDetailRequest, UnavailablePostListRequest
 from app.views.payments import PaymentCreate, PaymentList
 from app.views.user_transactions import UserTransactionList
+from app.views.user_profile import UserProfileUpdate

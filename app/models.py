@@ -132,3 +132,21 @@ class UserTransaction(models.Model):
         'Статус', choices=EXEC_TYPE, default=0)
     amount = models.DecimalField("Сумма", max_digits=7, decimal_places=2)
     date_pub = models.DateTimeField("Дата", auto_now_add=True)
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
+    email = models.EmailField("Эл. почта", blank=True)
+    displayname = models.CharField("ФИО", blank=True, max_length=250)
+    # phone = 
+    is_notify = models.BooleanField("Уведомлять", default=False)
+
+    def __str__(self):
+        return self.displayname
+
+    def create_update_profile(sender, instance, created, **kwargs):
+        if created:
+            UserProfile.objects.create(user=instance)
+        instance.profile.save()
+        
+    post_save.connect(create_update_profile, sender=User)

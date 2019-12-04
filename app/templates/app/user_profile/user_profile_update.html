@@ -1,0 +1,56 @@
+{% extends 'app/index.html' %}
+
+{% block title %}
+    Изменить Клиента | {{block.super}}
+{% endblock title %}
+
+{% block header %}
+    Изменить Клиента
+{% endblock header %}
+
+{% block content %}
+
+    <div class="details-table">
+        <form method="POST" action="{% url 'user_profile_update_url' %}">
+            {% csrf_token %}
+            {% for field in profile_form %}
+                {% if field.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{field.label}} - {{field.errors.as_text}}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            <table class="table table-sm">
+                <tr>
+                    <td>{{profile_form.email.label}}: </td>
+                    <td>
+                        <div class="input-group-sm">
+                            {{profile_form.email}}
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{profile_form.displayname.label}}:</td>
+                    <td>
+                        <div class="input-group-sm">
+                            {{profile_form.displayname}}
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{profile_form.is_notify.label}}: *</td>
+                    <td>
+                        <div class="input-group-sm">
+                            {{profile_form.is_notify}}
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <button type='submit' class='btn btn-secondary'>Изменить</button>
+            <a href="/" class="btn btn-light">Отмена</a>
+
+        </form>
+    </div>
+
+{% endblock content %}
+

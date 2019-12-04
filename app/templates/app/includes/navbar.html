@@ -14,9 +14,10 @@
                 <ul class="navbar-nav">
                     <li class="nav-item text-nowrap dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Привет, {{request.user}}
+                            Привет, {{request.user.profile.displayname}}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a href="{% url 'user_profile_update_url' %}" class="dropdown-item">Изменить профиль</a>
                         <a class="dropdown-item" href="{% url 'logout_url' %}">Выйти</a>
                         </div>
                     </li>
