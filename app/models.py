@@ -150,3 +150,7 @@ class UserProfile(models.Model):
         instance.profile.save()
         
     post_save.connect(create_update_profile, sender=User)
+
+
+class EposPayment(models.Model):
+    pass

@@ -75,6 +75,7 @@ urlpatterns = [
 
      path('transactions/ajax/', TransactionListJson.as_view(),
           name="transactions_ajax_request"),
-     path('user_profile/update', UserProfileUpdate.as_view(), name='user_profile_update_url')
+     path('user_profile/update/', UserProfileUpdate.as_view(), name='user_profile_update_url'),
+     path('epos-payment/', eposPaymentRequest, name='epos_payment_request_url')
 
 ]
