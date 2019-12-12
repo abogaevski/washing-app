@@ -144,12 +144,11 @@ class UserProfile(models.Model):
     def __str__(self):
         return self.displayname
 
-    def create_update_profile(sender, instance, created, **kwargs):
+    def create_profile(sender, instance, created, **kwargs):
         if created:
             UserProfile.objects.create(user=instance)
-        instance.profile.save()
         
-    post_save.connect(create_update_profile, sender=User)
+    post_save.connect(create_profile, sender=User)
 
 
 class EposPayment(models.Model):
