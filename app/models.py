@@ -57,6 +57,7 @@ class Post(models.Model):
     mac_uid = models.CharField("MAC UID", max_length=12, unique=True)
     last_seen = models.DateTimeField("Последний раз отвечал")
     is_available = models.BooleanField("Доступность", default=True)
+    erip_id = models.CharField("ЕРИП Счет", max_length=100, blank=True)
 
     def __str__(self):
         return str("{}: Пост {}".format(self.station.owner, self.post_id))
@@ -152,4 +153,18 @@ class UserProfile(models.Model):
 
 
 class EposPayment(models.Model):
-    pass
+
+    class Meta:
+        verbose_name = "Платеж физ. лица"
+        verbose_name_plural = "Платежи физ. лиц"
+
+    post = models.ForeignKey(   Post,
+                                on_delete=models.PROTECT,verbose_name="Пост",
+                                related_name="epos_payments")
+    pay_date = models.DateTimeField("Дата платежа")
+    amount = models.DecimalField(   verbose_name="Сумма начисления",
+                                    max_digits=7, decimal_places=2)
+    is_passed = models.BooleanField("Подтвержден", default=False)
+    
+    def __str__(self):
+        return "{}: {} руб.".format(self.post, self.amount)

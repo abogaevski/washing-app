@@ -13,6 +13,8 @@ admin.site.register(Card)
 admin.site.register(Transaction)
 admin.site.register(Payment)
 admin.site.register(UserTransaction)
+admin.site.register(EposPayment)
+
 
 class ProfileInline(admin.StackedInline):
     model = UserProfile
