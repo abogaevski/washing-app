@@ -18,7 +18,7 @@ def on_connect(client, userdata, flags, rc):
 
 
 def on_message(client, userdata, msg):
-    from app.models import Post, Card, Partner, Transaction, Station
+    from app.models import Post, Card, Partner, Transaction, Station, EposPayment
     logger.debug('Has a message:' + str(msg.payload))
     payload = json.loads(msg.payload)
     topic = msg.topic.split('/')
@@ -213,6 +213,33 @@ def on_message(client, userdata, msg):
                 except:
                     logger.error('Transaction not created')
 
+            elif init_type == 3:
+
+                if client == "QR":
+                    t = ""
+                    try:
+                        t = Transaction.objects.create(
+                            station=station,
+                            post=post,
+                            start_time=start_time,
+                            price=price,
+                            initiator_type=init_type
+                        )
+                        logger.debug(t)
+                    except:
+                        logger.error('Transaction not created')
+
+                    if t:
+                        # Доделать, првоерить! Добавить у коли uid транзакции
+                        payment = EposPayment.objects.filter(post=post, is_passed=False, amount=price).latest()
+                        payment.is_passed = True      
+                        try:
+                            payment.save()
+                        except (FieldError, ValidationError) as error:
+                            logger.error("Платеж физ. лица не проведен!")
+                else:
+                    logger.error(
+                        'Undefined client. Not created')
             else:
                 logger.error('Undefined transaction type. Not created')
         else:

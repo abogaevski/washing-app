@@ -28,7 +28,7 @@ def eposPaymentRequest(request):
 
             data = {
                 'client': 'QR',
-                'points': points
+                'points': points,
             }
             topic = str(uid) + '/start_washing'
             # publish_data(topic, json.dumps(data))
