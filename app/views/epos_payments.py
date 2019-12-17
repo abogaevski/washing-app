@@ -5,11 +5,13 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from app.models import Post, EposPayment
+from app.mqtt.publisher import publish_data
 
 @csrf_exempt
 def eposPaymentRequest(request):
     if request.method == "POST":
-        body = json.loads(request.body)
+        body = json.loads(request.body.decode('unicode_escape').encode('latin1').decode('utf8'))
+
         payment_datetime = datetime.strptime(body["paymentDate"], "%Y-%m-%dT%H:%M:%S.%f")
         post = Post.objects.get(erip_id=body["claimId"])
         amount = body["amount"]["amt"]
@@ -27,7 +29,7 @@ def eposPaymentRequest(request):
             uid = post.mac_uid
 
             data = {
-                'client': 'QR',
+                'client': 'NONE',
                 'points': points,
             }
             topic = str(uid) + '/start_washing'
