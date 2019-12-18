@@ -33,5 +33,5 @@ def eposPaymentRequest(request):
                 'points': points,
             }
             topic = str(uid) + '/start_washing'
-            # publish_data(topic, json.dumps(data))
+            publish_data(topic, json.dumps(data))
             return HttpResponse('Мойка запускается!{}'.format(data))
