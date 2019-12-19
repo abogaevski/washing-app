@@ -247,3 +247,88 @@ Just pull the changes and restart gunicorn server
 - [Gunicorn configuration](http://docs.gunicorn.org/en/latest/configure.html)
 
 
+## Celery configuration
+
+    sudo apt-get install redis-server
+    sudo useradd celery -d /home/celery -b /bin/bash
+    sudo nano /etc/tmpfiles.d/celery.conf
+
+        d /var/run/celery 0755 celery celery -
+        d /var/log/celery 0755 celery celery -
+    
+    sudo mkdir /var/log/celery
+    sudo chown -R celery:celery /var/log/celery
+    sudo chmod -R 755 /var/log/celery
+
+    sudo mkdir /var/run/celery
+    sudo chown -R celery:celery /var/run/celery
+    sudo chmod -R 755 /var/run/celery
+
+    sudo nano /etc/conf.d/celery
+
+        CELERYD_NODES="washing-app"
+        CELERY_BIN="/var/www/washing-app/env/bin/celery"
+        CELERY_APP="engine"
+        CELERYD_MULTI="multi"
+        CELERYD_OPTS="--time-limit=300 --concurrency=8"
+        CELERYD_PID_FILE="/var/run/celery/%n.pid"
+        CELERYD_LOG_FILE="/var/log/celery/%n%I.log"
+        CELERYD_LOG_LEVEL="INFO"
+        CELERYBEAT_PID_FILE="/var/run/celery/beat.pid"
+        CELERYBEAT_LOG_FILE="/var/log/celery/beat.log"
+
+
+    sudo nano /etc/systemd/system/celery.service
+        
+        [Unit]
+        Description=Celery Service
+        After=network.target
+
+        [Service]
+        Type=forking
+        User=celery
+        Group=celery
+        EnvironmentFile=/etc/conf.d/celery
+        WorkingDirectory=/var/www/washing-app/
+
+        ExecStart=/bin/sh -c '${CELERY_BIN} multi start ${CELERYD_NODES} \
+        -A ${CELERY_APP} --pidfile=${CELERYD_PID_FILE} \
+        --logfile=${CELERYD_LOG_FILE} --loglevel=${CELERYD_LOG_LEVEL} ${CELERYD_OPTS}'
+        ExecStop=/bin/sh -c '${CELERY_BIN} multi stopwait ${CELERYD_NODES} \
+        --pidfile=${CELERYD_PID_FILE}'
+        ExecReload=/bin/sh -c '${CELERY_BIN} multi restart ${CELERYD_NODES} \
+        -A ${CELERY_APP} --pidfile=${CELERYD_PID_FILE} \
+        --logfile=${CELERYD_LOG_FILE} --loglevel=${CELERYD_LOG_LEVEL} ${CELERYD_OPTS}'
+
+        [Install]
+        WantedBy=multi-user.target
+
+    sudo nano /etc/systemd/system/celerybeat.service
+
+        [Unit]
+        Description=Celery Beat Service
+        After=network.target
+
+        [Service]
+        Type=simple
+        User=celery
+        Group=celery
+        EnvironmentFile=/etc/conf.d/celery
+        WorkingDirectory=/var/www/washing-app/
+        ExecStart=/bin/sh -c '${CELERY_BIN} beat  \
+        -A ${CELERY_APP} --pidfile=${CELERYBEAT_PID_FILE} \
+        --logfile=${CELERYBEAT_LOG_FILE} --loglevel=${CELERYD_LOG_LEVEL}'
+
+        [Install]
+        WantedBy=multi-user.target
+
+    sudo systemctl daemon-reload
+    sudo systemctl enable celery
+    sudo systemctl enable celerybeat
+
+    service celerybeat start
+    service celery start
+    
+
+
+
