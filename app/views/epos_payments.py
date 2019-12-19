@@ -15,12 +15,14 @@ def eposPaymentRequest(request):
         payment_datetime = datetime.strptime(body["paymentDate"], "%Y-%m-%dT%H:%M:%S.%f")
         post = Post.objects.get(erip_id=body["claimId"])
         amount = body["amount"]["amt"]
+        payment_id = body["memorialSlip"]["tranEripId"]
         if post:
 
             try:
                 EposPayment.objects.create( post=post,
                                             pay_date=payment_datetime,
-                                            amount=amount)
+                                            amount=amount,
+                                            payment_id=payment_id)
             except:
                 print("EposPayment isn't created!")
 
@@ -29,8 +31,9 @@ def eposPaymentRequest(request):
             uid = post.mac_uid
 
             data = {
-                'client': 'NONE',
+                'client': "QR",
                 'points': points,
+                'payment_id': payment_id
             }
             topic = str(uid) + '/start_washing'
             publish_data(topic, json.dumps(data))

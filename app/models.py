@@ -86,7 +86,8 @@ class Transaction(models.Model):
     INIT_TYPES = (
         (0, 'Контроллер'),
         (1, 'Веб-приложение'),
-        (2, 'Купюроприемник')
+        (2, 'Купюроприемник'),
+        (4, 'EPOS платеж')
     )
     card = models.ForeignKey(Card, verbose_name="Карта", on_delete=models.PROTECT,
                              related_name="transactions", blank=True, null=True)
@@ -165,6 +166,7 @@ class EposPayment(models.Model):
     amount = models.DecimalField(   verbose_name="Сумма начисления",
                                     max_digits=7, decimal_places=2)
     is_passed = models.BooleanField("Подтвержден", default=False)
+    payment_id = models.CharField("ИД платежа", max_length=20, unique=True)
     
     def __str__(self):
         return "{}: {} руб.".format(self.post, self.amount)

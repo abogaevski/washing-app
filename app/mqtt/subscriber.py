@@ -230,9 +230,9 @@ def on_message(client, userdata, msg):
                         logger.error('Transaction not created')
 
                     if t:
-                        # Доделать, првоерить! Добавить у коли uid транзакции
-                        payment = EposPayment.objects.filter(post=post, is_passed=False, amount=price).latest()
-                        payment.is_passed = True      
+                        payment_id = str(payload['payment_id'])
+                        payment = EposPayment.objects.get(is_passed=False, payment_id=payment_id)
+                        payment.is_passed = True
                         try:
                             payment.save()
                         except (FieldError, ValidationError) as error:
