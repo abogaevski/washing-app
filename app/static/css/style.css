@@ -439,3 +439,6 @@ body {
     transition: 0.32s cubic-bezier(0.09, 0.26, 0.48, 1.02);
 
 }
+#posts_table .btn {
+    float: right;
+}

@@ -4,7 +4,7 @@ from app.views.partners import PartnerList, PartnerCreate, PartnerUpdate, Partne
 from app.views.contractors import ContractorList, ContractorUpdate, ContractorCreate, ContractorDelete, contractorDetailRequest
 from app.views.cards import CardCreate, CardList, CardUpdate, CardDelete, CardActive, cardDetailRequest
 from app.views.stations import StationCreate, StationList, StationUpdate, stationDetailRequest
-from app.views.posts import PostList, postDetailRequest, UnavailablePostListRequest
+from app.views.posts import PostList, postDetailRequest, UnavailablePostListRequest, PostUpdateEripId
 from app.views.payments import PaymentCreate, PaymentList
 from app.views.user_transactions import UserTransactionList
 from app.views.user_profile import UserProfileUpdate

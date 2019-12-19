@@ -50,8 +50,8 @@ def check_post_availability():
 
             logger.debug("{} posts are unavailable".format(unavailable_posts))
 
-            sms_notification("{} posts are unavailable".format(unavailable_posts))
-            email_notification("{} posts are unavailable".format(unavailable_posts))
+            # sms_notification("{} posts are unavailable".format(unavailable_posts))
+            # email_notification("{} posts are unavailable".format(unavailable_posts))
 
 
 

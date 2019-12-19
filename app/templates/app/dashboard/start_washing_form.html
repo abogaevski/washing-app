@@ -25,36 +25,51 @@
 
 </form>
 <script>
+
+function loadPosts() {
+    var url = '{% url "load_posts_url" %}' 
+    var stationId = $("#id_station").val();
+    csrf = $('form').find('input[name=csrfmiddlewaretoken]').val()
+    $.ajax({ 
+        type: 'POST',
+        url: url, 
+        data: {
+            'station': stationId,
+            'csrfmiddlewaretoken': csrf,
+        },
+        success: function (data) { 
+            $("#id_post").html(data); 
+        }
+    });
+}
+
+function loadCards() {
+    var url = '{% url "load_cards_url" %}' 
+    var partnerId = $("#id_partner").val();
+    csrf = $('form').find('input[name=csrfmiddlewaretoken]').val()
+    $.ajax({ 
+        type: 'POST',
+        url: url, 
+        data: {
+            'partner': partnerId,
+            'csrfmiddlewaretoken': csrf,
+        },
+        success: function (data) { 
+            $("#id_card").html(data);
+        }
+    });
+}
+
     $("#id_station").change(function () {
-        var url = '{% url "load_posts_url" %}' 
-        var stationId = $(this).val(); 
-        csrf = $('form').find('input[name=csrfmiddlewaretoken]').val()
-        $.ajax({ 
-            type: 'POST',
-            url: url, 
-            data: {
-                'station': stationId,
-                'csrfmiddlewaretoken': csrf,
-            },
-            success: function (data) { 
-                $("#id_post").html(data); 
-            }
-        });
+        loadPosts();
     });
     $("#id_partner").change(function () {
-        var url = '{% url "load_cards_url" %}' 
-        var partnerId = $(this).val(); 
-        csrf = $('form').find('input[name=csrfmiddlewaretoken]').val()
-        $.ajax({ 
-            type: 'POST',
-            url: url, 
-            data: {
-                'partner': partnerId,
-                'csrfmiddlewaretoken': csrf,
-            },
-            success: function (data) { 
-                $("#id_card").html(data);
-            }
-        });
+        loadCards();
     });
+
+    $(document).ready(function () {
+        loadPosts();
+        $("#id_card").html("");
+    });
+
 </script>

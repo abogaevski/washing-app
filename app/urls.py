@@ -28,6 +28,7 @@ urlpatterns = [
      path('posts/detail', postDetailRequest, name='post_detail_url'),
      path('posts/unavailable', UnavailablePostListRequest.as_view(),
           name='unavailable_post_list_request_url'),
+     path('post/<int:id>/update_erip/', PostUpdateEripId.as_view(), name='post_update_erip_id_url'),
 
      path('payments/', PaymentList.as_view(), name='payment_list_url'),
      path('transactions/', TransactionList.as_view(), name='transaction_list_url'),

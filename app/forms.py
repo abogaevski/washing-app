@@ -97,8 +97,6 @@ class StartWashingForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # self.fields['post'].queryset = Post.objects.none()
-        # self.fields['card'].queryset = Card.objects.none()
 
 
 class PaymentForm(forms.ModelForm):
@@ -127,4 +125,15 @@ class UserProfileForm(forms.ModelForm):
             'email': forms.TextInput(attrs={'class': 'form-control'}),
             'displayname': forms.TextInput(attrs={'class': 'form-control'}),
             'is_notify': forms.CheckboxInput(attrs={'class': 'form-control'})
+        }
+
+
+class PostUpdateEripIdForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = [
+            'erip_id'
+        ]
+        widgets = {
+            'erip_id': forms.TextInput(attrs={'class': 'form-control'}),
         }

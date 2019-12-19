@@ -24,5 +24,15 @@
             {{post.mac_uid}}
         </td>
     </tr>
+    <tr>
+        <td>Счет</td>
+        <td>
+        {% if post.erip_id %}
+            {{post.erip_id}}
+        {% else %}
+            <b>Не существует</b>
+        {% endif %}
+        </td>
+    </tr>
         
 </table>

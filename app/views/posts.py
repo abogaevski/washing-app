@@ -1,10 +1,11 @@
 from django.http import HttpResponse, JsonResponse
 from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from app.utils import ObjectListMixin, objectDetailRequest
+from app.utils import ObjectListMixin, objectDetailRequest, ObjectUpdateMixin
 from django.core import serializers
 
 from app.models import Post
+from app.forms import PostUpdateEripIdForm
 
 class PostList(LoginRequiredMixin, ObjectListMixin, View):
     model = Post
@@ -18,8 +19,14 @@ def postDetailRequest(request):
     return HttpResponse(objectDetailRequest(request, model, template))
 
 
-class UnavailablePostListRequest(View):
+class UnavailablePostListRequest(LoginRequiredMixin, View):
     def post(self, request):
         posts = Post.objects.filter(is_available=False).values('pk', 'post_id', 'station__owner', 'is_available', 'last_seen')
         result = {'results': list(posts)}
         return JsonResponse(result)
+
+
+class PostUpdateEripId(LoginRequiredMixin, ObjectUpdateMixin, View):
+    model = Post
+    model_form = PostUpdateEripIdForm
+    template = "app/post/post_update_erip_id.html"
