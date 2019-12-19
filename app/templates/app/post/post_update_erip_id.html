@@ -1,0 +1,44 @@
+{% extends 'app/index.html' %}
+
+{% block title %}
+    Изменить счет {{post}} | {{block.super}}
+{% endblock title %}
+
+{% block header %}
+    Изменить счет {{post}}
+{% endblock header %}
+
+{% block content %}
+
+    <div class="details-table">
+        <div class="details-table">
+        <form method="POST" action="{% url 'post_update_erip_id_url' post.id %}">
+            {% csrf_token %}
+            {% for field in postupdateeripidform %}
+                {% if field.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{field.label}} - {{field.errors.as_text}}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            <table class="table table-sm">
+                </tr>
+                <tr>
+                    <td>{{postupdateeripidform.erip_id.label}}: *</td>
+                    <td>
+                        <div class="input-group-sm">
+                            {{postupdateeripidform.erip_id}}
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <button type='submit' class='btn btn-secondary'>Изменить</button>
+            <a href="{% url 'post_list_url' %}" class="btn btn-light">Отмена</a>
+        </form>
+    </div>
+
+        </form>
+    </div>
+
+{% endblock content %}
+
