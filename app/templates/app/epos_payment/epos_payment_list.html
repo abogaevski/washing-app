@@ -1,0 +1,18 @@
+{% extends 'app/index.html' %}
+
+{% block title %}
+    Список платежей физ лиц | {{block.super}}
+{% endblock title %}
+
+{% block header %}
+    Список платежей физ лиц
+{% endblock header %} 
+
+{% block header_buttons %}
+{% endblock header_buttons %}
+
+{% block content %}
+<div class="content-item pb-5 align-self-start mb-3">
+    {% include "app/epos_payment/epos_payment_table_list.html" %}
+</div>
+{% endblock content %}

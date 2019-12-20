@@ -3,9 +3,13 @@ from datetime import datetime
 
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import View
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from app.models import Post, EposPayment
 from app.mqtt.publisher import publish_data
+from app.utils import ObjectListMixin
+
 
 @csrf_exempt
 def eposPaymentRequest(request):
@@ -38,3 +42,9 @@ def eposPaymentRequest(request):
             topic = str(uid) + '/start_washing'
             publish_data(topic, json.dumps(data))
             return HttpResponse('Мойка запускается!{}'.format(data))
+
+
+class EposPaymentList(LoginRequiredMixin, ObjectListMixin, View):
+    model = EposPayment
+    template = 'app/epos_payment/epos_payment_list.html'
+    context = 'epos_payments'

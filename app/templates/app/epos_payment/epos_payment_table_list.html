@@ -1,0 +1,149 @@
+<div class="datepicker input-group-sm d-inline-block mb-3">
+    <input type="text" id='min' class="form-control" placeholder='От'>
+</div>
+<div class="datepicker input-group-sm  d-inline-block mb-3">
+    <input type="text" id='max' class="form-control d-inline-block" placeholder='До'>
+</div>
+<div class="input-group-sm  d-inline-block mb-3">
+    <button class="btn btn-secondary" id="cancel-filters">Сбросить фильтры</button>
+</div>
+
+
+<table class="table-list table table-sm mx-auto" id="epos_payment_table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">ИД платежа</th>
+            <th scope="col">Пост</th>
+            <th scope="col">Сумма</th>
+            <th scope="col">Дата</th>
+            <th scope="col">Подтвержение</th>
+        </tr>
+        <tr>
+            <th>
+                <input class="form-control form-control-sm" type="number" placeholder="Найти по ID" />
+            </th>
+            <th>
+                <input class="form-control form-control-sm" type="text" placeholder="Найти по ИД платежа" />
+            </th>
+            <th>
+                <input class="form-control form-control-sm" type="text" placeholder="Найти по посту" />
+            </th>
+            <th>
+                <input class="form-control form-control-sm" type="number" placeholder="Найти по сумме" />
+            </th>
+            <th>
+               <i>Выберите диапазон дат выше</i>
+            </th>
+            <th>
+               <select class="form-control form-control-sm">
+                    <option value="1">Подтвержден</option>
+                    <option value="0">Не подтвержден</option>
+                </select>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for epos_payment in epos_payments %}
+            <tr>
+                <td>{{epos_payment.id}}</td>
+                <td>{{epos_payment.payment_id}}</td>
+                <td>{{epos_payment.post}}</td>
+                <td>{{epos_payment.amount}}</td>
+                <td>{{epos_payment.pay_date|date:"d.m.Y H:i"}}</td>
+                <td>
+                    {% if epos_payment.is_passed %}
+                        <i class="fas fa-check bg-success rounded-circle status-icon epos_payment">
+                            <span class="d-none">1</span>
+                        </i>
+                    {% elif not epos_payment.is_passed %}
+                        <i class="fas fa-ban bg-danger rounded-circle status-icon epos_payment">
+                            <span class="d-none">0</span>
+                        </i>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+
+$(document).ready(function() {
+
+    $('#epos_payment_table thead tr:eq(1) th').each( function (i) {
+        $( 'input, select', this ).on( 'keyup change', function () {
+            if ( table.column(i).search() !== this.value ) {
+                    table
+                        .column(i)
+                        .search( this.value )
+                        .draw();
+            }
+        });
+    });
+
+    var table = $("#epos_payment_table").DataTable({
+        select: true,
+        "order": [[ 0, "desc" ]],
+        "language": {
+            "lengthMenu": "_MENU_",
+            "zeroRecords": "Ничего не найдено",
+            "info": "Страниц: _PAGE_ из _PAGES_",
+            "zeroRecords":    "Записей нет",
+            "infoEmpty": "Не найдено",
+            "infoFiltered": "(Поиск по _MAX_ записям)",
+            "search" : "Фильтр",
+            "paginate": {
+                "first":      "Первая",
+                "last":       "Последняя",
+                "next":       "Следующая",
+                "previous":   "Предыдущая"
+            },
+        },
+        destroy: true,
+        orderCellsTop: true
+    });
+
+     $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex) {
+            var min = $('#min').datepicker("getDate");
+            var max = $('#max').datepicker("getDate");
+            splitDate = data[4].split(' ');
+            splitDate = splitDate[0].split('.');
+            startDate = new Date(parseInt(splitDate[2]), parseInt(splitDate[1]) - 1, parseInt(splitDate[0]));
+            
+            if (min == null && max == null) { return true; }
+            if (min == null && startDate <= max) { return true;}
+            if(max == null && startDate >= min) {return true;}
+            if (startDate <= max && startDate >= min) { return true; }
+            return false;
+        }
+    );
+
+    $("#min").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true });
+    $("#max").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true });
+    
+    $('#min, #max').change(function () {
+        table.draw();
+    });
+
+    // Cancel all filters   
+    $('#cancel-filters').click(function(){
+        $("#min, #max").val(function(i){
+            if (this.value !== "") {
+                this.value = "";
+                table.search("").draw();
+            }
+        })
+        $("#epos_payment_table input").val(function(i){
+            if ( table.column(i).search() !== "" ) {
+                this.value = "";
+                table.column(i).search("").draw();
+            } 
+        });
+    });
+
+});
+
+
+</script>

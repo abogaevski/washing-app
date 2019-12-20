@@ -341,7 +341,8 @@ body {
     display: inline-block;
     vertical-align: text-bottom;
 }
-.status-icon.user_transaction {
+.status-icon.user_transaction,
+.status-icon.epos_payment {
     width: auto;
     height: auto;
 }
