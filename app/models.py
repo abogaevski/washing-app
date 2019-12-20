@@ -87,7 +87,7 @@ class Transaction(models.Model):
         (0, 'Контроллер'),
         (1, 'Веб-приложение'),
         (2, 'Купюроприемник'),
-        (4, 'EPOS платеж')
+        (3, 'EPOS платеж')
     )
     card = models.ForeignKey(Card, verbose_name="Карта", on_delete=models.PROTECT,
                              related_name="transactions", blank=True, null=True)
