@@ -5,6 +5,7 @@
 {% url 'station_list_url' as station_list_url %}
 {% url 'post_list_url' as post_list_url %}
 {% url 'payment_list_url' as payment_list_url %}
+{% url 'epos_payment_list_url' as epos_payment_list_url %}
 
 
 {% url 'partner_create_url' as partner_create_url %}
@@ -64,7 +65,13 @@
             <li class="nav-item">
                 <a class="nav-link {% if request.path == payment_list_url %}active{% endif %}" href="{{ payment_list_url }}">
                     <i class="fas fa-shopping-basket"></i>               
-                    Платежи
+                    Платежи юр лиц
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if request.path == epos_payment_list_url %}active{% endif %}" href="{{ epos_payment_list_url }}">
+                    <i class="fas fa-shopping-basket"></i>               
+                    Платежи физ лиц
                 </a>
             </li>
             <li class="nav-item">
@@ -82,7 +89,6 @@
         </ul>
         <div id="unavailable_post_list" class="m-3">
             {% csrf_token %}
-        
         </div>
 </div>
 

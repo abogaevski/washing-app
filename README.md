@@ -329,6 +329,7 @@ Just pull the changes and restart gunicorn server
     service celerybeat start
     service celery start
     
+### Links
 
-
-
+[Daemonization Celery](https://docs.celeryproject.org/en/latest/userguide/daemonizing.html)
+[Celery 4 with Django on Ubuntu 18.04](https://www.willandskill.se/en/celery-4-with-django-on-ubuntu-18-04/)
