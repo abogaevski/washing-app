@@ -1,0 +1,21 @@
+{% extends 'app/index.html' %}
+
+{% block title %}
+Клиент {{partner}} | {{block.super}}
+{% endblock title %}
+
+{% block header %}
+    Клиент {{partner}}
+{% endblock header %} 
+
+{% block header_buttons %}
+    <a href="{% url 'partner_update_url' partner.id %}" class="btn btn-secondary">Изменить</a>
+{% endblock header_buttons %}
+
+{% block content %}
+<div class="content-item pb-5 align-self-start mb-3">
+</div>
+<div class="details"></div>
+
+
+{% endblock content %}

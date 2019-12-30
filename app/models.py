@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.contrib import messages
+from django.urls import reverse
 
 
 # Create your models here.
@@ -16,6 +17,9 @@ class Contractor(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def get_absolute_url(self):
+        return reverse("contractor_detail_page_url", kwargs={"id": self.pk})
 
 
 class Partner(models.Model):
@@ -36,6 +40,9 @@ class Partner(models.Model):
 
     def __str__(self):
         return str("{} - {}".format(self.contractor.name, self.name))
+    
+    def get_absolute_url(self):
+        return reverse("partner_detail_page_url", kwargs={"id": self.pk})
 
 
 
@@ -49,6 +56,9 @@ class Station(models.Model):
     def __str__(self):
         return self.owner
 
+    def get_absolute_url(self):
+        return reverse("station_detail_page_url", kwargs={"id": self.pk})
+
 
 class Post(models.Model):
     post_id = models.PositiveSmallIntegerField("Номер поста", default=1, db_index=True)
@@ -61,6 +71,9 @@ class Post(models.Model):
 
     def __str__(self):
         return str("{}: Пост {}".format(self.station.owner, self.post_id))
+    
+    def get_absolute_url(self):
+        return reverse("post_detail_page_url", kwargs={"id": self.pk})
 
 
 class Card(models.Model):
@@ -75,6 +88,9 @@ class Card(models.Model):
             return str("{}: Активна".format(self.data))
         else: 
             return str("{}: Отключена".format(self.data))
+
+    def get_absolute_url(self):
+        return reverse("card_detail_page_url", kwargs={"id": self.pk})
 
 
 class Transaction(models.Model):

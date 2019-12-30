@@ -1,6 +1,8 @@
 from django.urls import path
-from app.views import *
 from django.contrib.auth.views import LoginView, LogoutView
+
+from app.views import *
+from app.api import *
 
 urlpatterns = [
      path('', Dashboard.as_view(), name='app_url'),
@@ -12,23 +14,31 @@ urlpatterns = [
 
      path('partners/', PartnerList.as_view(), name='partner_list_url'),
      path('partners/detail/', partnerDetailRequest, name='partner_detail_url'),
+     path('partner/<int:id>/detail/', PartnerDetail.as_view(), name='partner_detail_page_url'),
+
 
      path('contractors/', ContractorList.as_view(), name='contractor_list_url'),
      path('contractors/detail/', contractorDetailRequest,
           name='contractor_detail_url'),
+     path('contractor/<int:id>/detail/', ContractorDetail.as_view(), name='contractor_detail_page_url'),
+     
 
      path('cards/', CardList.as_view(), name='card_list_url'),
      path('cards/detail', cardDetailRequest, name='card_detail_url'),
+     path('card/<int:id>/detail/', CardDetail.as_view(), name='card_detail_page_url'),
+
 
      path('stations/', StationList.as_view(), name='station_list_url'),
      path('stations/detail', stationDetailRequest, name='station_detail_url'),
-
+     path('station/<int:id>/detail/', StationDetail.as_view(), name='station_detail_page_url'),
 
      path('posts/', PostList.as_view(), name='post_list_url'),
      path('posts/detail', postDetailRequest, name='post_detail_url'),
      path('posts/unavailable', UnavailablePostListRequest.as_view(),
           name='unavailable_post_list_request_url'),
      path('post/<int:id>/update_erip/', PostUpdateEripId.as_view(), name='post_update_erip_id_url'),
+     path('post/<int:id>/detail/', PostDetail.as_view(), name='post_detail_page_url'),
+
 
      path('payments/', PaymentList.as_view(), name='payment_list_url'),
      path('transactions/', TransactionList.as_view(), name='transaction_list_url'),
@@ -79,6 +89,9 @@ urlpatterns = [
      path('user_profile/update/', UserProfileUpdate.as_view(), name='user_profile_update_url'),
 
      path('epos-payment/', eposPaymentRequest, name='epos_payment_request_url'),
-     path('epos-payments/', EposPaymentList.as_view(), name='epos_payment_list_url')
+     path('epos-payments/', EposPaymentList.as_view(), name='epos_payment_list_url'),
+     
+     path('api/test_view', test_view, name='api_test_url'),
+
 
 ]

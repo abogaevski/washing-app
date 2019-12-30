@@ -1,7 +1,7 @@
 from django.http import HttpResponse, JsonResponse
 from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from app.utils import ObjectListMixin, objectDetailRequest, ObjectUpdateMixin
+from app.utils import ObjectListMixin, objectDetailRequest, ObjectUpdateMixin, ObjectDetailMixin
 from django.core import serializers
 
 from app.models import Post
@@ -22,6 +22,8 @@ def postDetailRequest(request):
 class UnavailablePostListRequest(LoginRequiredMixin, View):
     def post(self, request):
         posts = Post.objects.filter(is_available=False).values('pk', 'post_id', 'station__owner', 'is_available', 'last_seen')
+        for post in posts:
+            post["last_seen"] = post["last_seen"].strftime("%d.%m.%Y %H:%M:%S")
         result = {'results': list(posts)}
         return JsonResponse(result)
 
@@ -30,3 +32,8 @@ class PostUpdateEripId(LoginRequiredMixin, ObjectUpdateMixin, View):
     model = Post
     model_form = PostUpdateEripIdForm
     template = "app/post/post_update_erip_id.html"
+
+
+class PostDetail(LoginRequiredMixin, ObjectDetailMixin, View):
+    model = Post
+    template = "app/post/post_detail_page.html"

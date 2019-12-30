@@ -4,7 +4,7 @@ from django.views.generic import View
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from app.utils import ObjectListMixin, objectDetailRequest, ObjectCreateMixin, ObjectUpdateMixin, ObjectDisableMixin
+from app.utils import ObjectListMixin, objectDetailRequest, ObjectCreateMixin, ObjectUpdateMixin, ObjectDisableMixin, ObjectDetailMixin
 from app.models import Card
 from app.forms import CardForm
 
@@ -66,3 +66,7 @@ def cardDetailRequest(request):
     model = Card
     template = 'app/card/card_detail.html'
     return HttpResponse(objectDetailRequest(request, model, template))
+
+class CardDetail(LoginRequiredMixin, ObjectDetailMixin, View):
+    model = Card
+    template = "app/card/card_detail_page.html"

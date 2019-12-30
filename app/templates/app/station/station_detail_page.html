@@ -1,0 +1,21 @@
+{% extends 'app/index.html' %}
+
+{% block title %}
+Станция {{station}} | {{block.super}}
+{% endblock title %}
+
+{% block header %}
+    Станция {{station}}
+{% endblock header %} 
+
+{% block header_buttons %}
+    <a href="{% url 'station_update_url' station.id %}" class="btn btn-secondary">Изменить</a>
+{% endblock header_buttons %}
+
+{% block content %}
+<div class="content-item pb-5 align-self-start mb-3">
+</div>
+<div class="details"></div>
+
+
+{% endblock content %}

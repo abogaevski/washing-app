@@ -3,7 +3,7 @@ from django.views.generic import View
 from django.http import HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from app.utils import ObjectListMixin, objectDetailRequest, ObjectCreateMixin, ObjectUpdateMixin
+from app.utils import ObjectListMixin, objectDetailRequest, ObjectCreateMixin, ObjectUpdateMixin, ObjectDetailMixin
 from app.models import Station
 from app.forms import StationForm
 
@@ -31,3 +31,8 @@ class StationUpdate(LoginRequiredMixin, ObjectUpdateMixin, View):
     model = Station
     model_form = StationForm
     template = 'app/station/station_update.html'
+
+
+class StationDetail(LoginRequiredMixin, ObjectDetailMixin, View):
+    model = Station
+    template = "app/station/station_detail_page.html"

@@ -4,7 +4,7 @@ from django.views.generic import View
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from app.utils import ObjectListMixin, objectDetailRequest, ObjectCreateMixin, ObjectUpdateMixin, ObjectDeleteMixin
+from app.utils import ObjectListMixin, objectDetailRequest, ObjectCreateMixin, ObjectUpdateMixin, ObjectDeleteMixin, ObjectDetailMixin
 from app.models import Partner, UserTransaction
 from app.forms import PartnerForm, PartnerCoinForm
 
@@ -184,3 +184,8 @@ def partnerAddCoinsRequest(request):
             amount=partner_balance_in_form
         )
         return JsonResponse({"message": message + str(bound_form.errors), "class": "alert-danger", 'partner': partner.id})
+
+
+class PartnerDetail(LoginRequiredMixin, ObjectDetailMixin, View):
+    model = Partner
+    template = "app/partner/partner_detail_page.html"

@@ -1,5 +1,19 @@
 {% load static %}
-{% url 'dashboard_url' as dashboard_url %}
+{% url 'partner_list_url' as partner_list_url %}
+{% url 'app_url' as app_url %}
+{% url 'contractor_list_url' as contractor_list_url %}
+{% url 'card_list_url' as card_list_url %}
+{% url 'station_list_url' as station_list_url %}
+{% url 'post_list_url' as post_list_url %}
+{% url 'payment_list_url' as payment_list_url %}
+{% url 'epos_payment_list_url' as epos_payment_list_url %}
+
+{% url 'partner_create_url' as partner_create_url %}
+{% url 'contractor_create_url' as contractor_create_url %}
+{% url 'station_create_url' as station_create_url %}
+{% url 'user_transaction_list_url' as user_transaction_list_url %}
+{% url 'transaction_list_url' as transaction_list_url %}
+
     <nav class="navbar navbar-expand-lg navbar-dark shadow fixed-top p-0">
         <button class="navbar-toggler" type="button" data-toggle="collapse"aria-expanded="false">
             <span class="navbar-toggler-icon"></span>
@@ -9,6 +23,57 @@
             </a>
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                    <li class="nav-item">
+                        <a href="{{app_url}}" class="nav-link {% if request.path == app_url %}active{% endif %}">
+                            <span>Главная</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{contractor_list_url}}" class="nav-link {% if request.path == contractor_list_url %}active{% endif %}">
+                            <span>Контрагенты</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{partner_list_url}}" class="nav-link {% if request.path == partner_list_url %}active{% endif %}">
+                            <span>Клиенты</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{card_list_url}}" class="nav-link {% if request.path == card_list_url %}active{% endif %}">
+                            <span>Карты</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{station_list_url}}" class="nav-link {% if request.path == station_list_url %}active{% endif %}">
+                            <span>Станции</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{post_list_url}}" class="nav-link {% if request.path == post_list_url %}active{% endif %}">
+                            <span>Посты</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <div class="dropdown">
+                            <a class="dropdown-toggle nav-link" type="button" id="payment_button_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span>Платежи</span>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="payment_button_dropdown">
+                                <a class="dropdown-item" href="{{payment_list_url}}">Платежи юридических лиц</a>
+                                <a class="dropdown-item" href="{{epos_payment_list_url}}">EPOS/ЕРИП платежи</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{user_transaction_list_url}}" class="nav-link {% if request.path == user_transaction_list_url %}active{% endif %}">
+                            <span>Журнал</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{transaction_list_url}}" class="nav-link {% if request.path == transaction_list_url %}active{% endif %}">
+                            <span>Транзакции</span>
+                        </a>
+                    </li>
                 </ul>
                 <ul class="navbar-nav">
                     <li class="nav-item text-nowrap dropdown">

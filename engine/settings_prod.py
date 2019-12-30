@@ -65,6 +65,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'app.context_processors.contractor_list',
+                'app.context_processors.station_list'
             ],
         },
     },

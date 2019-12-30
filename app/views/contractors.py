@@ -4,7 +4,7 @@ from django.views.generic import View
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from app.utils import ObjectListMixin, objectDetailRequest, ObjectCreateMixin, ObjectUpdateMixin, ObjectDeleteMixin
+from app.utils import ObjectListMixin, objectDetailRequest, ObjectCreateMixin, ObjectUpdateMixin, ObjectDeleteMixin, ObjectDetailMixin
 from app.models import Contractor
 from app.forms import ContractorForm
 
@@ -37,3 +37,8 @@ def contractorDetailRequest(request):
     model = Contractor
     template = 'app/contractor/contractor_detail.html'
     return HttpResponse(objectDetailRequest(request, model, template))
+
+
+class ContractorDetail(LoginRequiredMixin, ObjectDetailMixin, View):
+    model = Contractor
+    template = "app/contractor/contractor_detail_page.html"

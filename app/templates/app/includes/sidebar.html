@@ -15,79 +15,122 @@
 {% url 'transaction_list_url' as transaction_list_url %}
 
 
-
-
 <div class="sidebar-sticky">
-    <ul class="nav flex-column">
-                {% comment %} <li class="nav-item">   
-                    <a class="nav-link  {% if request.path == order_create_url %}active{% endif %}" href="{% url 'order_create_url' %}">
-                        <i class="fas fa-plus"></i>
-                        Создать заказ
-                    </a>
-                </li> {% endcomment %}
-            <li class="nav-item">
-                <a class="nav-link {% if request.path == app_url %}active{% endif %}" href="{{ app_url }}">
-                    <i class="fas fa-list-ul"></i>               
-                    Главная
+    <ul class="nav flex-column flex-nowrap overflow-hidden">
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                <span>Выберите: </span>        
+            </h6>
+            <li class="nav-item {% if request.path == contractor_list_url %}active{% endif %}">
+                <a class="nav-link text-truncate" href="{{contractor_list_url}}">
+                        <i class="fas fa-money-check"></i>
+                        <span class="d-none d-sm-inline">Контрагенты</span>          
                 </a>
+                {% if contractors_list %}
+                <a class="collapsed" href="#contractors_menu" data-target="#contractors_menu" data-toggle="collapse" aria-expanded="false"></a>
+                <div class="collapse" id="contractors_menu" aria-expanded="false">
+                    <ul class="nav flex-column pl-4">
+                        {% for contractor in contractors_list %}
+                            <li class="nav-item py-0">
+                                <a class="nav-link" href="{{contractor.get_absolute_url}}">
+                                    <span>{{ contractor }}</span>
+                                </a>
+                                {% if contractor.partners %}
+                                    <a class="collapsed" href="#partner_menu_{{ contractor.id }}" data-target="#partner_menu_{{ contractor.id }}" data-toggle="collapse" aria-expanded="false"></a>
+                                    <div class="collapse" id="partner_menu_{{ contractor.id }}" aria-expanded="false">
+                                        <ul class="nav flex-column pl-4">
+                                            {% for partner in contractor.partners.all %}
+                                                <li class="nav-item py-0">
+                                                    <a class="nav-link" href="{{partner.get_absolute_url}}">
+                                                        <span>{{ partner }}</span>
+                                                    </a>
+                                                    {% if partner.cards.all %}
+                                                        <a class="collapsed" href="#card_menu_{{ partner.id }}" data-target="#card_menu_{{ partner.id }}" data-toggle="collapse" aria-expanded="false"></a>
+                                                        <div class="collapse" id="card_menu_{{ partner.id }}" aria-expanded="false">
+                                                            <ul class="nav flex-column pl-4">
+                                                                {% for card in partner.cards.all %}
+                                                                    <li class="nav-item py-0">
+                                                                        <a class="nav-link" href="{{card.get_absolute_url}}">
+                                                                            <span>{{ card }}</span>
+                                                                        </a>
+                                                                    </li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                        </div>
+                                                    {% endif %}
+                                                </li>
+                                                
+                                            {% endfor %}
+                                        </ul>
+
+                                    </div>
+                                    
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div> 
+                {% endif %}  
             </li>
-            
-            <li class="nav-item">
-                <a class="nav-link {% if request.path == contractor_list_url %}active{% endif %}" href="{{ contractor_list_url }}">
-                    <i class="fas fa-money-check"></i>               
-                    Контрагенты
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {% if request.path == partner_list_url %}active{% endif %}" href="{{ partner_list_url }}">
-                    <i class="fas fa-user"></i>               
-                    Клиенты
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {% if request.path == card_list_url %}active{% endif %}" href="{{ card_list_url }}">
-                    <i class="fas fa-id-card"></i>               
-                    Карты
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {% if request.path == station_list_url %}active{% endif %}" href="{{ station_list_url }}">
+            <li class="nav-item {% if request.path == station_list_url %}active{% endif %}">
+                <a class="nav-link" href="{{ station_list_url }}">
                     <i class="fas fa-handshake"></i>               
-                    Станции
+                    <span>Станции</span>
                 </a>
+                {% if stations_list %}
+                <a class="collapsed" href="#stations_menu" data-target="#stations_menu" data-toggle="collapse" aria-expanded="false"></a>
+                <div class="collapse" id="stations_menu" aria-expanded="false">
+                    <ul class="nav flex-column pl-4">
+                        {% for station in stations_list %}
+                            <li class="nav-item py-0">
+                                <a class="nav-link" href="{{station.get_absolute_url}}">
+                                    <span>{{ station }}</span>
+                                </a>
+                                {% if station.posts %}
+                                    <a class="collapsed" href="#stations_menu_{{ station.id }}" data-target="#stations_menu_{{ station.id }}" data-toggle="collapse" aria-expanded="false"></a>
+                                    <div class="collapse" id="stations_menu_{{ station.id }}" aria-expanded="false">
+                                        <ul class="nav flex-column pl-4">
+                                            {% for post in station.posts.all %}
+                                                <li class="nav-item py-0">
+                                                    <a class="nav-link" href="{{post.get_absolute_url}}">
+                                                        <span>{{ post }}</span>
+                                                    </a>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
             </li>
             <li class="nav-item">
-                    <a class="nav-link {% if request.path == post_list_url %}active{% endif %}" href="{{ post_list_url }}">
-                        <i class="fab fa-raspberry-pi"></i>               
-                        Посты
-                    </a>
-                </li>
-            <li class="nav-item">
-                <a class="nav-link {% if request.path == payment_list_url %}active{% endif %}" href="{{ payment_list_url }}">
+                <a class="collapsed nav-link text-truncate">
                     <i class="fas fa-shopping-basket"></i>               
-                    Платежи юр лиц
+                    <span>Платежи</span>
                 </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {% if request.path == epos_payment_list_url %}active{% endif %}" href="{{ epos_payment_list_url }}">
-                    <i class="fas fa-shopping-basket"></i>               
-                    Платежи физ лиц
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {% if request.path == user_transaction_list_url %}active{% endif %}" href="{{ user_transaction_list_url }}">
-                    <i class="fas fa-cash-register"></i>               
-                    Журнал
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {% if request.path == transaction_list_url %}active{% endif %}" href="{{ transaction_list_url }}">
-                    <i class="fas fa-exchange-alt"></i>               
-                    Транзакции
-                </a>
+                <a class="collapsed" href="#payment_menu" data-target="#payment_menu" data-toggle="collapse" aria-expanded="false"></a>
+                <div class="collapse" id="payment_menu" aria-expanded="false">
+                    <ul class="nav flex-column pl-4">
+                        <li class="nav-item {% if request.path == epos_payment_list_url %}active{% endif %}">
+                            <a class="nav-link" href="{{ epos_payment_list_url }}">
+                                Платежи EPOS/ЕРИП
+                            </a>
+                        </li>
+                        <li class="nav-item {% if request.path == payment_list_url %}active{% endif %}">
+                            <a class="nav-link" href="{{ payment_list_url }}">
+                                Платежи юридических лиц
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </li>
         </ul>
-        <div id="unavailable_post_list" class="m-3">
+        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+            <span>Недоступные посты: </span>        
+        </h6>
+        <div id="unavailable_post_list" class="m-3">     
             {% csrf_token %}
         </div>
 </div>
@@ -109,11 +152,11 @@
                 },
                 success: function (data) {
                     $(data.results).each(function(){
-                        message =   "Станция: "
+                        message =   "<b>Станция:</b> "
                                     + this.station__owner
-                                    + ". Пост: " + this.post_id
-                                    + " недоступен.<br>"
-                                    + "Последний раз был доступен: "
+                                    + ".<br> <b>Пост:</b> " + this.post_id
+                                    + " <br>"
+                                    + "<b>Последний раз был доступен:</b><br> "
                                     + this.last_seen;
                         elems = elems.add("<div class='alert alert-danger' role='alert'>"
                         + "<button type='button' class='close' data-dismiss='alert' aria-label='Close'><span aria-hidden='true'>&times;</span></button>"
@@ -124,10 +167,20 @@
                 }
             
             });
-            setTimeout(ajaxReq, 10000);
+            setTimeout(ajaxReq, 60000);
         };
         ajaxReq();
-        
+
+        if ( $(".nav-item").hasClass("active") ) {
+            $($(".nav-item.active").parents()[1]).addClass("show")
+        }
+
+        $(".sidebar-sticky").niceScroll();
+
+        // TODO: Correct it!
+        $('.sidebar-sticky').mouseover(function() {
+            $('.sidebar-sticky').getNiceScroll().resize();
+        })
 
     })
 </script>
