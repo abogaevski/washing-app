@@ -19,16 +19,6 @@ class ObjectListMixin:
         return render(request,
                       self.template,
                       context={self.context: objects})
-# # TODO: Create right mixin for getting one object!
-# class ObjectListMixin:
-#     model = None
-#     template = None
-
-#     def get(self, request):
-#         object = self.model.objects.get()
-#         return render(request,
-#                       self.template,
-#                       context={self.context: object})
 
 
 def objectDetailRequest(request, model, template):
@@ -142,6 +132,7 @@ class ObjectDisableMixin:
             messages.warning(
                 request, 'Вы не можете отключить {0}.<br>Ошибка: Уже отлючена'.format(obj))
             return redirect("{}_list_url".format(self.model.__name__.lower()))
+
 
 class ObjectDetailMixin:
     model = None

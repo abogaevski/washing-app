@@ -1,8 +1,10 @@
 from datetime import datetime, timedelta
 import json
+import pytz
 
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.conf import settings
 from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -13,7 +15,8 @@ from app.mqtt.publisher import publish_data
 
 class Dashboard(LoginRequiredMixin, View):
     def get(self, request):
-        user_transactions_filter_time = datetime.now() - timedelta(days=1)
+        tz = pytz.timezone(settings.TIME_ZONE)
+        user_transactions_filter_time = tz.localize(datetime.now()) - timedelta(days=1)
         partners = Partner.objects.filter(balance__lte=5)
         contractors = Contractor.objects.filter(balance__lte=100)
         posts = Post.objects.filter(is_available=False)
