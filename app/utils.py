@@ -90,7 +90,7 @@ class ObjectUpdateMixin:
             new_obj = bound_form.save()
             messages.info(request, 'Вы изменили ' + str(new_obj))
 
-            return redirect("{}_list_url".format(self.model.__name__.lower()))
+            return redirect("{}_detail_page_url".format(self.model.__name__.lower()), id=new_obj.pk)
         return render(request, self.template,
                       context={self.model_form.__name__.lower(): bound_form,
                                self.model.__name__.lower(): obj})

@@ -157,7 +157,8 @@ class UserProfile(models.Model):
     email = models.EmailField("Эл. почта", blank=True)
     displayname = models.CharField("ФИО", blank=True, max_length=250)
     # phone = 
-    is_notify = models.BooleanField("Уведомлять", default=False)
+    is_notify_email = models.BooleanField("Уведомлять Email", default=False)
+    is_notify_phone = models.BooleanField("Уведомлять телефон", default=False)
 
     def __str__(self):
         return self.displayname

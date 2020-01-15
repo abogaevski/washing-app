@@ -30,7 +30,7 @@
                 <div class="collapse" id="contractors_menu" aria-expanded="false">
                     <ul class="nav flex-column pl-4">
                         {% for contractor in contractors_list %}
-                            <li class="nav-item py-0">
+                            <li class="nav-item py-0 {% if request.path == contractor.get_absolute_url %}active{% endif %}">
                                 <a class="nav-link" href="{{contractor.get_absolute_url}}">
                                     <span>{{ contractor }}</span>
                                 </a>
@@ -39,7 +39,7 @@
                                     <div class="collapse" id="partner_menu_{{ contractor.id }}" aria-expanded="false">
                                         <ul class="nav flex-column pl-4">
                                             {% for partner in contractor.partners.all %}
-                                                <li class="nav-item py-0">
+                                                <li class="nav-item py-0 {% if request.path == partner.get_absolute_url %}active{% endif %}">
                                                     <a class="nav-link" href="{{partner.get_absolute_url}}">
                                                         <span>{{ partner }}</span>
                                                     </a>
@@ -48,7 +48,7 @@
                                                         <div class="collapse" id="card_menu_{{ partner.id }}" aria-expanded="false">
                                                             <ul class="nav flex-column pl-4">
                                                                 {% for card in partner.cards.all %}
-                                                                    <li class="nav-item py-0">
+                                                                    <li class="nav-item py-0 {% if request.path == card.get_absolute_url %}active{% endif %}">
                                                                         <a class="nav-link" href="{{card.get_absolute_url}}">
                                                                             <span>{{ card }}</span>
                                                                         </a>
@@ -81,7 +81,7 @@
                 <div class="collapse" id="stations_menu" aria-expanded="false">
                     <ul class="nav flex-column pl-4">
                         {% for station in stations_list %}
-                            <li class="nav-item py-0">
+                            <li class="nav-item py-0 {% if request.path == station.get_absolute_url %}active{% endif %}">
                                 <a class="nav-link" href="{{station.get_absolute_url}}">
                                     <span>{{ station }}</span>
                                 </a>
@@ -90,7 +90,7 @@
                                     <div class="collapse" id="stations_menu_{{ station.id }}" aria-expanded="false">
                                         <ul class="nav flex-column pl-4">
                                             {% for post in station.posts.all %}
-                                                <li class="nav-item py-0">
+                                                <li class="nav-item py-0 {% if request.path == post.get_absolute_url %}active{% endif %}">
                                                     <a class="nav-link" href="{{post.get_absolute_url}}">
                                                         <span>{{ post }}</span>
                                                     </a>
@@ -172,7 +172,12 @@
         ajaxReq();
 
         if ( $(".nav-item").hasClass("active") ) {
-            $($(".nav-item.active").parents()[1]).addClass("show")
+            parents = $(".nav-item.active").parents();
+            parents.each(function(){
+                if ( $(this).hasClass("collapse") ) {
+                    $(this).addClass("show");
+                }
+            })
         }
 
         $(".sidebar-sticky").niceScroll();

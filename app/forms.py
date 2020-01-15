@@ -119,12 +119,14 @@ class UserProfileForm(forms.ModelForm):
         fields = [
             'email',
             'displayname',
-            'is_notify'
+            'is_notify_email',
+            'is_notify_phone'
         ]
         widgets = {
             'email': forms.TextInput(attrs={'class': 'form-control'}),
             'displayname': forms.TextInput(attrs={'class': 'form-control'}),
-            'is_notify': forms.CheckboxInput(attrs={'class': 'form-control'})
+            'is_notify_email': forms.CheckboxInput(attrs={'class': 'form-control'}),
+            'is_notify_phone': forms.CheckboxInput(attrs={'class': 'form-control'})
         }
 
 

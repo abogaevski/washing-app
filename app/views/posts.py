@@ -2,7 +2,6 @@ from django.http import HttpResponse, JsonResponse
 from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from app.utils import ObjectListMixin, objectDetailRequest, ObjectUpdateMixin, ObjectDetailMixin
-from django.core import serializers
 
 from app.models import Post
 from app.forms import PostUpdateEripIdForm

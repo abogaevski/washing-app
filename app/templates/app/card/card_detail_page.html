@@ -1,1 +1,25 @@
-{{card}}
+{% extends 'app/index.html' %}
+
+{% block title %}
+Контрагент {{card}} | {{block.super}}
+{% endblock title %}
+
+{% block header %}
+    Контрагент "{{card}}"
+{% endblock header %} 
+
+{% block header_buttons %}
+    <a href="{% url 'card_delete_url' card.id %}" class="btn btn-secondary ">Удалить</a>
+    <a href="{% url 'card_update_url' card.id %}" class="btn btn-secondary ">Изменить</a>
+{% endblock header_buttons %}
+
+{% block content %}
+    <div class="content-item pb-5 align-self-start mb-3">
+        <div class="detail-summary align-self-center  ">
+            {% include "app/card/card_sum.html" %}
+        </div>
+    </div>
+<div class="details"></div>
+
+
+{% endblock content %}

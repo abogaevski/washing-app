@@ -5,16 +5,20 @@
 {% endblock title %}
 
 {% block header %}
-    Контрагент {{contractor}}
+    Контрагент "{{contractor}}"
 {% endblock header %} 
 
 {% block header_buttons %}
-    <a href="{% url 'contractor_update_url' contractor.id %}" class="btn btn-secondary">Изменить</a>
+    <a href="{% url 'contractor_delete_url' contractor.id %}" class="btn btn-secondary ">Удалить</a>
+    <a href="{% url 'contractor_update_url' contractor.id %}" class="btn btn-secondary ">Изменить</a>
 {% endblock header_buttons %}
 
 {% block content %}
-<div class="content-item pb-5 align-self-start mb-3">
-</div>
+    <div class="content-item pb-5 align-self-start mb-3">
+        <div class="detail-summary align-self-center  ">
+            {% include "app/contractor/contractor_sum.html" %}
+        </div>
+    </div>
 <div class="details"></div>
 
 
