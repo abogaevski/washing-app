@@ -9,3 +9,4 @@ from app.views.payments import PaymentCreate, PaymentList
 from app.views.user_transactions import UserTransactionList
 from app.views.user_profile import UserProfileUpdate
 from app.views.epos_payments import eposPaymentRequest, EposPaymentList
+from app.views.login import CustomLoginView

@@ -3,6 +3,8 @@ from django.contrib import messages
 from django.views.generic import View
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.admin.views.decorators import staff_member_required
+from django.utils.decorators import method_decorator
 
 from app.utils import ObjectListMixin, objectDetailRequest, ObjectCreateMixin, ObjectUpdateMixin, ObjectDisableMixin, ObjectDetailMixin
 from app.models import Card
@@ -34,6 +36,7 @@ class CardDelete(LoginRequiredMixin, ObjectDisableMixin, View):
     template = 'app/card/card_delete.html'
 
 
+@method_decorator(staff_member_required(login_url='login_url'), name='get')
 class CardActive(LoginRequiredMixin, View):
     def get(self, request):
         form = CardForm

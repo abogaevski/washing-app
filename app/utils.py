@@ -1,14 +1,16 @@
+import logging
+
 from django.shortcuts import render, redirect, reverse
 from django.template import loader
 from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 from django.db.models.deletion import ProtectedError
-import logging
+from django.contrib.admin.views.decorators import staff_member_required
+from django.utils.decorators import method_decorator
 
 logger = logging.getLogger('mqtt')
 
-
-
+@method_decorator(staff_member_required(login_url='login_url'), name='get')
 class ObjectListMixin:
     model = None
     template = None
@@ -20,7 +22,7 @@ class ObjectListMixin:
                       self.template,
                       context={self.context: objects})
 
-
+@staff_member_required(login_url='login_url')
 def objectDetailRequest(request, model, template):
     if request.is_ajax():
         itemId = request.POST['itemid']
@@ -41,6 +43,7 @@ def get_object_or_none(model, **kwargs):
         logger.debug("WTF!!!!!!!!!!!!!@#$@#%#$%@#")
 
 
+@method_decorator(staff_member_required(login_url='login_url'), name='get')
 class ObjectCreateMixin:
     form = None
     template = None
@@ -59,6 +62,7 @@ class ObjectCreateMixin:
         return render(request, self.template, context={'form': bound_form})
 
 
+@method_decorator(staff_member_required(login_url='login_url'), name='get')
 class ObjectUpdateMixin:
     model = None
     model_form = None
@@ -86,6 +90,7 @@ class ObjectUpdateMixin:
                                self.model.__name__.lower(): obj})
 
 
+@method_decorator(staff_member_required(login_url='login_url'), name='get')
 class ObjectDeleteMixin:
     model = None
     template = None
@@ -110,6 +115,7 @@ class ObjectDeleteMixin:
         return redirect("{}_list_url".format(self.model.__name__.lower()))
 
 
+@method_decorator(staff_member_required(login_url='login_url'), name='get')
 class ObjectDisableMixin:
     model = None
     template = None
@@ -134,6 +140,7 @@ class ObjectDisableMixin:
             return redirect("{}_list_url".format(self.model.__name__.lower()))
 
 
+@method_decorator(staff_member_required(login_url='login_url'), name='get')
 class ObjectDetailMixin:
     model = None
     template = None

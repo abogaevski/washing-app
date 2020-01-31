@@ -3,7 +3,8 @@ from django.contrib import messages
 
 from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from django.contrib.admin.views.decorators import staff_member_required
+from django.utils.decorators import method_decorator
 
 from app.utils import ObjectListMixin
 from app.models import Payment, UserTransaction
@@ -15,6 +16,8 @@ class PaymentList(LoginRequiredMixin, ObjectListMixin, View):
     context = 'payments'
 
 
+@method_decorator(staff_member_required(login_url='login_url'), name='get')
+@method_decorator(staff_member_required(login_url='login_url'), name='post')
 class PaymentCreate(LoginRequiredMixin, View):
     def get(self, request):
         form = PaymentForm

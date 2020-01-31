@@ -8,6 +8,8 @@ from django_datatables_view.base_datatable_view import BaseDatatableView
 from django.db.models import Q
 from django.conf import settings
 from django.utils.html import escape
+from django.contrib.admin.views.decorators import staff_member_required
+from django.utils.decorators import method_decorator
 
 from app.models import Transaction
 from app.utils import ObjectListMixin
@@ -19,6 +21,7 @@ class TransactionList(LoginRequiredMixin, ObjectListMixin, View):
     context = 'transactions'
 
 # Get raw table data.
+@method_decorator(staff_member_required(login_url='login_url'), name='get')
 class TransactionListJson(LoginRequiredMixin, BaseDatatableView):
     model = Transaction
     columns = ['id', 'card', 'partner',

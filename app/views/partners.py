@@ -3,6 +3,8 @@ from django.contrib import messages
 from django.views.generic import View
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.admin.views.decorators import staff_member_required
+from django.utils.decorators import method_decorator
 
 from app.utils import ObjectListMixin, objectDetailRequest, ObjectCreateMixin, ObjectUpdateMixin, ObjectDeleteMixin, ObjectDetailMixin
 from app.models import Partner, UserTransaction
@@ -32,6 +34,8 @@ class PartnerDelete(LoginRequiredMixin, ObjectDeleteMixin, View):
     template = 'app/partner/partner_delete.html'
 
 
+@method_decorator(staff_member_required(login_url='login_url'), name='get')
+@method_decorator(staff_member_required(login_url='login_url'), name='post')
 class PartnerAddCoins(LoginRequiredMixin, View):
     def get(self, request, id):
         partner = Partner.objects.get(id=id)
@@ -109,6 +113,7 @@ def partnerDetailRequest(request):
 
 
 # TODO: Create one mixin
+@staff_member_required(login_url='login_url')
 def partnerAddCoinsRequest(request):
     if request.is_ajax():
         post = request.POST

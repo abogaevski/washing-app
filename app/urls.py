@@ -3,6 +3,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 
 from app.views import *
 from app.api import *
+from app.api.views.generic import main
 
 urlpatterns = [
     path('', Dashboard.as_view(), name='app_url'),
@@ -87,7 +88,7 @@ urlpatterns = [
 
 
 
-    path('login/', LoginView.as_view(template_name='sign_in.html'), name='login_url'),
+    path('login/', CustomLoginView.as_view(template_name='sign_in.html'), name='login_url'),
     path('logout/', LogoutView.as_view(next_page='/'), name='logout_url'),
 
     path('transactions/ajax/', TransactionListJson.as_view(),
@@ -101,7 +102,11 @@ urlpatterns = [
          name='epos_payment_list_url'),
 
     path('api/client_balance/', ClientBalance.as_view(),
-         name='client_balance_api'),
+          name='client_balance_api'),
+    
+    path('api/home', main, name="api_view")
+     
+
 
 
 ]

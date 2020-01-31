@@ -7,12 +7,15 @@ from django.contrib import messages
 from django.conf import settings
 from django.views.generic import View
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.admin.views.decorators import staff_member_required
+from django.utils.decorators import method_decorator
 
 from app.models import Contractor, Partner, Payment, UserTransaction, Card, Post
 from app.forms import StartWashingForm
 from app.mqtt.publisher import publish_data
 
 
+@method_decorator(staff_member_required(login_url='login_url'), name='get')
 class Dashboard(LoginRequiredMixin, View):
     def get(self, request):
         tz = pytz.timezone(settings.TIME_ZONE)
@@ -37,6 +40,7 @@ class Dashboard(LoginRequiredMixin, View):
                       )
 
 
+@method_decorator(staff_member_required(login_url='login_url'), name='post')
 class StartWash(View):
     def post(self, request):
         bound_form = StartWashingForm(request.POST)
@@ -73,6 +77,7 @@ class StartWash(View):
         return redirect("/")
 
 
+@staff_member_required(login_url='login_url')
 def load_posts(request):
     if request.is_ajax():
         station_id = request.POST.get('station')
@@ -80,6 +85,7 @@ def load_posts(request):
         return render(request, 'app/dashboard/post_options.html', {'posts': posts})
 
 
+@staff_member_required(login_url='login_url')
 def load_cards(request):
     if request.is_ajax():
         partner_id = request.POST.get('partner')
