@@ -1,0 +1,60 @@
+api/client_balance/ - main url
+
+Хедер до логина: 
+Referer: https://api.car-wash.by
+
+
+----------------------
+Get client balance
+POST
+{"action": "get_client_balance", "client_id": "Егор"}
+
+return
+{
+    "success": true,
+    "client_balance": "51.50"
+}
+
+
+----------------------
+Inc Client balance
+POST
+{"action": "inc_client_balance", "client_id": "Егор", "amount": 3}
+
+return
+{
+    "success": true,
+    "client_balance": "54.50"
+}
+
+
+----------------------
+Dec client balance
+POST
+{"action": "dec_client_balance", "client_id": "Егор", "amount": 3}
+
+return 
+{
+    "success": true,
+    "client_balance": "51.50"
+}
+
+
+LOGIN
+
+GET /login/
+Получаем csrftoken из Cookie
+POST /login/
+form-data: 
+            csrfmiddlewaretoken: <csrftoken из Cookie>
+            username:<user>
+            password:<pass>
+
+Получили HelloWorld!
+
+После логина получаем новую куку csrftoken. Ее вставляем в хедер X-CSRFToken
+
+Пример хедеров после логина
+X-CSRFToken:FsqnKacoHIrrVPKiMW3BbBnxfB7ZH0bqmKHgZgQMRy9M1kiIbW3iB4tAkolootP2
+Accept:application/json
+Content-Type:application/x-www-form-urlencoded

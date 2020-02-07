@@ -1,7 +1,6 @@
 import json
 from decimal import Decimal
 
-
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, JsonResponse
 from django.views.generic import View
@@ -10,7 +9,7 @@ from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from app.models import Card, Partner, Contractor
 
 # TODO: Написать лог!
-class ClientBalance(View):
+class ClientBalance(LoginRequiredMixin, View):
 
     def post(self, request):
         try:
