@@ -151,8 +151,8 @@ def on_message(client, userdata, msg):
             topic = rpi + '/transaction_reply'
             print("DEBUG: Topic: {}".format(topic))
             #TODO: Correct it!
-            # data = '{"date" : {}}'.format(timestamp)
-            # print("DEBUG: Data: {}".format(data))
+            data = '{"date" : {}}'.format(timestamp)
+            print("DEBUG: Data: {}".format(data))
 
 
             try:
@@ -376,7 +376,7 @@ def on_message(client, userdata, msg):
                 print("DEBUG: Post with this station: {}, post id: {} not exist".format(station, post_id))
                 # is device exist
                 if not get_object_or_none(Post, mac_uid=rpi):
-            
+                    last_seen = pytz.timezone(settings.TIME_ZONE).localize(datetime.now())
                     print("DEBUG: Post with this rpi: {} not exist. Creating...".format(rpi))
                     try:
                         
@@ -384,7 +384,8 @@ def on_message(client, userdata, msg):
                         post = Post.objects.create(
                             post_id=post_id,
                             station=station,
-                            mac_uid=rpi
+                            mac_uid=rpi,
+                            last_seen=last_seen
                         )
 
                         status = "initOK"
